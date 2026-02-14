@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<module xmlns="urn:jboss:module:1.9" name="org.wildfly.a2a.jakarta.grpc">
+
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
+
+    <resources>
+        <artifact name="${org.wildfly.a2a:a2a-java-sdk-jakarta-grpc}"/>
+    </resources>
+
+    <dependencies>
+        <module name="io.github.a2asdk.spec"/>
+        <module name="io.github.a2asdk.server-common"/>
+        <module name="io.github.a2asdk.transport.grpc"/>
+        <module name="io.github.a2asdk.spec-grpc"/>
+        <module name="io.grpc-all" optional="true"/>
+        <module name="jakarta.enterprise.api"/>
+        <module name="jakarta.inject.api"/>
+        <module name="jakarta.annotation.api"/>
+        <!-- Weld modules for proper proxy generation with package-private access -->
+        <!-- TODO perhaps not needed -->
+<!--        <module name="org.jboss.weld.core"/>-->
+<!--        <module name="org.jboss.weld.spi"/>-->
+<!--        <module name="org.jboss.weld.api"/>-->
+    </dependencies>
+</module>

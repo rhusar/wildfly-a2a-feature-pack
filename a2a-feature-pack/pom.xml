@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.wildfly.extras.a2a</groupId>
+        <artifactId>wildfly-a2a-feature-pack-parent</artifactId>
+        <version>0.0.1.Alpha1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>wildfly-a2a-feature-pack</artifactId>
+    <packaging>pom</packaging>
+
+    <name>WildFly A2A Feature Pack</name>
+    <description>Feature pack providing A2A protocol support for WildFly</description>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-galleon-pack</artifactId>
+            <type>zip</type>
+        </dependency>
+
+        <!-- Internal modules -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-a2a-subsystem</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-a2a-injection</artifactId>
+        </dependency>
+
+        <!-- A2A SDK - Core -->
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-spec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-spec-grpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-jsonrpc-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-http-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-server-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-tests-server-common</artifactId>
+        </dependency>
+
+        <!-- A2A SDK - Client -->
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-client-transport-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-client-transport-jsonrpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-client-transport-grpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-client-transport-rest</artifactId>
+        </dependency>
+
+        <!-- A2A SDK - Integrations -->
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-microprofile-config</artifactId>
+        </dependency>
+
+        <!-- Reactive -->
+        <dependency>
+            <groupId>io.smallrye.reactive</groupId>
+            <artifactId>mutiny-zero</artifactId>
+        </dependency>
+
+        <!-- Third-party dependencies -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>failureaccess</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.api.grpc</groupId>
+            <artifactId>proto-google-common-protos</artifactId>
+        </dependency>
+
+        <!-- A2A SDK - Transports -->
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-transport-jsonrpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-transport-grpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-transport-rest</artifactId>
+        </dependency>
+
+        <!-- A2A SDK - Jakarta Implementations -->
+        <dependency>
+            <groupId>org.wildfly.a2a</groupId>
+            <artifactId>a2a-java-sdk-jakarta-jsonrpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.a2a</groupId>
+            <artifactId>a2a-java-sdk-jakarta-grpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.a2a</groupId>
+            <artifactId>a2a-java-sdk-jakarta-rest</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>a2a-galleon-pack-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>auto-clean</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.galleon-plugins</groupId>
+                <artifactId>wildfly-galleon-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>feature-pack-build</id>
+                        <goals>
+                            <goal>build-feature-pack</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <release-name>a2a-feature-pack</release-name>
+                            <fork-embedded>true</fork-embedded>
+                            <generate-channel-manifest>true</generate-channel-manifest>
+                            <deploy-channel-manifest>false</deploy-channel-manifest>
+                            <minimum-stability-level>experimental</minimum-stability-level>
+                            <config-stability-level>community</config-stability-level>
+                            <package-stability-level>experimental</package-stability-level>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.wildfly.extras.a2a</groupId>
+        <artifactId>wildfly-a2a-testsuite-integration-parent</artifactId>
+        <version>0.0.1.Alpha1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>wildfly-a2a-testsuite-integration-jsonrpc</artifactId>
+    <packaging>jar</packaging>
+
+    <name>WildFly A2A Feature Pack - Testsuite - Integration - JSON-RPC</name>
+
+    <dependencies>
+        <!-- A2A SDK client transport -->
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-client-transport-jsonrpc</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-transport-jsonrpc</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-microprofile-config</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.smallrye.reactive</groupId>
+            <artifactId>mutiny-zero</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Jakarta implementation for deployment -->
+        <dependency>
+            <groupId>org.wildfly.a2a</groupId>
+            <artifactId>a2a-java-sdk-jakarta-jsonrpc</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Servlet API for unified request handler -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <configuration>
+                    <feature-packs>
+                        <feature-pack>
+                            <groupId>org.wildfly</groupId>
+                            <artifactId>wildfly-galleon-pack</artifactId>
+                            <version>${version.wildfly}</version>
+                        </feature-pack>
+                        <feature-pack>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>wildfly-a2a-feature-pack</artifactId>
+                            <version>${project.version}</version>
+                        </feature-pack>
+                    </feature-packs>
+                    <layers>
+                        <layer>ee-core-profile-server</layer>
+                        <layer>jaxrs</layer>
+                        <layer>a2a-server-jsonrpc</layer>
+                    </layers>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>test-provisioning</id>
+                        <goals>
+                            <goal>provision</goal>
+                        </goals>
+                        <phase>test-compile</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

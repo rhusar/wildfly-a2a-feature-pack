@@ -1,0 +1,113 @@
+# Based on https://github.com/wildfly-extras/a2a-java-sdk-server-jakarta/blob/main/.github/workflows/run-tck.yml
+
+name: Build and Run TCK
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  merge_group:
+    types:
+      - checks_requested
+
+permissions:
+  contents: read
+
+env:
+  TCK_VERSION: main
+  UV_SYSTEM_PYTHON: 1
+
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Run TCK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: maven
+      - name: Check if SDK version is SNAPSHOT
+        run: |
+          SDK_VERSION=$(grep -oP '<version\.sdk>\K[^<]+' pom.xml)
+          echo "Detected SDK_VERSION: ${SDK_VERSION}"
+          echo "SDK_VERSION=${SDK_VERSION}" >> "$GITHUB_ENV"
+          if [[ "${SDK_VERSION}" == *"-SNAPSHOT" ]]; then
+            echo "IS_SNAPSHOT=true" >> "$GITHUB_ENV"
+          else
+            echo "IS_SNAPSHOT=false" >> "$GITHUB_ENV"
+          fi
+      - name: Checkout a2a-java
+        if: env.IS_SNAPSHOT == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: a2aproject/a2a-java
+          path: a2a-java
+      - name: Checkout a2a-tck
+        uses: actions/checkout@v4
+        with:
+          repository: a2aproject/a2a-tck
+          path: a2a-tck
+          ref: ${{ env.TCK_VERSION }}
+      - name: Build a2a-java with Maven, skipping tests
+        if: env.IS_SNAPSHOT == 'true'
+        run: |
+          mvn -B -ntp install -DskipTests
+        working-directory: a2a-java
+      - name: Get a2a-java version and save as env var
+        if: env.IS_SNAPSHOT == 'true'
+        run: |
+          VERSION=$(mvn -b -ntp help:evaluate -Dexpression=project.version -q -DforceStdout 2>&1 | grep -v '\[')
+          echo "Detected a2a-java version: ${VERSION}"
+          echo "SDK_VERSION=${VERSION}" >> "$GITHUB_ENV"
+        working-directory: a2a-java
+
+      - name: Checkout wildfly-grpc-feature-pack
+        uses: actions/checkout@v4
+        with:
+          repository: rhusar/wildfly-grpc-feature-pack
+          path: wildfly-grpc-feature-pack
+      - name: Build wildfly-grpc-feature-pack with Maven, skipping tests
+        working-directory: wildfly-grpc-feature-pack
+        run: mvn -B -ntp install -DskipTests
+
+      - name: Build the Feature pack and provision the TCK server
+        run: mvn -B -ntp install -Dversion.sdk=${SDK_VERSION}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: "a2a-tck/pyproject.toml"
+      - name: Install uv and Python dependencies
+        run: |
+          pip install uv
+          uv pip install -e .
+        working-directory: a2a-tck
+      - name: Start the WildFly SUT
+        run: |
+          SUT_JSONRPC_URL=http://localhost:8080 SUT_REST_URL=http://localhost:8080 SUT_GRPC_URL=http://localhost:9555 mvn -B -ntp wildfly:start -Dversion.sdk=${SDK_VERSION} -pl tck -Dstartup-timeout=120 -Dwildfly.serverArgs="--stability=preview"
+      - name: Run TCK
+        env:
+          SUT_JSONRPC_URL: http://localhost:8080
+          TCK_STREAMING_TIMEOUT: 4.0
+        run: |
+          ./run_tck.py --sut-url ${SUT_JSONRPC_URL} --category all --transports jsonrpc,grpc,rest --compliance-report report.json
+        working-directory: a2a-tck
+      - name: Upload tck server.log
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tck-server-log
+          path: tck/target/wildfly/standalone/log/server.log
+          retention-days: 5
+

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.wildfly.extras.a2a</groupId>
+        <artifactId>wildfly-a2a-feature-pack-parent</artifactId>
+        <version>0.0.1.Alpha1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>wildfly-a2a-tck</artifactId>
+    <packaging>war</packaging>
+
+    <name>WildFly A2A Feature Pack - TCK</name>
+    <description>TCK server for running the A2A protocol TCK against WildFly with the A2A feature pack</description>
+
+    <properties>
+        <jboss.home>${project.build.directory}/wildfly</jboss.home>
+    </properties>
+
+    <dependencies>
+        <!--
+            Include the TCK server from the a2a-java project.
+            This provides the AgentExecutor and AgentCard for TCK tests.
+        -->
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-tck-server</artifactId>
+            <version>${version.sdk}</version>
+            <exclusions>
+                <!-- Exclude all dependencies - they are provided by the A2A feature pack -->
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Jakarta APIs (provided by WildFly) -->
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- WildFly Maven plugin for provisioning and running the server -->
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${version.wildfly.maven.plugin}</version>
+                <configuration>
+                    <feature-packs>
+                        <feature-pack>
+                            <groupId>org.wildfly</groupId>
+                            <artifactId>wildfly-galleon-pack</artifactId>
+                            <version>${version.wildfly}</version>
+                        </feature-pack>
+                        <!-- gRPC feature pack (required for a2a-server-grpc layer) -->
+                        <feature-pack>
+                            <groupId>org.wildfly.extras.grpc</groupId>
+                            <artifactId>wildfly-grpc-feature-pack</artifactId>
+                            <version>${version.wildfly.grpc}</version>
+                        </feature-pack>
+                        <!-- A2A feature pack -->
+                        <feature-pack>
+                            <groupId>org.wildfly.extras.a2a</groupId>
+                            <artifactId>wildfly-a2a-feature-pack</artifactId>
+                            <version>${project.version}</version>
+                        </feature-pack>
+                    </feature-packs>
+                    <layers>
+                        <layer>cloud-server</layer>
+                        <layer>a2a-server-jsonrpc</layer>
+                        <layer>a2a-server-grpc</layer>
+                        <layer>a2a-server-http-json</layer>
+                        <layer>grpc</layer>
+                    </layers>
+                    <jboss-home>${jboss.home}</jboss-home>
+                    <name>ROOT.war</name>
+                    <provisioning-dir>${jboss.home}</provisioning-dir>
+                    <galleon-options>
+                        <jboss-fork-embedded>true</jboss-fork-embedded>
+                        <stability-level>preview</stability-level>
+                    </galleon-options>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>provision</id>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

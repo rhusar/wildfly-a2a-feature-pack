@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.wildfly.extras.a2a</groupId>
+        <artifactId>wildfly-a2a-testsuite-integration-parent</artifactId>
+        <version>0.0.1.Alpha1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>wildfly-a2a-testsuite-integration-grpc</artifactId>
+    <packaging>jar</packaging>
+
+    <name>WildFly A2A Feature Pack - Testsuite - Integration - gRPC</name>
+
+    <properties>
+        <!-- Server arguments for preview stability level (needed for gRPC) -->
+        <server.jboss.args>--stability=preview</server.jboss.args>
+        <jboss.home>${project.build.directory}${file.separator}wildfly</jboss.home>
+    </properties>
+
+    <dependencies>
+        <!-- A2A SDK client transport -->
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-client-transport-grpc</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-spec-grpc</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a2asdk</groupId>
+            <artifactId>a2a-java-sdk-transport-grpc</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Jakarta implementation for deployment -->
+        <dependency>
+            <groupId>org.wildfly.a2a</groupId>
+            <artifactId>a2a-java-sdk-jakarta-grpc</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- gRPC dependencies for client -->
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <configuration>
+                    <feature-packs>
+                        <feature-pack>
+                            <groupId>org.wildfly</groupId>
+                            <artifactId>wildfly-galleon-pack</artifactId>
+                            <version>${version.wildfly}</version>
+                        </feature-pack>
+                        <feature-pack>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>wildfly-a2a-feature-pack</artifactId>
+                            <version>${project.version}</version>
+                        </feature-pack>
+                        <!-- Add gRPC feature pack -->
+                        <feature-pack>
+                            <groupId>org.wildfly.extras.grpc</groupId>
+                            <artifactId>wildfly-grpc-feature-pack</artifactId>
+                            <version>${version.wildfly.grpc}</version>
+                        </feature-pack>
+                    </feature-packs>
+                    <!-- Set stability level to preview for gRPC feature pack -->
+                    <galleon-options>
+                        <jboss-fork-embedded>true</jboss-fork-embedded>
+                        <stability-level>preview</stability-level>
+                    </galleon-options>
+                    <layers>
+                        <layer>a2a-server-grpc</layer>
+                        <layer>ee-core-profile-server</layer>
+                        <layer>jaxrs</layer>
+                        <layer>microprofile-config</layer>
+                        <layer>datasources</layer>
+                        <layer>grpc</layer>
+                    </layers>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables combine.children="append">
+                        <jboss.install.dir>${jboss.home}</jboss.install.dir>
+                        <!-- test.agent.card.port is read by AgentCardProducer in a2a-java-sdk-tests-server-common -->
+                        <!-- gRPC uses port 9555 for the agent card -->
+                        <test.agent.card.port>9555</test.agent.card.port>
+                        <jboss.args>${server.jboss.args}</jboss.args>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

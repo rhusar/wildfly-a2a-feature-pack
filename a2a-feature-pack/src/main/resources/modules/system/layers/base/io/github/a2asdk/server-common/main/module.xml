@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<module xmlns="urn:jboss:module:1.9" name="io.github.a2asdk.server-common">
+
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
+
+    <resources>
+        <artifact name="${io.github.a2asdk:a2a-java-sdk-server-common}"/>
+    </resources>
+
+    <dependencies>
+        <module name="io.github.a2asdk.common"/>
+        <module name="io.github.a2asdk.spec"/>
+        <module name="io.github.a2asdk.spec-grpc"/>
+        <module name="io.github.a2asdk.jsonrpc-common"/>
+        <module name="io.github.a2asdk.http-client"/>
+        <module name="com.google.code.gson"/>
+        <module name="com.google.protobuf"/>
+        <module name="com.google.protobuf.util"/>
+        <module name="com.google.guava"/>
+        <module name="jakarta.enterprise.api"/>
+        <module name="jakarta.inject.api"/>
+        <module name="org.slf4j"/>
+        <module name="java.logging"/>
+        <module name="io.smallrye.reactive.mutiny.zero"/>
+        <!-- Weld modules for proper proxy generation with package-private access -->
+        <module name="org.jboss.weld.core"/>
+        <module name="org.jboss.weld.spi"/>
+        <module name="org.jboss.weld.api"/>
+    </dependencies>
+</module>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<module xmlns="urn:jboss:module:1.9" name="org.wildfly.extension.a2a">
+
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
+
+    <resources>
+        <artifact name="${org.wildfly.extras.a2a:wildfly-a2a-subsystem}"/>
+    </resources>
+
+    <dependencies>
+        <module name="jakarta.enterprise.api"/>
+        <module name="org.jboss.as.controller"/>
+        <module name="org.jboss.as.server"/>
+        <module name="org.jboss.logging"/>
+        <module name="org.jboss.modules"/>
+        <module name="org.jboss.staxmapper"/>
+        <module name="org.wildfly.common"/>
+        <module name="org.wildfly.extension.a2a.injection"/>
+        <module name="org.wildfly.service"/>
+        <module name="org.wildfly.subsystem"/>
+        <!-- For JAX-RS resource/provider registration -->
+        <module name="org.jboss.as.jaxrs" optional="true"/>
+        <!-- For gRPC service registration -->
+        <module name="org.wildfly.extension.grpc" optional="true"/>
+        <module name="io.grpc" optional="true"/>
+        <!-- For annotation indexing -->
+        <module name="org.jboss.jandex"/>
+        <!-- For adding resource roots from module JARs -->
+        <module name="org.jboss.vfs"/>
+    </dependencies>
+</module>

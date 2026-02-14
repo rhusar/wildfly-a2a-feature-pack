@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jboss</groupId>
+        <artifactId>jboss-parent</artifactId>
+        <version>50</version>
+    </parent>
+
+    <groupId>org.wildfly.extras.a2a</groupId>
+    <artifactId>wildfly-a2a-feature-pack-parent</artifactId>
+    <version>0.0.1.Alpha1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>WildFly A2A Feature Pack Parent</name>
+    <description>Parent POM for the WildFly A2A Feature Pack</description>
+    <url>https://github.com/wildfly-extras/wildfly-a2a-feature-pack</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git@github.com:wildfly-extras/wildfly-a2a-feature-pack.git</connection>
+        <developerConnection>scm:git:git@github.com:wildfly-extras/wildfly-a2a-feature-pack.git</developerConnection>
+        <url>https://github.com/wildfly-extras/wildfly-a2a-feature-pack</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>wildfly.org</id>
+            <name>WildFly Community</name>
+            <organization>wildfly.org</organization>
+            <organizationUrl>https://wildfly.org</organizationUrl>
+        </developer>
+    </developers>
+
+    <properties>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.release>17</maven.compiler.release>
+
+        <version.org.wildfly>39.0.1.Final</version.org.wildfly>
+        <version.org.wildfly.core>31.0.1.Final</version.org.wildfly.core>
+        <version.org.wildfly.common>1.7.0.Final</version.org.wildfly.common>
+        <version.org.wildfly.galleon-plugins>8.1.0.Final</version.org.wildfly.galleon-plugins>
+
+        <version.sdk>1.0.0.Alpha2</version.sdk>
+        <version.org.wildfly.a2a>1.0.0.Alpha2</version.org.wildfly.a2a>
+
+        <!-- Third-party dependencies (from A2A SDK) -->
+        <version.gson>2.11.0</version.gson>
+        <version.protobuf>4.33.1</version.protobuf>
+        <version.guava>33.4.8-jre</version.guava>
+        <version.proto-google-common-protos>2.52.0</version.proto-google-common-protos>
+        <version.mutiny-zero>1.0.0</version.mutiny-zero>
+        <version.wildfly.grpc>0.1.17-SNAPSHOT</version.wildfly.grpc>
+        <version.grpc>1.78.0</version.grpc>
+
+        <!-- Test dependencies -->
+        <version.arquillian>1.10.0.Final</version.arquillian>
+        <version.wildfly.arquillian>5.1.0.Final</version.wildfly.arquillian>
+        <version.wildfly.glow>1.5.2.Final</version.wildfly.glow>
+        <version.wildfly.maven.plugin>5.0.0.Final</version.wildfly.maven.plugin>
+        <version.rest-assured>5.5.0</version.rest-assured>
+        <version.shrinkwrap>1.2.6</version.shrinkwrap>
+
+        <!-- Alias for version.org.wildfly to use in tests -->
+        <version.wildfly>${version.org.wildfly}</version.wildfly>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- gRPC BOM - must match a2a-java SDK version -->
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-bom</artifactId>
+                <version>${version.grpc}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- WildFly BOMs -->
+            <dependency>
+                <groupId>org.wildfly</groupId>
+                <artifactId>wildfly-standard-expansion-bom</artifactId>
+                <version>${version.org.wildfly}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- A2A SDK BOM -->
+            <dependency>
+                <groupId>io.github.a2asdk</groupId>
+                <artifactId>a2a-java-sdk-bom</artifactId>
+                <version>${version.sdk}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.wildfly</groupId>
+                <artifactId>wildfly-galleon-pack</artifactId>
+                <version>${version.org.wildfly}</version>
+                <type>zip</type>
+            </dependency>
+
+            <!-- Internal modules -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>wildfly-a2a-subsystem</artifactId>
+                <version>${project.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>wildfly-a2a-injection</artifactId>
+                <version>${project.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- A2A SDK - Core -->
+            <dependency>
+                <groupId>io.github.a2asdk</groupId>
+                <artifactId>a2a-java-sdk-common</artifactId>
+                <version>${version.sdk}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.github.a2asdk</groupId>
+                <artifactId>a2a-java-sdk-spec</artifactId>
+                <version>${version.sdk}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.github.a2asdk</groupId>
+                <artifactId>a2a-java-sdk-spec-grpc</artifactId>
+                <version>${version.sdk}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.github.a2asdk</groupId>
+                <artifactId>a2a-java-sdk-jsonrpc-common</artifactId>
+                <version>${version.sdk}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.github.a2asdk</groupId>
+                <artifactId>a2a-java-sdk-http-client</artifactId>
+                <version>${version.sdk}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.github.a2asdk</groupId>
+                <artifactId>a2a-java-sdk-server-common</artifactId>
+                <version>${version.sdk}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.github.a2asdk</groupId>
+                <artifactId>a2a-java-sdk-tests-server-common</artifactId>
+                <version>${version.sdk}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- A2A SDK - Transports -->
+            <dependency>
+                <groupId>io.github.a2asdk</groupId>
+                <artifactId>a2a-java-sdk-transport-jsonrpc</artifactId>
+                <version>${version.sdk}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.github.a2asdk</groupId>
+                <artifactId>a2a-java-sdk-transport-grpc</artifactId>
+                <version>${version.sdk}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.github.a2asdk</groupId>
+                <artifactId>a2a-java-sdk-transport-rest</artifactId>
+                <version>${version.sdk}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- A2A SDK - Jakarta Implementations -->
+            <dependency>
+                <groupId>org.wildfly.a2a</groupId>
+                <artifactId>a2a-java-sdk-jakarta-jsonrpc</artifactId>
+                <version>${version.org.wildfly.a2a}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.a2a</groupId>
+                <artifactId>a2a-java-sdk-jakarta-grpc</artifactId>
+                <version>${version.org.wildfly.a2a}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.a2a</groupId>
+                <artifactId>a2a-java-sdk-jakarta-rest</artifactId>
+                <version>${version.org.wildfly.a2a}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Third-party dependencies -->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${version.gson}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${version.protobuf}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java-util</artifactId>
+                <version>${version.protobuf}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${version.guava}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>failureaccess</artifactId>
+                <version>1.0.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.api.grpc</groupId>
+                <artifactId>proto-google-common-protos</artifactId>
+                <version>${version.proto-google-common-protos}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.smallrye.reactive</groupId>
+                <artifactId>mutiny-zero</artifactId>
+                <version>${version.mutiny-zero}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.a2asdk</groupId>
+                <artifactId>a2a-java-sdk-microprofile-config</artifactId>
+                <version>${version.sdk}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.extras.grpc</groupId>
+                <artifactId>wildfly-grpc-subsystem</artifactId>
+                <version>${version.wildfly.grpc}</version>
+            </dependency>
+
+            <!-- Test dependencies -->
+            <dependency>
+                <groupId>org.wildfly.arquillian</groupId>
+                <artifactId>wildfly-arquillian-container-managed</artifactId>
+                <version>${version.wildfly.arquillian}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>${version.rest-assured}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.shrinkwrap</groupId>
+                <artifactId>shrinkwrap-api</artifactId>
+                <version>${version.shrinkwrap}</version>
+                <scope>test</scope>
+            </dependency>
+                 <dependency>
+                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                    <artifactId>shrinkwrap-resolver-bom</artifactId>
+                     <version>3.1.4</version>
+                     <scope>import</scope>
+                    <type>pom</type>
+                </dependency>
+         </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>17</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.wildfly.galleon-plugins</groupId>
+                    <artifactId>wildfly-galleon-maven-plugin</artifactId>
+                    <version>${version.org.wildfly.galleon-plugins}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.wildfly.core</groupId>
+                            <artifactId>wildfly-embedded</artifactId>
+                            <version>${version.org.wildfly.core}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.wildfly.common</groupId>
+                            <artifactId>wildfly-common</artifactId>
+                            <version>${version.org.wildfly.common}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+
+    <modules>
+        <module>bom</module>
+        <module>wildfly-a2a</module>
+        <module>a2a-feature-pack</module>
+        <module>testsuite</module>
+        <module>tck</module>
+    </modules>
+</project>

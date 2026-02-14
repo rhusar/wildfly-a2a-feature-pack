@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<layer-spec xmlns="urn:jboss:galleon:layer-spec:2.0" name="a2a-client-grpc">
+    <props>
+        <prop name="org.wildfly.category" value="A2A"/>
+        <prop name="org.wildfly.description" value="A2A client with gRPC binary protocol transport"/>
+        <prop name="org.wildfly.stability" value="experimental"/>
+    </props>
+    <dependencies>
+        <layer name="a2a"/>
+    </dependencies>
+    <packages>
+        <package name="io.github.a2asdk.transport.grpc"/>
+    </packages>
+</layer-spec>

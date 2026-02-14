@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<layer-spec xmlns="urn:jboss:galleon:layer-spec:2.0" name="a2a">
+    <props>
+        <prop name="org.wildfly.category" value="A2A"/>
+        <prop name="org.wildfly.description" value="Support for A2A (Agent-to-Agent) Protocol"/>
+        <prop name="org.wildfly.stability" value="experimental"/>
+    </props>
+    <feature spec="subsystem.a2a"/>
+    <packages>
+        <!-- Subsystem module -->
+        <package name="org.wildfly.extension.a2a"/>
+        <package name="org.wildfly.extension.a2a.injection"/>
+        <!-- A2A SDK core modules -->
+        <package name="io.github.a2asdk.common"/>
+        <package name="io.github.a2asdk.spec"/>
+        <package name="io.github.a2asdk.spec-grpc"/>
+        <package name="io.github.a2asdk.jsonrpc-common"/>
+        <package name="io.github.a2asdk.http-client"/>
+        <package name="io.github.a2asdk.server-common"/>
+        <package name="io.github.a2asdk.tests-server-common"/>
+        <!-- A2A SDK client modules -->
+        <package name="io.github.a2asdk.client"/>
+        <package name="io.github.a2asdk.client-transport-spi"/>
+        <package name="io.github.a2asdk.client-transport-jsonrpc"/>
+        <package name="io.github.a2asdk.client-transport-grpc"/>
+        <package name="io.github.a2asdk.client-transport-rest"/>
+        <!-- Reactive -->
+        <package name="io.smallrye.reactive.mutiny.zero"/>
+        <!-- Third-party dependencies -->
+        <package name="com.google.code.gson"/>
+        <package name="com.google.protobuf"/>
+        <package name="com.google.protobuf.util"/>
+        <package name="com.google.api.grpc.proto-google-common-protos"/>
+        <package name="com.google.guava"/>
+    </packages>
+</layer-spec>
