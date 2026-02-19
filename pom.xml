@@ -60,7 +60,7 @@
 
         <!-- Third-party dependencies (from A2A SDK) -->
         <version.gson>2.11.0</version.gson>
-        <version.protobuf>4.33.1</version.protobuf>
+        <version.protobuf>4.33.5</version.protobuf>
         <version.guava>33.4.8-jre</version.guava>
         <version.proto-google-common-protos>2.52.0</version.proto-google-common-protos>
         <version.mutiny-zero>1.0.0</version.mutiny-zero>
