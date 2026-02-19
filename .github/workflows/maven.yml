@@ -51,7 +51,7 @@ jobs:
       - name: Build and Test with Maven
         run: ./mvnw -B -ntp install
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: failure()
         with:
           name: ${{ matrix.os }}-${{ matrix.java }}-test-reports
