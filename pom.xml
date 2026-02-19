@@ -71,7 +71,7 @@
         <version.arquillian>1.10.0.Final</version.arquillian>
         <version.wildfly.arquillian>5.1.0.Final</version.wildfly.arquillian>
         <version.wildfly.glow>1.5.2.Final</version.wildfly.glow>
-        <version.wildfly.maven.plugin>5.0.0.Final</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>5.1.5.Final</version.wildfly.maven.plugin>
         <version.rest-assured>5.5.0</version.rest-assured>
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
 
