@@ -8,7 +8,25 @@ A WildFly feature pack implementing the open-standard Agent2Agent (A2A) Protocol
 == Building
 
 WARNING: To pass all tests, a gRPC Feature Pack with fix for https://github.com/wildfly-extras/wildfly-grpc-feature-pack/issues/430 is required.
+Thus, temporarily use an unrelease version compiled from the `main` branch.
 
+First, clone and build the https://github.com/wildfly-extras/wildfly-grpc-feature-pack[wildfly-grpc-feature-pack]:
+
+[source,bash]
+----
+git clone https://github.com/wildfly-extras/wildfly-grpc-feature-pack.git
+cd wildfly-grpc-feature-pack
+./mvnw install -DskipTests
+----
+
+Then, build the A2A feature pack:
+
+[source,bash]
+----
+git clone https://github.com/rhusar/wildfly-a2a-feature-pack.git
+cd wildfly-a2a-feature-pack
+./mvnw install -DskipTests
+----
 
 == Provisioning with Maven
 
