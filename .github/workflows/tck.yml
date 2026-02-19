@@ -74,12 +74,13 @@ jobs:
           echo "SDK_VERSION=${VERSION}" >> "$GITHUB_ENV"
         working-directory: a2a-java
 
+        # Temporarily use 'main' branch of grpc FP which has the required fixes
       - name: Checkout wildfly-grpc-feature-pack
         uses: actions/checkout@v4
         with:
-          repository: rhusar/wildfly-grpc-feature-pack
+          repository: wildfly-extras/wildfly-grpc-feature-pack
           path: wildfly-grpc-feature-pack
-      - name: Build wildfly-grpc-feature-pack with Maven, skipping tests
+      - name: Build wildfly-grpc-feature-pack
         working-directory: wildfly-grpc-feature-pack
         run: ./mvnw -B -ntp install -DskipTests
 

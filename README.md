@@ -41,9 +41,9 @@ For gRPC support, include the [wildfly-grpc-feature-pack](https://github.com/wil
                 <version>39.0.1.Final</version>
             </feature-pack>
             <feature-pack>
-                <groupId>org.wildfly.extras.grpc</groupId>
+                <groupId>org.wildfly.grpc</groupId>
                 <artifactId>wildfly-grpc-feature-pack</artifactId>
-                <version>0.1.17</version>
+                <version>0.1.17-SNAPSHOT</version>
             </feature-pack>
             <feature-pack>
                 <groupId>org.wildfly.extras.a2a</groupId>

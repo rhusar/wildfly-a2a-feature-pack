@@ -331,7 +331,7 @@
                 <version>${version.sdk}</version>
             </dependency>
             <dependency>
-                <groupId>org.wildfly.extras.grpc</groupId>
+                <groupId>org.wildfly.grpc</groupId>
                 <artifactId>wildfly-grpc-subsystem</artifactId>
                 <version>${version.wildfly.grpc}</version>
             </dependency>
