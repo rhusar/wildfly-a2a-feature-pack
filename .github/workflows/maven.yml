@@ -1,6 +1,8 @@
 name: Maven
 
 on:
+  schedule:
+    - cron: '0 6 * * *'
   push:
     branches:
       - '*'
@@ -44,10 +46,10 @@ jobs:
 
       - name: Build wildfly-grpc-feature-pack with Maven, skipping tests
         working-directory: wildfly-grpc-feature-pack
-        run: mvn -B -ntp install -DskipTests
+        run: ./mvnw -B -ntp install -DskipTests
 
       - name: Build and Test with Maven
-        run: mvn -B -ntp install
+        run: ./mvnw -B -ntp install
 
       - uses: actions/upload-artifact@v4
         if: failure()
