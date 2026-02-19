@@ -3,6 +3,8 @@
 name: Build and Run TCK
 
 on:
+  schedule:
+    - cron: '0 6 * * *'
   push:
     branches:
       - '*'
@@ -62,27 +64,28 @@ jobs:
       - name: Build a2a-java with Maven, skipping tests
         if: env.IS_SNAPSHOT == 'true'
         run: |
-          mvn -B -ntp install -DskipTests
+          ./mvnw -B -ntp install -DskipTests
         working-directory: a2a-java
       - name: Get a2a-java version and save as env var
         if: env.IS_SNAPSHOT == 'true'
         run: |
-          VERSION=$(mvn -b -ntp help:evaluate -Dexpression=project.version -q -DforceStdout 2>&1 | grep -v '\[')
+          VERSION=$(./mvnw -B -ntp help:evaluate -Dexpression=project.version -q -DforceStdout 2>&1 | grep -v '\[')
           echo "Detected a2a-java version: ${VERSION}"
           echo "SDK_VERSION=${VERSION}" >> "$GITHUB_ENV"
         working-directory: a2a-java
 
+        # Temporarily use 'main' branch of grpc FP which has the required fixes
       - name: Checkout wildfly-grpc-feature-pack
         uses: actions/checkout@v4
         with:
-          repository: rhusar/wildfly-grpc-feature-pack
+          repository: wildfly-extras/wildfly-grpc-feature-pack
           path: wildfly-grpc-feature-pack
-      - name: Build wildfly-grpc-feature-pack with Maven, skipping tests
+      - name: Build wildfly-grpc-feature-pack
         working-directory: wildfly-grpc-feature-pack
-        run: mvn -B -ntp install -DskipTests
+        run: ./mvnw -B -ntp install -DskipTests
 
       - name: Build the Feature pack and provision the TCK server
-        run: mvn -B -ntp install -Dversion.sdk=${SDK_VERSION}
+        run: ./mvnw -B -ntp install -Dversion.sdk=${SDK_VERSION}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -95,7 +98,7 @@ jobs:
         working-directory: a2a-tck
       - name: Start the WildFly SUT
         run: |
-          SUT_JSONRPC_URL=http://localhost:8080 SUT_REST_URL=http://localhost:8080 SUT_GRPC_URL=http://localhost:9555 mvn -B -ntp wildfly:start -Dversion.sdk=${SDK_VERSION} -pl tck -Dstartup-timeout=120 -Dwildfly.serverArgs="--stability=preview"
+          SUT_JSONRPC_URL=http://localhost:8080 SUT_REST_URL=http://localhost:8080 SUT_GRPC_URL=http://localhost:9555 ./mvnw -B -ntp wildfly:start -Dversion.sdk=${SDK_VERSION} -pl tck -Dstartup-timeout=120 -Dwildfly.serverArgs="--stability=preview"
       - name: Run TCK
         env:
           SUT_JSONRPC_URL: http://localhost:8080

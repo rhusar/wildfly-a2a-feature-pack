@@ -71,7 +71,7 @@
                         </feature-pack>
                         <!-- gRPC feature pack (required for a2a-server-grpc layer) -->
                         <feature-pack>
-                            <groupId>org.wildfly.extras.grpc</groupId>
+                            <groupId>org.wildfly.grpc</groupId>
                             <artifactId>wildfly-grpc-feature-pack</artifactId>
                             <version>${version.wildfly.grpc}</version>
                         </feature-pack>
