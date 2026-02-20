@@ -67,7 +67,7 @@
                         <feature-pack>
                             <groupId>org.wildfly</groupId>
                             <artifactId>wildfly-galleon-pack</artifactId>
-                            <version>${version.wildfly}</version>
+                            <version>${version.org.wildfly}</version>
                         </feature-pack>
                         <!-- gRPC feature pack (required for a2a-server-grpc layer) -->
                         <feature-pack>
