@@ -5,7 +5,7 @@ on:
     - cron: '0 6 * * *'
   push:
     branches:
-      - '*'
+      - main
   pull_request:
     branches:
       - '*'
@@ -15,6 +15,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.head_ref || github.ref }}'
+  cancel-in-progress: true
 
 jobs:
   build-and-test:
