@@ -62,7 +62,7 @@
         <version.gson>2.11.0</version.gson>
         <version.protobuf>4.33.1</version.protobuf>
         <version.guava>33.4.8-jre</version.guava>
-        <version.proto-google-common-protos>2.52.0</version.proto-google-common-protos>
+        <version.proto-google-common-protos>2.66.0</version.proto-google-common-protos>
         <version.mutiny-zero>1.0.0</version.mutiny-zero>
         <version.wildfly.grpc>0.1.17-SNAPSHOT</version.wildfly.grpc>
         <version.grpc>1.78.0</version.grpc>
