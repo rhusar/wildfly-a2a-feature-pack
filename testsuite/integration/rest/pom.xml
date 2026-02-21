@@ -56,7 +56,7 @@
                         <feature-pack>
                             <groupId>org.wildfly</groupId>
                             <artifactId>wildfly-galleon-pack</artifactId>
-                            <version>${version.wildfly}</version>
+                            <version>${version.org.wildfly}</version>
                         </feature-pack>
                         <feature-pack>
                             <groupId>${project.groupId}</groupId>
