@@ -61,7 +61,7 @@
         <version.org.wildfly.a2a>1.0.0.Alpha2</version.org.wildfly.a2a>
 
         <!-- Third-party dependencies (from A2A SDK) -->
-        <version.gson>2.11.0</version.gson>
+        <version.gson>2.13.2</version.gson>
         <version.protobuf>4.33.1</version.protobuf>
         <version.guava>33.4.8-jre</version.guava>
         <version.proto-google-common-protos>2.52.0</version.proto-google-common-protos>
