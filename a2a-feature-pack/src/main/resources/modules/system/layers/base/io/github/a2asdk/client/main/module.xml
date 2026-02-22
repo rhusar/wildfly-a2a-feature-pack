@@ -14,13 +14,15 @@
     </resources>
 
     <dependencies>
-        <module name="io.github.a2asdk.common"/>
-        <module name="io.github.a2asdk.spec"/>
-        <module name="io.github.a2asdk.http-client"/>
-        <module name="io.github.a2asdk.client-transport-spi"/>
-        <module name="io.github.a2asdk.client-transport-jsonrpc"/>
-        <module name="io.github.a2asdk.client-transport-grpc" optional="true"/>
-        <module name="io.github.a2asdk.client-transport-rest" optional="true"/>
         <module name="java.logging"/>
+
+        <module name="io.github.a2asdk.client-transport-grpc" optional="true"/>
+        <module name="io.github.a2asdk.client-transport-jsonrpc"/>
+        <module name="io.github.a2asdk.client-transport-rest" optional="true"/>
+        <module name="io.github.a2asdk.client-transport-spi"/>
+        <module name="io.github.a2asdk.common"/>
+        <module name="io.github.a2asdk.http-client"/>
+        <module name="io.github.a2asdk.spec"/>
+        <module name="org.slf4j"/>
     </dependencies>
 </module>

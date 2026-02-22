@@ -14,13 +14,11 @@
     </resources>
 
     <dependencies>
-        <!-- Jakarta EE APIs for CDI extension -->
         <module name="jakarta.enterprise.api"/>
         <module name="jakarta.inject.api"/>
 
-        <!-- A2A Jakarta transport modules (optional - loaded at runtime if available) -->
-        <module name="org.wildfly.a2a.jakarta.jsonrpc" optional="true"/>
         <module name="org.wildfly.a2a.jakarta.grpc" optional="true"/>
+        <module name="org.wildfly.a2a.jakarta.jsonrpc" optional="true"/>
         <module name="org.wildfly.a2a.jakarta.rest" optional="true"/>
     </dependencies>
 </module>
