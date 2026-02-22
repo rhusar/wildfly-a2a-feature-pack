@@ -57,7 +57,7 @@
         <version.org.wildfly.galleon-plugins>8.1.0.Final</version.org.wildfly.galleon-plugins>
 
         <!-- A2A dependencies -->
-        <version.sdk>1.0.0.Alpha2</version.sdk>
+        <version.sdk>1.0.0.Alpha3</version.sdk>
         <version.org.wildfly.a2a>1.0.0.Alpha2</version.org.wildfly.a2a>
 
         <!-- Third-party dependencies (from A2A SDK) -->
