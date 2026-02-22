@@ -102,17 +102,7 @@
             <artifactId>a2a-java-sdk-microprofile-config</artifactId>
         </dependency>
 
-        <!-- Reactive -->
-        <dependency>
-            <groupId>io.smallrye.reactive</groupId>
-            <artifactId>mutiny-zero</artifactId>
-        </dependency>
-
         <!-- Third-party dependencies -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
@@ -120,14 +110,6 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java-util</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>failureaccess</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.api.grpc</groupId>

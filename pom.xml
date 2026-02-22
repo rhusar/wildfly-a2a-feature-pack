@@ -63,11 +63,8 @@
         <version.org.wildfly.a2a>1.0.0.Alpha3</version.org.wildfly.a2a>
 
         <!-- Third-party dependencies (from A2A SDK) -->
-        <version.gson>2.11.0</version.gson>
         <version.protobuf>4.33.1</version.protobuf>
-        <version.guava>33.4.8-jre</version.guava>
         <version.proto-google-common-protos>2.52.0</version.proto-google-common-protos>
-        <version.mutiny-zero>1.0.0</version.mutiny-zero>
         <version.wildfly.grpc>0.1.17-SNAPSHOT</version.wildfly.grpc>
         <version.grpc>1.78.0</version.grpc>
 
@@ -292,11 +289,6 @@
 
             <!-- Third-party dependencies -->
             <dependency>
-                <groupId>com.google.code.gson</groupId>
-                <artifactId>gson</artifactId>
-                <version>${version.gson}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
                 <version>${version.protobuf}</version>
@@ -307,24 +299,9 @@
                 <version>${version.protobuf}</version>
             </dependency>
             <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${version.guava}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>failureaccess</artifactId>
-                <version>1.0.2</version>
-            </dependency>
-            <dependency>
                 <groupId>com.google.api.grpc</groupId>
                 <artifactId>proto-google-common-protos</artifactId>
                 <version>${version.proto-google-common-protos}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.smallrye.reactive</groupId>
-                <artifactId>mutiny-zero</artifactId>
-                <version>${version.mutiny-zero}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.a2asdk</groupId>
