@@ -177,6 +177,12 @@
             <artifactId>commons-logging-jboss-logging</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- SLF4J required by A2A SDK -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

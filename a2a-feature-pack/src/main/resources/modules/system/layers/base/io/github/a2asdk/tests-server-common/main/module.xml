@@ -14,13 +14,14 @@
     </resources>
 
     <dependencies>
-        <module name="io.github.a2asdk.common"/>
-        <module name="io.github.a2asdk.spec"/>
-        <module name="io.github.a2asdk.spec-grpc"/>
-        <module name="io.github.a2asdk.server-common"/>
-        <module name="io.github.a2asdk.http-client"/>
-        <module name="io.github.a2asdk.jsonrpc-common"/>
         <module name="jakarta.enterprise.api"/>
         <module name="jakarta.inject.api"/>
+
+        <module name="io.github.a2asdk.common"/>
+        <module name="io.github.a2asdk.http-client"/>
+        <module name="io.github.a2asdk.jsonrpc-common"/>
+        <module name="io.github.a2asdk.server-common"/>
+        <module name="io.github.a2asdk.spec"/>
+        <module name="io.github.a2asdk.spec-grpc"/>
     </dependencies>
 </module>

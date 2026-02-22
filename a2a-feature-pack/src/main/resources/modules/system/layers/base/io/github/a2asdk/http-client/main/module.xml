@@ -14,9 +14,11 @@
     </resources>
 
     <dependencies>
-        <module name="io.github.a2asdk.common"/>
-        <module name="io.github.a2asdk.spec"/>
-        <module name="io.github.a2asdk.jsonrpc-common"/>
         <module name="java.net.http"/>
+
+        <module name="io.github.a2asdk.common"/>
+        <module name="io.github.a2asdk.jsonrpc-common"/>
+        <module name="io.github.a2asdk.spec"/>
+        <module name="org.slf4j"/>
     </dependencies>
 </module>

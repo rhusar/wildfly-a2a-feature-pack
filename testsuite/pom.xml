@@ -8,6 +8,7 @@
         <groupId>org.wildfly.extras.a2a</groupId>
         <artifactId>wildfly-a2a-feature-pack-parent</artifactId>
         <version>0.0.1.Alpha1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>wildfly-a2a-testsuite-parent</artifactId>
