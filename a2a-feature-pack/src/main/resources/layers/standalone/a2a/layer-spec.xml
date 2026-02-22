@@ -28,13 +28,9 @@
         <package name="io.github.a2asdk.client-transport-jsonrpc"/>
         <package name="io.github.a2asdk.client-transport-grpc"/>
         <package name="io.github.a2asdk.client-transport-rest"/>
-        <!-- Reactive -->
-        <package name="io.smallrye.reactive.mutiny.zero"/>
         <!-- Third-party dependencies -->
-        <package name="com.google.code.gson"/>
         <package name="com.google.protobuf"/>
         <package name="com.google.protobuf.util"/>
         <package name="com.google.api.grpc.proto-google-common-protos"/>
-        <package name="com.google.guava"/>
     </packages>
 </layer-spec>
