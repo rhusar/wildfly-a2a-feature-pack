@@ -58,7 +58,7 @@
 
         <!-- A2A dependencies -->
         <version.sdk>1.0.0.Alpha2</version.sdk>
-        <version.org.wildfly.a2a>1.0.0.Alpha2</version.org.wildfly.a2a>
+        <version.org.wildfly.a2a>1.0.0.Alpha3</version.org.wildfly.a2a>
 
         <!-- Third-party dependencies (from A2A SDK) -->
         <version.gson>2.11.0</version.gson>
