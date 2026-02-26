@@ -37,7 +37,6 @@ public class A2ADependencyProcessor implements DeploymentUnitProcessor {
             "io.github.a2asdk.client-transport-grpc",
             "io.github.a2asdk.client-transport-rest",
             "io.github.a2asdk.server-common",
-            "io.github.a2asdk.tests-server-common",
             "com.google.code.gson",
             "com.google.protobuf",
             "com.google.protobuf.util",

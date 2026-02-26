@@ -21,7 +21,6 @@
         <package name="io.github.a2asdk.jsonrpc-common"/>
         <package name="io.github.a2asdk.http-client"/>
         <package name="io.github.a2asdk.server-common"/>
-        <package name="io.github.a2asdk.tests-server-common"/>
         <!-- A2A SDK client modules -->
         <package name="io.github.a2asdk.client"/>
         <package name="io.github.a2asdk.client-transport-spi"/>
