@@ -30,7 +30,7 @@
         <module name="org.jboss.as.jaxrs" optional="true"/>
         <!-- For gRPC service registration -->
         <module name="org.wildfly.extension.grpc" optional="true"/>
-        <module name="io.grpc" optional="true"/>
+        <module name="io.grpc-all" optional="true"/>
         <!-- For annotation indexing -->
         <module name="org.jboss.jandex"/>
         <!-- For adding resource roots from module JARs -->
