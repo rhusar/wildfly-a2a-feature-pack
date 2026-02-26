@@ -44,6 +44,16 @@
             <organization>wildfly.org</organization>
             <organizationUrl>https://wildfly.org</organizationUrl>
         </developer>
+        <developer>
+            <name>Radoslav Husar</name>
+            <email>rhusar@ibm.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <url>https://github.com/rhusar</url>
+            <organization>IBM</organization>
+            <organizationUrl>https://www.ibm.com</organizationUrl>
+        </developer>
     </developers>
 
     <properties>

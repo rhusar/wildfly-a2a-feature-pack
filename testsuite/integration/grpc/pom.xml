@@ -15,12 +15,6 @@
 
     <name>WildFly A2A Feature Pack - Testsuite - Integration - gRPC</name>
 
-    <properties>
-        <!-- Server arguments for preview stability level (needed for gRPC) -->
-        <server.jboss.args>--stability=preview</server.jboss.args>
-        <jboss.home>${project.build.directory}${file.separator}wildfly</jboss.home>
-    </properties>
-
     <dependencies>
         <!-- A2A SDK client transport -->
         <dependency>
@@ -93,10 +87,9 @@
                             <version>${version.wildfly.grpc}</version>
                         </feature-pack>
                     </feature-packs>
-                    <!-- Set stability level to preview for gRPC feature pack -->
+                    <!-- Set stability level to at least preview for gRPC feature pack -->
                     <galleon-options>
-                        <jboss-fork-embedded>true</jboss-fork-embedded>
-                        <stability-level>preview</stability-level>
+                        <stability-level>experimental</stability-level>
                     </galleon-options>
                     <layers>
                         <layer>a2a-server-grpc</layer>
@@ -116,7 +109,7 @@
                         <jboss.install.dir>${jboss.home}</jboss.install.dir>
                         <!-- test.agent.card.port is read by AgentCardProducer in a2a-java-sdk-tests-server-common -->
                         <!-- gRPC uses port 9555 for the agent card -->
-                        <test.agent.card.port>9555</test.agent.card.port>
+                        <server.jvm.args>-Dtest.agent.card.port=9555</server.jvm.args>
                         <jboss.args>${server.jboss.args}</jboss.args>
                     </systemPropertyVariables>
                 </configuration>
