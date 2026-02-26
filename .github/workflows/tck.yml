@@ -98,7 +98,7 @@ jobs:
         working-directory: a2a-tck
       - name: Start the WildFly SUT
         run: |
-          SUT_JSONRPC_URL=http://localhost:8080 SUT_REST_URL=http://localhost:8080 SUT_GRPC_URL=http://localhost:9555 ./mvnw -B -ntp wildfly:start -Dversion.sdk=${SDK_VERSION} -pl tck -Dstartup-timeout=120 -Dwildfly.serverArgs="--stability=preview"
+          SUT_JSONRPC_URL=http://localhost:8080 SUT_REST_URL=http://localhost:8080 SUT_GRPC_URL=http://localhost:9555 ./mvnw -B -ntp wildfly:start -Dversion.sdk=${SDK_VERSION} -pl tck -Dstartup-timeout=120 -Dwildfly.serverArgs="--stability=experimental"
       - name: Run TCK
         env:
           SUT_JSONRPC_URL: http://localhost:8080

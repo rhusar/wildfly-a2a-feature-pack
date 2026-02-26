@@ -41,7 +41,7 @@ For gRPC support, include the https://github.com/wildfly-extras/wildfly-grpc-fea
 <plugin>
     <groupId>org.wildfly.plugins</groupId>
     <artifactId>wildfly-maven-plugin</artifactId>
-    <version>5.0.0.Final</version>
+    <version>5.1.5.Final</version>
     <configuration>
         <feature-packs>
             <feature-pack>
@@ -69,7 +69,7 @@ For gRPC support, include the https://github.com/wildfly-extras/wildfly-grpc-fea
         </layers>
         <galleon-options>
             <jboss-fork-embedded>true</jboss-fork-embedded>
-            <stability-level>preview</stability-level>
+            <stability-level>experimental</stability-level>
         </galleon-options>
     </configuration>
     <executions>
@@ -183,4 +183,4 @@ TCK Endpoints Reference
 * https://github.com/a2aproject/a2a-java[a2a-java] - Java SDK for A2A protocol
 * https://github.com/a2aproject/a2a-tck[a2a-tck] - Official A2A protocol TCK
 * https://github.com/wildfly-extras/a2a-java-sdk-server-jakarta[a2a-java-sdk-server-jakarta] - Jakarta EE server implementation of A2A Java SDK
-* https://github.com/wildfly-extras/wildfly-ai-feature-pack[wildfly-ai-feature-pack] - WildFly feature pack for AI/LLM integration (langchain4j)
+* https://github.com/wildfly-extras/wildfly-ai-feature-pack[wildfly-ai-feature-pack] - WildFly feature pack for AI/LLM integration (LangChain4j)

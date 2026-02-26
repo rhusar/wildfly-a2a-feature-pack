@@ -71,6 +71,9 @@
                             <version>${project.version}</version>
                         </feature-pack>
                     </feature-packs>
+                    <galleon-options>
+                        <stability-level>${wildfly.a2a.stability}</stability-level>
+                    </galleon-options>
                     <layers>
                         <layer>ee-core-profile-server</layer>
                         <layer>jaxrs</layer>

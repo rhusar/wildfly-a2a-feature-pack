@@ -94,7 +94,7 @@
                     <provisioning-dir>${jboss.home}</provisioning-dir>
                     <galleon-options>
                         <jboss-fork-embedded>true</jboss-fork-embedded>
-                        <stability-level>preview</stability-level>
+                        <stability-level>${wildfly.a2a.stability}</stability-level>
                     </galleon-options>
                 </configuration>
                 <executions>

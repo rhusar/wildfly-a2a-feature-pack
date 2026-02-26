@@ -4,6 +4,7 @@
  */
 package org.wildfly.extension.a2a;
 
+import org.jboss.as.version.Stability;
 import org.wildfly.subsystem.SubsystemConfiguration;
 import org.wildfly.subsystem.SubsystemExtension;
 import org.wildfly.subsystem.SubsystemPersistence;
@@ -15,5 +16,10 @@ public class A2ASubsystemExtension extends SubsystemExtension<A2ASubsystemSchema
 
     public A2ASubsystemExtension() {
         super(SubsystemConfiguration.of(A2ASubsystemRegistrar.NAME, A2ASubsystemModel.CURRENT, A2ASubsystemRegistrar::new), SubsystemPersistence.of(A2ASubsystemSchema.CURRENT));
+    }
+
+    @Override
+    public Stability getStability() {
+        return Stability.EXPERIMENTAL;
     }
 }
