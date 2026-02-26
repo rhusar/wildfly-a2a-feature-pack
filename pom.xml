@@ -79,7 +79,7 @@
         <version.protobuf>4.33.1</version.protobuf>
         <version.proto-google-common-protos>2.52.0</version.proto-google-common-protos>
         <version.wildfly.grpc>0.1.17-SNAPSHOT</version.wildfly.grpc>
-        <version.grpc>1.78.0</version.grpc>
+        <version.grpc>1.79.0</version.grpc>
 
         <!-- Test dependencies -->
         <version.arquillian>1.10.0.Final</version.arquillian>
