@@ -72,7 +72,7 @@
                         </feature-pack>
                     </feature-packs>
                     <galleon-options>
-                        <stability-level>experimental</stability-level>
+                        <stability-level>${wildfly.a2a.stability}</stability-level>
                     </galleon-options>
                     <layers>
                         <layer>ee-core-profile-server</layer>

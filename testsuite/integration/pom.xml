@@ -17,8 +17,8 @@
 
     <properties>
         <jboss.home>${project.build.directory}/wildfly</jboss.home>
-        <!-- Server arguments for experimental stability level (needed for A2A subsystem) -->
-        <server.jboss.args>--stability=experimental</server.jboss.args>
+        <!-- Server arguments for A2A subsystem stability level -->
+        <server.jboss.args>--stability=${wildfly.a2a.stability}</server.jboss.args>
     </properties>
 
     <dependencyManagement>

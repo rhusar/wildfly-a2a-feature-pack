@@ -87,9 +87,9 @@
                             <version>${version.wildfly.grpc}</version>
                         </feature-pack>
                     </feature-packs>
-                    <!-- Set stability level to at least preview for gRPC feature pack -->
+                    <!-- Set stability level for gRPC feature pack -->
                     <galleon-options>
-                        <stability-level>experimental</stability-level>
+                        <stability-level>${wildfly.a2a.stability}</stability-level>
                     </galleon-options>
                     <layers>
                         <layer>a2a-server-grpc</layer>
