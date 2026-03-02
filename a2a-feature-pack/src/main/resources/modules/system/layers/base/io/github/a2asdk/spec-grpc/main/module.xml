@@ -16,10 +16,8 @@
     <dependencies>
         <module name="java.logging"/>
 
-        <module name="com.google.api.grpc.proto-google-common-protos"/>
         <module name="com.google.code.gson"/>
         <module name="com.google.protobuf"/>
-        <module name="com.google.protobuf.util"/>
         <module name="io.github.a2asdk.jsonrpc-common"/>
         <module name="io.github.a2asdk.spec"/>
         <module name="io.grpc-all" optional="true"/>

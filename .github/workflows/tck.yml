@@ -19,7 +19,9 @@ permissions:
   contents: read
 
 env:
-  TCK_VERSION: main
+  # Ref (branch/tag/SHA) of the TCK
+  # https://github.com/a2aproject/a2a-tck
+  TCK_VERSION: d36f441b560ec09ba2357d3a51c45c5b4ab258f7
   UV_SYSTEM_PYTHON: 1
 
 concurrency:

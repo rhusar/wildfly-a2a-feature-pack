@@ -28,8 +28,9 @@
         <package name="io.github.a2asdk.client-transport-grpc"/>
         <package name="io.github.a2asdk.client-transport-rest"/>
         <!-- Third-party dependencies -->
+        <!-- For layers that do NOT bring in the GRPC feature pack with an updated protobuf version -->
+        <!-- we need to bring an up-to-date one ourselves, since WildFly uses a very old and incompatible version -->
+        <!-- TODO remove once WildFly catches up -->
         <package name="com.google.protobuf"/>
-        <package name="com.google.protobuf.util"/>
-        <package name="com.google.api.grpc.proto-google-common-protos"/>
     </packages>
 </layer-spec>
