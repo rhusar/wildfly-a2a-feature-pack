@@ -21,7 +21,6 @@
         <module name="com.google.code.gson"/>
         <module name="com.google.guava"/>
         <module name="com.google.protobuf"/>
-        <module name="com.google.protobuf.util"/>
         <module name="io.github.a2asdk.common"/>
         <module name="io.github.a2asdk.http-client"/>
         <module name="io.github.a2asdk.jsonrpc-common"/>

@@ -39,8 +39,6 @@ public class A2ADependencyProcessor implements DeploymentUnitProcessor {
             "io.github.a2asdk.server-common",
             "com.google.code.gson",
             "com.google.protobuf",
-            "com.google.protobuf.util",
-            "com.google.api.grpc.proto-google-common-protos",
             "com.google.guava"
     };
 

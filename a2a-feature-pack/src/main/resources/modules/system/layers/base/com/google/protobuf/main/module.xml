@@ -3,17 +3,22 @@
   ~ Copyright The WildFly Authors
   ~ SPDX-License-Identifier: Apache-2.0
   -->
+<!-- n.b. modelled after https://github.com/wildfly/wildfly/blob/39.0.1.Final/galleon-pack/galleon-shared/src/main/resources/modules/system/layers/base/com/google/protobuf/main/module.xml -->
 <module xmlns="urn:jboss:module:1.9" name="com.google.protobuf">
-
     <properties>
         <property name="jboss.api" value="private"/>
     </properties>
 
     <resources>
+        <artifact name="${com.google.api.grpc:proto-google-common-protos}"/>
         <artifact name="${com.google.protobuf:protobuf-java}"/>
+        <artifact name="${com.google.protobuf:protobuf-java-util}"/>
     </resources>
 
     <dependencies>
+        <!-- TODO There is a bug in WF that the gson dependency is missing -->
+        <module name="com.google.code.gson"/>
+        <module name="com.google.guava"/>
         <module name="java.logging"/>
     </dependencies>
 </module>
