@@ -82,7 +82,7 @@
         <version.grpc>1.79.0</version.grpc>
 
         <!-- Test dependencies -->
-        <version.arquillian>1.10.0.Final</version.arquillian>
+        <version.arquillian>1.10.1.Final</version.arquillian>
         <version.wildfly.arquillian>5.1.0.Final</version.wildfly.arquillian>
         <version.wildfly.glow>1.5.2.Final</version.wildfly.glow>
         <version.wildfly.maven.plugin>5.1.5.Final</version.wildfly.maven.plugin>
