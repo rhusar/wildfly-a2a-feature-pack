@@ -2,7 +2,7 @@
   ~ Copyright The WildFly Authors
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<build xmlns="urn:wildfly:feature-pack-build:3.5" producer="org.wildfly.extras.a2a:wildfly-a2a-feature-pack">
+<build xmlns="urn:wildfly:feature-pack-build:3.5" producer="org.wildfly.a2a:wildfly-a2a-feature-pack">
     <transitive>
         <dependency group-id="org.wildfly" artifact-id="wildfly-ee-galleon-pack" allowedFamily="wildfly:jakarta-ee-10+">
             <name>org.wildfly:wildfly-ee-galleon-pack</name>
