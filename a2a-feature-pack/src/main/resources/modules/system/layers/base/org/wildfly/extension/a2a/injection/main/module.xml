@@ -10,7 +10,7 @@
     </properties>
 
     <resources>
-        <artifact name="${org.wildfly.extras.a2a:wildfly-a2a-injection}"/>
+        <artifact name="${org.wildfly.a2a:wildfly-a2a-injection}"/>
     </resources>
 
     <dependencies>

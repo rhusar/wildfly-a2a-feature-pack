@@ -55,7 +55,7 @@ For gRPC support, include the https://github.com/wildfly-extras/wildfly-grpc-fea
                 <version>0.1.17-SNAPSHOT</version>
             </feature-pack>
             <feature-pack>
-                <groupId>org.wildfly.extras.a2a</groupId>
+                <groupId>org.wildfly.a2a</groupId>
                 <artifactId>wildfly-a2a-feature-pack</artifactId>
                 <version>0.0.1.Alpha1-SNAPSHOT</version>
             </feature-pack>

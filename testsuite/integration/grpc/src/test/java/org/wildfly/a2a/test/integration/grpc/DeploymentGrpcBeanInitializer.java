@@ -2,7 +2,6 @@ package org.wildfly.a2a.test.integration.grpc;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
-import org.wildfly.extras.a2a.server.apps.grpc.GrpcBeanInitializer;
 import org.wildfly.extras.a2a.server.apps.grpc.WildFlyGrpcHandler;
 
 /**
