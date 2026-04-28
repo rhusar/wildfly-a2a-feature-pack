@@ -88,7 +88,7 @@
         <version.wildfly.maven.plugin>5.1.5.Final</version.wildfly.maven.plugin>
         <version.rest-assured>6.0.0</version.rest-assured>
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
-        <version.shrinkwrap.resolver>3.3.5</version.shrinkwrap.resolver>
+        <version.shrinkwrap.resolver>3.3.6</version.shrinkwrap.resolver>
     </properties>
 
     <dependencyManagement>
