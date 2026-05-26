@@ -84,7 +84,7 @@
         <!-- Test dependencies -->
         <version.arquillian>1.10.2.Final</version.arquillian>
         <version.wildfly.arquillian>5.1.0.Final</version.wildfly.arquillian>
-        <version.wildfly.glow>2.0.0.Final</version.wildfly.glow>
+        <version.wildfly.glow>2.1.0.Final</version.wildfly.glow>
         <version.wildfly.maven.plugin>6.0.0.Final</version.wildfly.maven.plugin>
         <version.rest-assured>6.0.0</version.rest-assured>
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
