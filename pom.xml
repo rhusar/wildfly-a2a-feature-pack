@@ -73,7 +73,6 @@
 
         <!-- A2A dependencies -->
         <version.sdk>1.0.0.CR1</version.sdk>
-        <version.tck>1.0.0.Alpha4</version.tck>
         <version.org.wildfly.a2a>1.0.0.Beta1</version.org.wildfly.a2a>
 
         <!-- Third-party dependencies (from A2A SDK) -->

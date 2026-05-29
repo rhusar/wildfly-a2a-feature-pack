@@ -21,8 +21,11 @@ permissions:
 env:
   # Ref (branch/tag/SHA) of the TCK
   # https://github.com/a2aproject/a2a-tck
-  TCK_VERSION: d36f441b560ec09ba2357d3a51c45c5b4ab258f7
+  TCK_VERSION: 1.0.0.alpha1
   UV_SYSTEM_PYTHON: 1
+  # Env vars to configure SUT hosts
+  SUT_HOST: localhost:8080
+  SUT_GRPC_HOST: localhost:9555
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.head_ref || github.ref }}'
@@ -100,14 +103,15 @@ jobs:
         working-directory: a2a-tck
       - name: Start the WildFly SUT
         run: |
-          SUT_JSONRPC_URL=http://localhost:8080 SUT_REST_URL=http://localhost:8080 SUT_GRPC_URL=http://localhost:9555 ./mvnw -B -ntp wildfly:start -Dversion.sdk=${SDK_VERSION} -pl tck -Dstartup-timeout=120 -Dwildfly.serverArgs="--stability=experimental"
+          ./mvnw -B -ntp wildfly:start -Dversion.sdk=${SDK_VERSION} -pl tck -Dstartup-timeout=120 -Dwildfly.serverArgs="--stability=experimental"
       - name: Run TCK
-        env:
-          SUT_JSONRPC_URL: http://localhost:8080
-          TCK_STREAMING_TIMEOUT: 4.0
         run: |
-          ./run_tck.py --sut-url ${SUT_JSONRPC_URL} --category all --transports jsonrpc,grpc,rest --compliance-report report.json
+          set -o pipefail
+          uv run ./run_tck.py --sut-host http://${{ env.SUT_HOST }} -v 2>&1 | tee tck-output.log
         working-directory: a2a-tck
+      - name: Shutdown the WildFly SUT
+        run: |
+          ./mvnw -B -ntp wildfly:shutdown -pl tck
       - name: Upload tck server.log
         uses: actions/upload-artifact@v7
         if: always()
@@ -115,4 +119,3 @@ jobs:
           name: tck-server-log
           path: tck/target/wildfly/standalone/log/server.log
           retention-days: 5
-

@@ -31,8 +31,8 @@
         -->
         <dependency>
             <groupId>org.a2aproject.sdk</groupId>
-            <artifactId>a2a-tck-server</artifactId>
-            <version>${version.tck}</version>
+            <artifactId>a2a-java-sdk-tck-sut</artifactId>
+            <version>${version.sdk}</version>
             <exclusions>
                 <!-- Exclude all dependencies - they are provided by the A2A feature pack -->
                 <exclusion>
