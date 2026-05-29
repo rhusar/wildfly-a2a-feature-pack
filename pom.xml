@@ -72,19 +72,19 @@
         <version.org.wildfly.galleon-plugins>8.1.5.Final</version.org.wildfly.galleon-plugins>
 
         <!-- A2A dependencies -->
-        <version.sdk>1.0.0.Alpha3</version.sdk>
-        <version.org.wildfly.a2a>1.0.0.Alpha3</version.org.wildfly.a2a>
+        <version.sdk>1.0.0.CR1</version.sdk>
+        <version.org.wildfly.a2a>1.0.0.Beta1</version.org.wildfly.a2a>
 
         <!-- Third-party dependencies (from A2A SDK) -->
-        <version.protobuf>4.34.0</version.protobuf>
-        <version.proto-google-common-protos>2.52.0</version.proto-google-common-protos>
+        <version.protobuf>4.35.0</version.protobuf>
+        <version.proto-google-common-protos>2.71.0</version.proto-google-common-protos>
         <version.wildfly.grpc>0.1.17-SNAPSHOT</version.wildfly.grpc>
-        <version.grpc>1.79.0</version.grpc>
+        <version.grpc>1.81.0</version.grpc>
 
         <!-- Test dependencies -->
         <version.arquillian>1.10.2.Final</version.arquillian>
         <version.wildfly.arquillian>5.1.0.Final</version.wildfly.arquillian>
-        <version.wildfly.glow>2.0.0.Final</version.wildfly.glow>
+        <version.wildfly.glow>2.1.0.Final</version.wildfly.glow>
         <version.wildfly.maven.plugin>6.0.0.Final</version.wildfly.maven.plugin>
         <version.rest-assured>6.0.0</version.rest-assured>
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
@@ -113,7 +113,7 @@
 
             <!-- A2A SDK BOM -->
             <dependency>
-                <groupId>io.github.a2asdk</groupId>
+                <groupId>org.a2aproject.sdk</groupId>
                 <artifactId>a2a-java-sdk-bom</artifactId>
                 <version>${version.sdk}</version>
                 <type>pom</type>
@@ -153,7 +153,7 @@
 
             <!-- A2A SDK - Core -->
             <dependency>
-                <groupId>io.github.a2asdk</groupId>
+                <groupId>org.a2aproject.sdk</groupId>
                 <artifactId>a2a-java-sdk-common</artifactId>
                 <version>${version.sdk}</version>
                 <exclusions>
@@ -164,7 +164,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>io.github.a2asdk</groupId>
+                <groupId>org.a2aproject.sdk</groupId>
                 <artifactId>a2a-java-sdk-spec</artifactId>
                 <version>${version.sdk}</version>
                 <exclusions>
@@ -175,7 +175,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>io.github.a2asdk</groupId>
+                <groupId>org.a2aproject.sdk</groupId>
                 <artifactId>a2a-java-sdk-spec-grpc</artifactId>
                 <version>${version.sdk}</version>
                 <exclusions>
@@ -186,7 +186,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>io.github.a2asdk</groupId>
+                <groupId>org.a2aproject.sdk</groupId>
                 <artifactId>a2a-java-sdk-jsonrpc-common</artifactId>
                 <version>${version.sdk}</version>
                 <exclusions>
@@ -197,7 +197,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>io.github.a2asdk</groupId>
+                <groupId>org.a2aproject.sdk</groupId>
                 <artifactId>a2a-java-sdk-http-client</artifactId>
                 <version>${version.sdk}</version>
                 <exclusions>
@@ -208,7 +208,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>io.github.a2asdk</groupId>
+                <groupId>org.a2aproject.sdk</groupId>
                 <artifactId>a2a-java-sdk-server-common</artifactId>
                 <version>${version.sdk}</version>
                 <exclusions>
@@ -219,7 +219,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>io.github.a2asdk</groupId>
+                <groupId>org.a2aproject.sdk</groupId>
                 <artifactId>a2a-java-sdk-tests-server-common</artifactId>
                 <version>${version.sdk}</version>
                 <exclusions>
@@ -232,7 +232,7 @@
 
             <!-- A2A SDK - Transports -->
             <dependency>
-                <groupId>io.github.a2asdk</groupId>
+                <groupId>org.a2aproject.sdk</groupId>
                 <artifactId>a2a-java-sdk-transport-jsonrpc</artifactId>
                 <version>${version.sdk}</version>
                 <exclusions>
@@ -243,7 +243,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>io.github.a2asdk</groupId>
+                <groupId>org.a2aproject.sdk</groupId>
                 <artifactId>a2a-java-sdk-transport-grpc</artifactId>
                 <version>${version.sdk}</version>
                 <exclusions>
@@ -254,7 +254,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>io.github.a2asdk</groupId>
+                <groupId>org.a2aproject.sdk</groupId>
                 <artifactId>a2a-java-sdk-transport-rest</artifactId>
                 <version>${version.sdk}</version>
                 <exclusions>
@@ -317,7 +317,7 @@
                 <version>${version.proto-google-common-protos}</version>
             </dependency>
             <dependency>
-                <groupId>io.github.a2asdk</groupId>
+                <groupId>org.a2aproject.sdk</groupId>
                 <artifactId>a2a-java-sdk-microprofile-config</artifactId>
                 <version>${version.sdk}</version>
             </dependency>

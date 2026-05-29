@@ -13,7 +13,7 @@
         <layer name="a2a"/>
     </dependencies>
     <packages>
-        <package name="io.github.a2asdk.transport.jsonrpc"/>
+        <package name="org.a2aproject.sdk.transport.jsonrpc"/>
         <package name="org.wildfly.a2a.jakarta.jsonrpc"/>
     </packages>
 </layer-spec>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<module xmlns="urn:jboss:module:1.9" name="org.a2aproject.sdk.http-client">
+
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
+
+    <resources>
+        <artifact name="${org.a2aproject.sdk:a2a-java-sdk-http-client}"/>
+    </resources>
+
+    <dependencies>
+        <module name="java.net.http"/>
+
+        <module name="org.a2aproject.sdk.common"/>
+        <module name="org.a2aproject.sdk.jsonrpc-common"/>
+        <module name="org.a2aproject.sdk.spec"/>
+        <module name="org.slf4j"/>
+    </dependencies>
+</module>

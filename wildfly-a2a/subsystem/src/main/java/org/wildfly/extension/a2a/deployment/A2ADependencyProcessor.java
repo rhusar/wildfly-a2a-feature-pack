@@ -26,17 +26,17 @@ public class A2ADependencyProcessor implements DeploymentUnitProcessor {
      */
     private static final String[] EXPORTED_MODULES = {
             "org.wildfly.extension.a2a.injection",
-            "io.github.a2asdk.common",
-            "io.github.a2asdk.spec",
-            "io.github.a2asdk.spec-grpc",
-            "io.github.a2asdk.jsonrpc-common",
-            "io.github.a2asdk.http-client",
-            "io.github.a2asdk.client",
-            "io.github.a2asdk.client-transport-spi",
-            "io.github.a2asdk.client-transport-jsonrpc",
-            "io.github.a2asdk.client-transport-grpc",
-            "io.github.a2asdk.client-transport-rest",
-            "io.github.a2asdk.server-common",
+            "org.a2aproject.sdk.common",
+            "org.a2aproject.sdk.spec",
+            "org.a2aproject.sdk.spec-grpc",
+            "org.a2aproject.sdk.jsonrpc-common",
+            "org.a2aproject.sdk.http-client",
+            "org.a2aproject.sdk.client",
+            "org.a2aproject.sdk.client-transport-spi",
+            "org.a2aproject.sdk.client-transport-jsonrpc",
+            "org.a2aproject.sdk.client-transport-grpc",
+            "org.a2aproject.sdk.client-transport-rest",
+            "org.a2aproject.sdk.server-common",
             "com.google.code.gson",
             "com.google.protobuf",
             "com.google.guava"
@@ -46,11 +46,11 @@ public class A2ADependencyProcessor implements DeploymentUnitProcessor {
      * Optional transport modules - added based on what's available.
      */
     private static final String[] OPTIONAL_MODULES = {
-            "io.github.a2asdk.transport.jsonrpc",
-            "io.github.a2asdk.transport.grpc",
-            "io.github.a2asdk.transport.rest",
+            "org.a2aproject.sdk.transport.jsonrpc",
+            "org.a2aproject.sdk.transport.grpc",
+            "org.a2aproject.sdk.transport.rest",
             "io.smallrye.reactive.mutiny.zero",
-            "io.github.a2asdk.microprofile-config"
+            "org.a2aproject.sdk.microprofile-config"
     };
 
     /**

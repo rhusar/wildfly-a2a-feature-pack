@@ -13,6 +13,6 @@
         <layer name="a2a"/>
     </dependencies>
     <packages>
-        <package name="io.github.a2asdk.transport.grpc"/>
+        <package name="org.a2aproject.sdk.transport.grpc"/>
     </packages>
 </layer-spec>

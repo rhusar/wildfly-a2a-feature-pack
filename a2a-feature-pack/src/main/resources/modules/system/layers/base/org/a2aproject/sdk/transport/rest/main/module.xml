@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<module xmlns="urn:jboss:module:1.9" name="org.a2aproject.sdk.transport.rest">
+
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
+
+    <resources>
+        <artifact name="${org.a2aproject.sdk:a2a-java-sdk-transport-rest}"/>
+    </resources>
+
+    <dependencies>
+        <module name="java.logging"/>
+        <module name="jakarta.enterprise.api"/>
+        <module name="jakarta.inject.api"/>
+        <module name="jakarta.ws.rs.api"/>
+        <module name="jakarta.servlet.api"/>
+
+        <module name="com.google.code.gson"/>
+        <module name="com.google.guava"/>
+        <module name="com.google.protobuf"/>
+        <module name="org.a2aproject.sdk.common"/>
+        <module name="org.a2aproject.sdk.jsonrpc-common"/>
+        <module name="org.a2aproject.sdk.server-common"/>
+        <module name="org.a2aproject.sdk.spec"/>
+        <module name="org.a2aproject.sdk.spec-grpc"/>
+        <module name="io.smallrye.reactive.mutiny.zero"/>
+        <module name="org.slf4j"/>
+    </dependencies>
+</module>
