@@ -18,17 +18,17 @@
     <dependencies>
         <!-- A2A SDK client transport -->
         <dependency>
-            <groupId>io.github.a2asdk</groupId>
+            <groupId>org.a2aproject.sdk</groupId>
             <artifactId>a2a-java-sdk-client-transport-jsonrpc</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.github.a2asdk</groupId>
+            <groupId>org.a2aproject.sdk</groupId>
             <artifactId>a2a-java-sdk-transport-jsonrpc</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.github.a2asdk</groupId>
+            <groupId>org.a2aproject.sdk</groupId>
             <artifactId>a2a-java-sdk-microprofile-config</artifactId>
             <scope>test</scope>
         </dependency>
@@ -77,6 +77,7 @@
                     <layers>
                         <layer>ee-core-profile-server</layer>
                         <layer>jaxrs</layer>
+                        <layer>microprofile-config</layer>
                         <layer>a2a-server-jsonrpc</layer>
                     </layers>
                 </configuration>

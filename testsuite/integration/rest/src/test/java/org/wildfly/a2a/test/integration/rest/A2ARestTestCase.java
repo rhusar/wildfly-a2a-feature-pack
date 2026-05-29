@@ -6,11 +6,11 @@ package org.wildfly.a2a.test.integration.rest;
 
 import java.io.File;
 
-import io.a2a.client.ClientBuilder;
-import io.a2a.client.transport.rest.RestTransport;
-import io.a2a.client.transport.rest.RestTransportConfigBuilder;
-import io.a2a.server.apps.common.AbstractA2AServerTest;
-import io.a2a.spec.TransportProtocol;
+import org.a2aproject.sdk.client.ClientBuilder;
+import org.a2aproject.sdk.client.transport.rest.RestTransport;
+import org.a2aproject.sdk.client.transport.rest.RestTransportConfigBuilder;
+import org.a2aproject.sdk.server.apps.common.AbstractA2AServerTest;
+import org.a2aproject.sdk.spec.TransportProtocol;
 import io.restassured.RestAssured;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
