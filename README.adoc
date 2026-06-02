@@ -143,7 +143,7 @@ mvn package -pl tck -am
 
 [source,bash]
 ----
-SUT_JSONRPC_URL=http://localhost:8080 SUT_GRPC_URL=http://localhost:9555 SUT_REST_URL=http://localhost:8080 tck/target/wildfly/bin/standalone.sh --stability=preview
+SUT_HOST=localhost:8080 SUT_GRPC_HOST=localhost:9555 tck/target/wildfly/bin/standalone.sh --stability=experimental
 ----
 
 . Clone and set up the A2A TCK:
@@ -152,6 +152,7 @@ SUT_JSONRPC_URL=http://localhost:8080 SUT_GRPC_URL=http://localhost:9555 SUT_RES
 ----
 git clone https://github.com/a2aproject/a2a-tck.git
 cd a2a-tck
+git checkout 1.0.0.alpha1
 pip install uv
 uv pip install -e .
 ----
@@ -160,7 +161,7 @@ uv pip install -e .
 
 [source,bash]
 ----
-TCK_STREAMING_TIMEOUT=4.0 SUT_JSONRPC_URL=http://localhost:8080 SUT_GRPC_URL=http://localhost:9555 SUT_REST_URL=http://localhost:8080 uv run ./run_tck.py --sut-url http://localhost:8080 --category all --transports jsonrpc,grpc,rest --compliance-report report.json
+uv run ./run_tck.py --sut-host http://localhost:8080 -v
 ----
 
 . Stop the server:

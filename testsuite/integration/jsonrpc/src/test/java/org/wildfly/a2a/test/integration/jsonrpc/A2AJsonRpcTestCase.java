@@ -4,11 +4,11 @@
  */
 package org.wildfly.a2a.test.integration.jsonrpc;
 
-import io.a2a.client.ClientBuilder;
-import io.a2a.client.transport.jsonrpc.JSONRPCTransport;
-import io.a2a.client.transport.jsonrpc.JSONRPCTransportConfigBuilder;
-import io.a2a.server.apps.common.AbstractA2AServerTest;
-import io.a2a.spec.TransportProtocol;
+import org.a2aproject.sdk.client.ClientBuilder;
+import org.a2aproject.sdk.client.transport.jsonrpc.JSONRPCTransport;
+import org.a2aproject.sdk.client.transport.jsonrpc.JSONRPCTransportConfigBuilder;
+import org.a2aproject.sdk.server.apps.common.AbstractA2AServerTest;
+import org.a2aproject.sdk.spec.TransportProtocol;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit5.container.annotation.ArquillianTest;

@@ -7,11 +7,11 @@ package org.wildfly.a2a.test.integration.grpc;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import io.a2a.server.apps.common.AbstractA2AServerTest;
-import io.a2a.client.ClientBuilder;
-import io.a2a.client.transport.grpc.GrpcTransport;
-import io.a2a.client.transport.grpc.GrpcTransportConfigBuilder;
-import io.a2a.spec.TransportProtocol;
+import org.a2aproject.sdk.server.apps.common.AbstractA2AServerTest;
+import org.a2aproject.sdk.client.ClientBuilder;
+import org.a2aproject.sdk.client.transport.grpc.GrpcTransport;
+import org.a2aproject.sdk.client.transport.grpc.GrpcTransportConfigBuilder;
+import org.a2aproject.sdk.spec.TransportProtocol;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.restassured.RestAssured;
@@ -79,6 +79,11 @@ public class A2AGrpcTestCase extends AbstractA2AServerTest {
     static JavaArchive getJarForClass(Class<?> clazz) throws Exception {
         File f = new File(clazz.getProtectionDomain().getCodeSource().getLocation().toURI());
         return ShrinkWrap.createFromZipFile(JavaArchive.class, f);
+    }
+
+    @Override
+    public void testAgentCardHeaders() {
+        // gRPC doesn't use HTTP caching headers for Agent Card
     }
 
     @AfterAll

@@ -4,7 +4,7 @@
  */
 package org.wildfly.extension.a2a.deployment;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 import org.jboss.as.controller.capability.CapabilityServiceSupport;
@@ -23,6 +23,7 @@ import org.wildfly.extension.a2a.A2ALogger;
 import org.wildfly.extension.grpc.WildFlyGrpcDeploymentRegistry;
 
 import io.grpc.BindableService;
+import io.grpc.ServerInterceptor;
 
 /**
  * Deployment processor that manually registers the A2A gRPC handler with the WildFly gRPC deployment registry.
@@ -34,6 +35,7 @@ public class A2AGrpcServiceProcessor implements DeploymentUnitProcessor {
 
     private static final String GRPC_SERVER_CAPABILITY = "org.wildfly.grpc.server";
     private static final String GRPC_HANDLER_CLASS = "org.wildfly.extras.a2a.server.apps.grpc.WildFlyGrpcHandler";
+    private static final String GRPC_INTERCEPTOR_CLASS = "org.wildfly.extras.a2a.server.apps.grpc.A2AExtensionsInterceptor";
     private static final String GRPC_HANDLER_MODULE = "org.wildfly.a2a.jakarta.grpc";
 
     @Override
@@ -50,14 +52,19 @@ public class A2AGrpcServiceProcessor implements DeploymentUnitProcessor {
             return;
         }
 
-        // Load WildFlyGrpcHandler class from its module to avoid compile-time dependency
+        // Load WildFlyGrpcHandler and A2AExtensionsInterceptor from their module to avoid compile-time dependency
         Class<? extends BindableService> handlerClass;
+        List<ServerInterceptor> interceptors;
         try {
             Module module = Module.getBootModuleLoader().loadModule(GRPC_HANDLER_MODULE);
             @SuppressWarnings("unchecked")
             Class<? extends BindableService> clazz = (Class<? extends BindableService>)
                     module.getClassLoader().loadClass(GRPC_HANDLER_CLASS);
             handlerClass = clazz;
+            @SuppressWarnings("unchecked")
+            Class<? extends ServerInterceptor> interceptorClass = (Class<? extends ServerInterceptor>)
+                    module.getClassLoader().loadClass(GRPC_INTERCEPTOR_CLASS);
+            interceptors = List.of(interceptorClass.getConstructor().newInstance());
         } catch (Exception e) {
             A2ALogger.ROOT_LOGGER.warnf("Failed to load gRPC handler class for '%s': %s",
                     deploymentUnit.getName(), e.getMessage());
@@ -71,7 +78,7 @@ public class A2AGrpcServiceProcessor implements DeploymentUnitProcessor {
         ServiceBuilder<?> builder = phaseContext.getServiceTarget().addService(a2aGrpcServiceName);
         Supplier<WildFlyGrpcDeploymentRegistry> registrySupplier = builder.requires(serviceName);
 
-        builder.setInstance(new A2AGrpcRegistrationService(deploymentUnit, handlerClass, registrySupplier));
+        builder.setInstance(new A2AGrpcRegistrationService(deploymentUnit, handlerClass, interceptors, registrySupplier));
         builder.install();
 
         A2ALogger.ROOT_LOGGER.infof("Installed A2A gRPC registration service for deployment '%s'", deploymentUnit.getName());
@@ -88,13 +95,16 @@ public class A2AGrpcServiceProcessor implements DeploymentUnitProcessor {
     private static class A2AGrpcRegistrationService implements Service {
         private final DeploymentUnit deploymentUnit;
         private final Class<? extends BindableService> handlerClass;
+        private final List<ServerInterceptor> interceptors;
         private final Supplier<WildFlyGrpcDeploymentRegistry> registrySupplier;
 
         A2AGrpcRegistrationService(DeploymentUnit deploymentUnit,
                                    Class<? extends BindableService> handlerClass,
+                                   List<ServerInterceptor> interceptors,
                                    Supplier<WildFlyGrpcDeploymentRegistry> registrySupplier) {
             this.deploymentUnit = deploymentUnit;
             this.handlerClass = handlerClass;
+            this.interceptors = interceptors;
             this.registrySupplier = registrySupplier;
         }
 
@@ -110,7 +120,7 @@ public class A2AGrpcServiceProcessor implements DeploymentUnitProcessor {
             A2ALogger.ROOT_LOGGER.infof("Got gRPC registry: %s", registry.getClass().getName());
 
             try {
-                registry.addService(deploymentUnit, handlerClass, Collections.emptyList());
+                registry.addService(deploymentUnit, handlerClass, interceptors);
                 A2ALogger.ROOT_LOGGER.infof("Registered A2A gRPC handler '%s' for deployment '%s'",
                         GRPC_HANDLER_CLASS, deploymentUnit.getName());
             } catch (Exception e) {

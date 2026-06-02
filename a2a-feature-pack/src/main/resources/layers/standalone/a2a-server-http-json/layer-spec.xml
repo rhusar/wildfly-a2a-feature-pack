@@ -13,7 +13,7 @@
         <layer name="a2a"/>
     </dependencies>
     <packages>
-        <package name="io.github.a2asdk.transport.rest"/>
+        <package name="org.a2aproject.sdk.transport.rest"/>
         <package name="org.wildfly.a2a.jakarta.rest"/>
     </packages>
 </layer-spec>
