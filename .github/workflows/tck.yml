@@ -1,4 +1,4 @@
-# Based on https://github.com/wildfly-extras/a2a-java-sdk-server-jakarta/blob/main/.github/workflows/run-tck.yml
+# Based on https://github.com/wildfly-extras/a2a-jakarta/blob/main/.github/workflows/run-tck.yml
 
 name: Build and Run TCK
 
