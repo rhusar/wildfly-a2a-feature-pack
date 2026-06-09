@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.wildfly.a2a</groupId>
+        <artifactId>wildfly-a2a-feature-pack-parent</artifactId>
+        <version>0.0.1.Alpha1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>wildfly-a2a-tck-0.3</artifactId>
+    <packaging>war</packaging>
+
+    <name>WildFly A2A Feature Pack - TCK v0.3</name>
+    <description>TCK server for running the legacy A2A protocol v0.3 TCK against WildFly with the A2A feature pack</description>
+
+    <properties>
+        <jboss.home>${project.build.directory}/wildfly</jboss.home>
+    </properties>
+
+    <dependencies>
+        <!--
+            Include the v0.3 TCK server from the a2a-java project.
+            This provides the v0.3 AgentExecutor and AgentCard producers for the TCK tests.
+        -->
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-compat-0.3-tck-server</artifactId>
+            <version>${version.sdk}</version>
+            <exclusions>
+                <!-- All dependencies are provided by the A2A feature pack -->
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Jakarta APIs (provided by WildFly) -->
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- WildFly Maven plugin for provisioning and running the server -->
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${version.wildfly.maven.plugin}</version>
+                <configuration>
+                    <feature-packs>
+                        <feature-pack>
+                            <groupId>org.wildfly</groupId>
+                            <artifactId>wildfly-galleon-pack</artifactId>
+                            <version>${version.org.wildfly}</version>
+                        </feature-pack>
+                        <!-- gRPC feature pack (required for a2a-server-grpc-0.3 layer) -->
+                        <feature-pack>
+                            <groupId>org.wildfly.grpc</groupId>
+                            <artifactId>wildfly-grpc-feature-pack</artifactId>
+                            <version>${version.wildfly.grpc}</version>
+                        </feature-pack>
+                        <!-- A2A feature pack -->
+                        <feature-pack>
+                            <groupId>org.wildfly.a2a</groupId>
+                            <artifactId>wildfly-a2a-feature-pack</artifactId>
+                            <version>${project.version}</version>
+                        </feature-pack>
+                    </feature-packs>
+                    <layers>
+                        <layer>cloud-server</layer>
+                        <layer>a2a-server-jsonrpc-0.3</layer>
+                        <layer>a2a-server-grpc-0.3</layer>
+                        <layer>a2a-server-http-json-0.3</layer>
+                        <layer>grpc</layer>
+                    </layers>
+                    <jboss-home>${jboss.home}</jboss-home>
+                    <name>ROOT.war</name>
+                    <provisioning-dir>${jboss.home}</provisioning-dir>
+                    <galleon-options>
+                        <jboss-fork-embedded>true</jboss-fork-embedded>
+                        <stability-level>${wildfly.a2a.stability}</stability-level>
+                    </galleon-options>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>provision</id>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!--
+            Multi-version profile: provisions a single server that serves both v1.0 and v0.3
+            transports. The DerivedAgentCardProducer (added from src/multi-version/java) derives a
+            v1.0 agent card from the v0.3 card so the server advertises both.
+        -->
+        <profile>
+            <id>multi-version</id>
+            <dependencies>
+                <!-- Provided deps needed to compile DerivedAgentCardProducer -->
+                <dependency>
+                    <groupId>org.a2aproject.sdk</groupId>
+                    <artifactId>a2a-java-sdk-spec</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.a2aproject.sdk</groupId>
+                    <artifactId>a2a-java-sdk-compat-0.3-spec</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.a2aproject.sdk</groupId>
+                    <artifactId>a2a-java-sdk-server-common</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>jakarta.inject</groupId>
+                    <artifactId>jakarta.inject-api</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-multi-version-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/multi-version/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <configuration>
+                            <layers>
+                                <layer>cloud-server</layer>
+                                <layer>a2a-server-multiversion</layer>
+                                <layer>grpc</layer>
+                            </layers>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

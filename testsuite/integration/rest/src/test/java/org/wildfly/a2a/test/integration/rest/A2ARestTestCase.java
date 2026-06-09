@@ -51,6 +51,18 @@ public class A2ARestTestCase extends AbstractA2AServerTest {
         builder.withTransport(RestTransport.class, new RestTransportConfigBuilder());
     }
 
+    /**
+     * Disabled in the feature-pack deployment model: request-scoped propagation onto the SDK
+     * agent-executor threads requires a managed-executor {@code @Internal Executor} bundled in the
+     * application archive, which is not visible to the SDK transport modules' bean archives in the
+     * modular feature-pack layout. See {@code A2AJsonRpcTestCase} for details.
+     */
+    @Test
+    @Disabled("Request context propagation onto SDK agent-executor threads is not supported in the modular feature-pack deployment model")
+    @Override
+    public void testRequestScopedBeanAvailableOnAgentExecutorThread() {
+    }
+
     @Deployment
     public static WebArchive createTestArchive() throws Exception {
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "ROOT.war")

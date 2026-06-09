@@ -10,24 +10,14 @@
     </properties>
 
     <resources>
-        <artifact name="${org.wildfly.a2a:a2a-jakarta-http-common}"/>
+        <artifact name="${org.wildfly.a2a:a2a-jakarta-common}"/>
     </resources>
 
     <dependencies>
-        <module name="jakarta.annotation.api"/>
         <module name="jakarta.enterprise.api"/>
-        <module name="jakarta.enterprise.concurrent.api"/>
         <module name="jakarta.inject.api"/>
-        <module name="jakarta.ws.rs.api"/>
+        <module name="jakarta.enterprise.concurrent.api"/>
 
-        <!-- The routing filters here inject Instance<A2AVersionProvider>/<A2AJsonRpcMethodProvider>, whose
-             implementations live in the transport modules. A bean archive only sees beans from the modules it
-             depends on, so without these the filters resolve no providers and never route the request. Optional
-             because a deployment may enable only one transport. -->
-        <module name="org.wildfly.a2a.jakarta.jsonrpc" optional="true"/>
-        <module name="org.wildfly.a2a.jakarta.rest" optional="true"/>
-
-        <module name="org.a2aproject.sdk.common"/>
         <module name="org.a2aproject.sdk.server-common"/>
         <module name="org.slf4j"/>
     </dependencies>

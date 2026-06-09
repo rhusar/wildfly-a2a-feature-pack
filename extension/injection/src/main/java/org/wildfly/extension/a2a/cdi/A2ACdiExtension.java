@@ -4,21 +4,42 @@
  */
 package org.wildfly.extension.a2a.cdi;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Observes;
 import jakarta.enterprise.inject.spi.AfterTypeDiscovery;
 import jakarta.enterprise.inject.spi.AnnotatedType;
 import jakarta.enterprise.inject.spi.BeanManager;
 import jakarta.enterprise.inject.spi.Extension;
+import jakarta.enterprise.inject.spi.ProcessAnnotatedType;
 
 /**
  * CDI extension that registers A2A beans from JBoss modules.
  *
- * Since A2A classes are in JBoss modules (not WEB-INF/lib), CDI doesn't automatically discover them.
- * This extension programmatically adds them as CDI beans during the type discovery phase.
+ * <p>Since the A2A transport classes live in JBoss modules (not {@code WEB-INF/lib}) whose jars do
+ * not carry a {@code META-INF/beans.xml}, CDI does not automatically discover them. This extension
+ * programmatically adds them as CDI beans during the type discovery phase.
  *
- * Classes are registered conditionally based on availability to support deployments that only use specific transports.
+ * <p>Classes are registered conditionally based on availability to support deployments that only
+ * use specific transports.
  */
 public class A2ACdiExtension implements Extension {
+
+    /**
+     * The v0.3 SDK request->response converter is an {@code @ApplicationScoped} bean with only an
+     * {@code @Inject} constructor (no no-args constructor), which is not proxyable. When it is loaded
+     * from a JBoss module (rather than bundled in the application archive) Weld rejects it. Since it
+     * is a stateless adapter over the v1.0 {@code RequestHandler}, relax its scope to
+     * {@code @Dependent} so no client proxy is required.
+     */
+    <T> void relaxV03ConverterScope(@Observes ProcessAnnotatedType<T> pat) {
+        if ("org.a2aproject.sdk.compat03.conversion.Convert_v0_3_To10RequestHandler"
+                .equals(pat.getAnnotatedType().getJavaClass().getName())) {
+            pat.configureAnnotatedType()
+                    .remove(a -> a.annotationType().equals(ApplicationScoped.class))
+                    .add(Dependent.Literal.INSTANCE);
+        }
+    }
 
     void afterTypeDiscovery(@Observes AfterTypeDiscovery event, BeanManager beanManager) {
         ClassLoader classLoader = getClass().getClassLoader();
@@ -40,6 +61,18 @@ public class A2ACdiExtension implements Extension {
 
         // gRPC transport
         tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.grpc.GrpcBeanInitializer", classLoader);
+
+        // JSON-RPC transport (v0.3 backward compatibility)
+        tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.jsonrpc.compat03.A2AServerResource_v0_3", classLoader);
+        tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.jsonrpc.compat03.JsonRpcVersionProvider_v0_3", classLoader);
+        tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.jsonrpc.compat03.JsonRpcMethodProvider_v0_3", classLoader);
+
+        // REST transport (v0.3 backward compatibility)
+        tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.rest.compat03.A2ARestServerResource_v0_3", classLoader);
+        tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.rest.compat03.RestVersionProvider_v0_3", classLoader);
+
+        // gRPC transport (v0.3 backward compatibility)
+        tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.grpc.compat03.GrpcBeanInitializer_v0_3", classLoader);
     }
 
     private void tryAddAnnotatedType(AfterTypeDiscovery event, BeanManager beanManager, String className, ClassLoader classLoader) {

@@ -29,8 +29,12 @@ public class A2AJaxrsProcessor implements DeploymentUnitProcessor {
      * JAX-RS resource classes to register with RESTEasy.
      */
     private static final String[] JAXRS_RESOURCE_CLASSES = {
+            // v1.0
             "org.wildfly.a2a.jakarta.jsonrpc.A2AServerResource",
-            "org.wildfly.a2a.jakarta.rest.A2ARestServerResource"
+            "org.wildfly.a2a.jakarta.rest.A2ARestServerResource",
+            // v0.3 backward compatibility
+            "org.wildfly.a2a.jakarta.jsonrpc.compat03.A2AServerResource_v0_3",
+            "org.wildfly.a2a.jakarta.rest.compat03.A2ARestServerResource_v0_3"
     };
 
     /**

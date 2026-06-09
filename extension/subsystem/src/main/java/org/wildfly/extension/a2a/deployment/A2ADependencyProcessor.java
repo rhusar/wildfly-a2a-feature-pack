@@ -50,7 +50,15 @@ public class A2ADependencyProcessor implements DeploymentUnitProcessor {
             "org.a2aproject.sdk.transport.grpc",
             "org.a2aproject.sdk.transport.rest",
             "io.smallrye.reactive.mutiny.zero",
-            "org.a2aproject.sdk.microprofile-config"
+            "org.a2aproject.sdk.microprofile-config",
+            // v0.3 backward-compatibility SDK modules (present only when a v0.3 layer is provisioned).
+            // These carry the v0.3 spec types and request handlers (@ApplicationScoped CDI beans).
+            "org.a2aproject.sdk.compat03-spec",
+            "org.a2aproject.sdk.compat03-spec-grpc",
+            "org.a2aproject.sdk.compat03-server-conversion",
+            "org.a2aproject.sdk.compat03-transport-jsonrpc",
+            "org.a2aproject.sdk.compat03-transport-grpc",
+            "org.a2aproject.sdk.compat03-transport-rest"
     };
 
     /**
@@ -61,7 +69,13 @@ public class A2ADependencyProcessor implements DeploymentUnitProcessor {
             "org.wildfly.a2a.jakarta.common",
             "org.wildfly.a2a.jakarta.jsonrpc",
             "org.wildfly.a2a.jakarta.grpc",
-            "org.wildfly.a2a.jakarta.rest"
+            "org.wildfly.a2a.jakarta.rest",
+            // v0.3 backward-compatibility transports (added only when present in the deployment)
+            "org.wildfly.a2a.jakarta.compat03.jsonrpc",
+            "org.wildfly.a2a.jakarta.compat03.grpc",
+            "org.wildfly.a2a.jakarta.compat03.rest",
+            "org.wildfly.a2a.jakarta.compat03.multiversion-jsonrpc",
+            "org.wildfly.a2a.jakarta.compat03.multiversion-rest"
     };
 
     @Override
