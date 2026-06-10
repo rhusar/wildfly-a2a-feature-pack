@@ -79,16 +79,6 @@ jobs:
           echo "SDK_VERSION=${VERSION}" >> "$GITHUB_ENV"
         working-directory: a2a-java
 
-        # Temporarily use 'main' branch of grpc FP which has the required fixes
-      - name: Checkout wildfly-grpc-feature-pack
-        uses: actions/checkout@v6
-        with:
-          repository: wildfly-extras/wildfly-grpc-feature-pack
-          path: wildfly-grpc-feature-pack
-      - name: Build wildfly-grpc-feature-pack
-        working-directory: wildfly-grpc-feature-pack
-        run: ./mvnw -B -ntp install -DskipTests
-
       - name: Build the Feature pack and provision the TCK server
         run: ./mvnw -B -ntp install -Dversion.sdk=${SDK_VERSION}
 
