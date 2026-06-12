@@ -76,7 +76,7 @@
         <version.org.wildfly.a2a>1.0.0.Beta1</version.org.wildfly.a2a>
 
         <!-- Third-party dependencies (from A2A SDK) -->
-        <version.protobuf>4.35.0</version.protobuf>
+        <version.protobuf>4.35.1</version.protobuf>
         <version.proto-google-common-protos>2.71.0</version.proto-google-common-protos>
         <version.wildfly.grpc>0.2.0.Final</version.wildfly.grpc>
         <version.grpc>1.81.0</version.grpc>
