@@ -81,6 +81,9 @@
         <version.wildfly.grpc>0.2.0.Final</version.wildfly.grpc>
         <version.grpc>1.81.0</version.grpc>
 
+        <!-- Annotation processing -->
+        <version.org.jboss.logging.tools>3.0.4.Final</version.org.jboss.logging.tools>
+
         <!-- Test dependencies -->
         <version.arquillian>1.10.2.Final</version.arquillian>
         <version.wildfly.arquillian>5.1.0.Final</version.wildfly.arquillian>
