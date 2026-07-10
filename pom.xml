@@ -79,7 +79,7 @@
         <version.protobuf>4.35.0</version.protobuf>
         <version.proto-google-common-protos>2.71.0</version.proto-google-common-protos>
         <version.wildfly.grpc>0.2.0.Final</version.wildfly.grpc>
-        <version.grpc>1.81.0</version.grpc>
+        <version.grpc>1.82.2</version.grpc>
 
         <!-- Annotation processing -->
         <version.org.jboss.logging.tools>3.0.4.Final</version.org.jboss.logging.tools>
