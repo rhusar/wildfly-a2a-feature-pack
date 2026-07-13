@@ -89,7 +89,7 @@
         <version.wildfly.arquillian>5.1.0.Final</version.wildfly.arquillian>
         <version.wildfly.glow>2.2.0.Final</version.wildfly.glow>
         <version.wildfly.maven.plugin>6.0.0.Final</version.wildfly.maven.plugin>
-        <version.rest-assured>6.0.0</version.rest-assured>
+        <version.rest-assured>6.0.1</version.rest-assured>
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
         <version.shrinkwrap.resolver>3.3.7</version.shrinkwrap.resolver>
     </properties>
