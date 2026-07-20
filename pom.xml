@@ -66,7 +66,7 @@
         <wildfly.a2a.stability>experimental</wildfly.a2a.stability>
 
         <!-- WildFly dependencies -->
-        <version.org.wildfly>40.0.1.Final</version.org.wildfly>
+        <version.org.wildfly>41.0.0.Final</version.org.wildfly>
         <version.org.wildfly.core>33.0.0.Final</version.org.wildfly.core>
         <version.org.wildfly.common>2.0.1</version.org.wildfly.common>
         <version.org.wildfly.galleon-plugins>8.1.6.Final</version.org.wildfly.galleon-plugins>
