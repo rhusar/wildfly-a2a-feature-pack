@@ -69,7 +69,7 @@
         <version.org.wildfly>41.0.0.Final</version.org.wildfly>
         <version.org.wildfly.core>33.0.0.Final</version.org.wildfly.core>
         <version.org.wildfly.common>2.0.1</version.org.wildfly.common>
-        <version.org.wildfly.galleon-plugins>8.1.6.Final</version.org.wildfly.galleon-plugins>
+        <version.org.wildfly.galleon-plugins>8.1.7.Final</version.org.wildfly.galleon-plugins>
 
         <!-- A2A dependencies -->
         <version.sdk>1.0.0.CR1</version.sdk>
