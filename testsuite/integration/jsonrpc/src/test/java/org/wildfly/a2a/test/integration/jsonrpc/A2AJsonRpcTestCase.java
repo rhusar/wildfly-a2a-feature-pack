@@ -45,21 +45,6 @@ public class A2AJsonRpcTestCase extends AbstractA2AServerTest {
         builder.withTransport(JSONRPCTransport.class, new JSONRPCTransportConfigBuilder());
     }
 
-    /**
-     * Disabled in the feature-pack deployment model: this test requires the CDI request context to
-     * be active on the SDK agent-executor threads, which the A2A Jakarta layer achieves by enabling
-     * a managed-executor {@code @Internal Executor} producer bundled in the application archive.
-     * In the feature pack the SDK transports live in JBoss modules whose bean archives cannot see a
-     * deployment- or module-contributed alternative executor, so the SDK's default (non
-     * context-propagating) executor is always used. Request-scoped propagation onto agent threads is
-     * therefore an unsupported scenario here.
-     */
-    @Test
-    @Disabled("Request context propagation onto SDK agent-executor threads is not supported in the modular feature-pack deployment model")
-    @Override
-    public void testRequestScopedBeanAvailableOnAgentExecutorThread() {
-    }
-
     @Deployment
     public static WebArchive createTestArchive() {
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "ROOT.war")

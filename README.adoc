@@ -84,9 +84,23 @@ The feature-pack provides the following Galleon layers:
 |`a2a-server-jsonrpc` |A2A server with JSON-RPC 2.0 over HTTP transport
 |`a2a-server-grpc` |A2A server with gRPC binary protocol transport
 |`a2a-server-http-json` |A2A server with RESTful HTTP/JSON transport
+|`a2a-server-jsonrpc-0.3` |A2A server with the v0.3 JSON-RPC 2.0 over HTTP transport (backward compatibility)
+|`a2a-server-grpc-0.3` |A2A server with the v0.3 gRPC binary protocol transport (backward compatibility)
+|`a2a-server-http-json-0.3` |A2A server with the v0.3 RESTful HTTP/JSON transport (backward compatibility)
 |===
 
 Server layers include both the A2A SDK transport module and the Jakarta EE implementation. Client layers include only the SDK transport module.
+
+
+=== Protocol version v0.3 backward compatibility
+
+The `-0.3` server layers provision the v0.3 compatibility transports from the A2A SDK, which adapt v0.3 requests onto
+the v1.0 `RequestHandler`. They are opt-in: provisioning one of them alongside its v1.0 counterpart makes the server
+serve both protocol versions from a single deployment, with requests dispatched on the `A2A-Version` header.
+
+Note that a v0.3 transport declares itself the default version, so a request that carries no `A2A-Version` header is
+handled as v0.3. The agent card served from `/.well-known/agent-card.json` always comes from the highest provisioned
+version.
 
 
 == Running Integration Tests

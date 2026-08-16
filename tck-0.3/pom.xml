@@ -17,8 +17,8 @@
     <artifactId>wildfly-a2a-tck-0.3</artifactId>
     <packaging>war</packaging>
 
-    <name>WildFly A2A Feature Pack - TCK v0.3</name>
-    <description>TCK server for running the legacy A2A protocol v0.3 TCK against WildFly with the A2A feature pack</description>
+    <name>WildFly A2A Feature-Pack - TCK v0.3</name>
+    <description>TCK server for running the legacy A2A protocol v0.3 TCK against WildFly with the A2A feature-pack</description>
 
     <properties>
         <jboss.home>${project.build.directory}/wildfly</jboss.home>
@@ -34,7 +34,7 @@
             <artifactId>a2a-compat-0.3-tck-server</artifactId>
             <version>${version.sdk}</version>
             <exclusions>
-                <!-- All dependencies are provided by the A2A feature pack -->
+                <!-- All dependencies are provided by the A2A feature-pack -->
                 <exclusion>
                     <groupId>*</groupId>
                     <artifactId>*</artifactId>
@@ -69,13 +69,13 @@
                             <artifactId>wildfly-galleon-pack</artifactId>
                             <version>${version.org.wildfly}</version>
                         </feature-pack>
-                        <!-- gRPC feature pack (required for a2a-server-grpc-0.3 layer) -->
+                        <!-- gRPC feature-pack (required for a2a-server-grpc-0.3 layer) -->
                         <feature-pack>
                             <groupId>org.wildfly.grpc</groupId>
                             <artifactId>wildfly-grpc-feature-pack</artifactId>
                             <version>${version.wildfly.grpc}</version>
                         </feature-pack>
-                        <!-- A2A feature pack -->
+                        <!-- A2A feature-pack -->
                         <feature-pack>
                             <groupId>org.wildfly.a2a</groupId>
                             <artifactId>wildfly-a2a-feature-pack</artifactId>
@@ -112,7 +112,7 @@
 
     <profiles>
         <!--
-            Multi-version profile: provisions a single server that serves both v1.0 and v0.3
+            Multi-version profile: provisions a single server that serves both the v1.0 and the v0.3
             transports. The DerivedAgentCardProducer (added from src/multi-version/java) derives a
             v1.0 agent card from the v0.3 card so the server advertises both.
         -->
@@ -165,9 +165,20 @@
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-maven-plugin</artifactId>
                         <configuration>
+                            <!--
+                                Provision the v1.0 and the v0.3 layers side by side. All resources have unique
+                                @Path prefixes (/a2a_jsonrpc_v1.0, /a2a_jsonrpc_v0.3, /a2a_rest_v1.0,
+                                /a2a_rest_v0.3/v1), so they coexist; the routing filters in
+                                org.wildfly.a2a.jakarta.common dispatch on the A2A-Version header.
+                            -->
                             <layers>
                                 <layer>cloud-server</layer>
-                                <layer>a2a-server-multiversion</layer>
+                                <layer>a2a-server-jsonrpc</layer>
+                                <layer>a2a-server-grpc</layer>
+                                <layer>a2a-server-http-json</layer>
+                                <layer>a2a-server-jsonrpc-0.3</layer>
+                                <layer>a2a-server-grpc-0.3</layer>
+                                <layer>a2a-server-http-json-0.3</layer>
                                 <layer>grpc</layer>
                             </layers>
                         </configuration>

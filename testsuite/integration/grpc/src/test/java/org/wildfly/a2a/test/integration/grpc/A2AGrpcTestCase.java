@@ -27,8 +27,6 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 /**
  * Integration test for A2A gRPC transport on WildFly with the A2A feature-pack.
@@ -96,18 +94,6 @@ public class A2AGrpcTestCase extends AbstractA2AServerTest {
     @Override
     public void testAgentCardHeaders() {
         // gRPC doesn't use HTTP caching headers for Agent Card
-    }
-
-    /**
-     * Disabled in the feature-pack deployment model: request-scoped propagation onto the SDK
-     * agent-executor threads requires a managed-executor {@code @Internal Executor} bundled in the
-     * application archive, which is not visible to the SDK transport modules' bean archives in the
-     * modular feature-pack layout. See {@code A2AJsonRpcTestCase} for details.
-     */
-    @Test
-    @Disabled("Request context propagation onto SDK agent-executor threads is not supported in the modular feature-pack deployment model")
-    @Override
-    public void testRequestScopedBeanAvailableOnAgentExecutorThread() {
     }
 
     @AfterAll

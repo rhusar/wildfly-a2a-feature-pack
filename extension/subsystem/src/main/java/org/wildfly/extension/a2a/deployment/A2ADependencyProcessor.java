@@ -73,9 +73,7 @@ public class A2ADependencyProcessor implements DeploymentUnitProcessor {
             // v0.3 backward-compatibility transports (added only when present in the deployment)
             "org.wildfly.a2a.jakarta.compat03.jsonrpc",
             "org.wildfly.a2a.jakarta.compat03.grpc",
-            "org.wildfly.a2a.jakarta.compat03.rest",
-            "org.wildfly.a2a.jakarta.compat03.multiversion-jsonrpc",
-            "org.wildfly.a2a.jakarta.compat03.multiversion-rest"
+            "org.wildfly.a2a.jakarta.compat03.rest"
     };
 
     @Override

@@ -25,7 +25,5 @@
         <module name="org.wildfly.a2a.jakarta.compat03.jsonrpc" optional="true"/>
         <module name="org.wildfly.a2a.jakarta.compat03.grpc" optional="true"/>
         <module name="org.wildfly.a2a.jakarta.compat03.rest" optional="true"/>
-        <module name="org.wildfly.a2a.jakarta.compat03.multiversion-jsonrpc" optional="true"/>
-        <module name="org.wildfly.a2a.jakarta.compat03.multiversion-rest" optional="true"/>
     </dependencies>
 </module>

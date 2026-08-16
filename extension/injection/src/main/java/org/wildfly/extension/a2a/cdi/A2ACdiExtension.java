@@ -12,6 +12,7 @@ import jakarta.enterprise.inject.spi.AnnotatedType;
 import jakarta.enterprise.inject.spi.BeanManager;
 import jakarta.enterprise.inject.spi.Extension;
 import jakarta.enterprise.inject.spi.ProcessAnnotatedType;
+import jakarta.enterprise.inject.spi.WithAnnotations;
 
 /**
  * CDI extension that registers A2A beans from JBoss modules.
@@ -32,7 +33,7 @@ public class A2ACdiExtension implements Extension {
      * is a stateless adapter over the v1.0 {@code RequestHandler}, relax its scope to
      * {@code @Dependent} so no client proxy is required.
      */
-    <T> void relaxV03ConverterScope(@Observes ProcessAnnotatedType<T> pat) {
+    <T> void relaxV03ConverterScope(@Observes @WithAnnotations(ApplicationScoped.class) ProcessAnnotatedType<T> pat) {
         if ("org.a2aproject.sdk.compat03.conversion.Convert_v0_3_To10RequestHandler"
                 .equals(pat.getAnnotatedType().getJavaClass().getName())) {
             pat.configureAnnotatedType()
