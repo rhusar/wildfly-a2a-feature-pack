@@ -21,5 +21,9 @@
         <module name="org.wildfly.a2a.jakarta.grpc" optional="true"/>
         <module name="org.wildfly.a2a.jakarta.jsonrpc" optional="true"/>
         <module name="org.wildfly.a2a.jakarta.rest" optional="true"/>
+        <!-- v0.3 backward-compatibility transports (present only when a v0.3 layer is provisioned) -->
+        <module name="org.wildfly.a2a.jakarta.compat03.jsonrpc" optional="true"/>
+        <module name="org.wildfly.a2a.jakarta.compat03.grpc" optional="true"/>
+        <module name="org.wildfly.a2a.jakarta.compat03.rest" optional="true"/>
     </dependencies>
 </module>

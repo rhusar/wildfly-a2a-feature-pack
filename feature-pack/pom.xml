@@ -147,6 +147,46 @@
             <groupId>org.wildfly.a2a</groupId>
             <artifactId>a2a-jakarta-rest</artifactId>
         </dependency>
+
+        <!-- A2A SDK - v0.3 Compatibility (from a2a-java) -->
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-compat-0.3-spec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-compat-0.3-spec-grpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-compat-0.3-server-conversion</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-compat-0.3-transport-jsonrpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-compat-0.3-transport-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-compat-0.3-transport-grpc</artifactId>
+        </dependency>
+
+        <!-- A2A SDK - v0.3 Compatibility - Jakarta Implementations -->
+        <dependency>
+            <groupId>org.wildfly.a2a</groupId>
+            <artifactId>a2a-jakarta-compat-0.3-jsonrpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.a2a</groupId>
+            <artifactId>a2a-jakarta-compat-0.3-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.a2a</groupId>
+            <artifactId>a2a-jakarta-compat-0.3-grpc</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -21,6 +21,8 @@
         <package name="org.a2aproject.sdk.jsonrpc-common"/>
         <package name="org.a2aproject.sdk.http-client"/>
         <package name="org.a2aproject.sdk.server-common"/>
+        <!-- A2A Jakarta common (managed-executor producer used by all transports) -->
+        <package name="org.wildfly.a2a.jakarta.common"/>
         <!-- A2A SDK client modules -->
         <package name="org.a2aproject.sdk.client"/>
         <package name="org.a2aproject.sdk.client-transport-spi"/>

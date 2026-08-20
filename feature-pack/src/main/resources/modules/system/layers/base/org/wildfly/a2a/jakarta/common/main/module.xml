@@ -26,6 +26,8 @@
              because a deployment may enable only one transport. -->
         <module name="org.wildfly.a2a.jakarta.jsonrpc" optional="true"/>
         <module name="org.wildfly.a2a.jakarta.rest" optional="true"/>
+        <module name="org.wildfly.a2a.jakarta.compat03.jsonrpc" optional="true"/>
+        <module name="org.wildfly.a2a.jakarta.compat03.rest" optional="true"/>
 
         <module name="org.a2aproject.sdk.common"/>
         <module name="org.a2aproject.sdk.server-common"/>

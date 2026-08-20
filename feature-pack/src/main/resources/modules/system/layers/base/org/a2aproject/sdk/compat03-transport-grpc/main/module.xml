@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<module xmlns="urn:jboss:module:1.9" name="org.a2aproject.sdk.compat03-transport-grpc">
+
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
+
+    <resources>
+        <artifact name="${org.a2aproject.sdk:a2a-java-sdk-compat-0.3-transport-grpc}"/>
+    </resources>
+
+    <dependencies>
+        <module name="java.logging"/>
+        <module name="jakarta.enterprise.api"/>
+        <module name="jakarta.inject.api"/>
+
+        <module name="com.google.protobuf"/>
+        <module name="org.a2aproject.sdk.jsonrpc-common"/>
+        <module name="org.a2aproject.sdk.server-common"/>
+        <module name="org.a2aproject.sdk.spec"/>
+        <module name="org.a2aproject.sdk.compat03-spec"/>
+        <module name="org.a2aproject.sdk.compat03-spec-grpc"/>
+        <module name="org.a2aproject.sdk.compat03-server-conversion"/>
+        <module name="io.grpc-all" optional="true"/>
+    </dependencies>
+</module>
