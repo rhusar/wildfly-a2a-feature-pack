@@ -55,32 +55,19 @@
 
     <build>
         <plugins>
+            <!-- Scans the Arquillian deployment and writes the layers WildFly Glow discovers from it
+                 to target/glow-scan/provisioning.xml. expected-discovery pins that layer set, so a
+                 regression in the org.wildfly.rule.* metadata of the A2A layer specs fails the build. -->
+            <plugin>
+                <groupId>org.wildfly.glow</groupId>
+                <artifactId>wildfly-glow-arquillian-plugin</artifactId>
+                <configuration>
+                    <expected-discovery>[a2a, a2a-client-grpc, a2a-client-http-json, a2a-client-jsonrpc, a2a-server-jsonrpc, cdi, ee-integration, jaxrs, microprofile-config]==>ee-core-profile-server,a2a-client-grpc,a2a-client-http-json,a2a-client-jsonrpc,a2a-server-jsonrpc,jaxrs,microprofile-config</expected-discovery>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <configuration>
-                    <feature-packs>
-                        <feature-pack>
-                            <groupId>org.wildfly</groupId>
-                            <artifactId>wildfly-galleon-pack</artifactId>
-                            <version>${version.org.wildfly}</version>
-                        </feature-pack>
-                        <feature-pack>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>wildfly-a2a-feature-pack</artifactId>
-                            <version>${project.version}</version>
-                        </feature-pack>
-                    </feature-packs>
-                    <galleon-options>
-                        <stability-level>${wildfly.a2a.stability}</stability-level>
-                    </galleon-options>
-                    <layers>
-                        <layer>ee-core-profile-server</layer>
-                        <layer>jaxrs</layer>
-                        <layer>microprofile-config</layer>
-                        <layer>a2a-server-jsonrpc</layer>
-                    </layers>
-                </configuration>
                 <executions>
                     <execution>
                         <id>test-provisioning</id>
@@ -88,13 +75,75 @@
                             <goal>provision</goal>
                         </goals>
                         <phase>test-compile</phase>
+                        <configuration>
+                            <feature-packs>
+                                <feature-pack>
+                                    <groupId>org.wildfly</groupId>
+                                    <artifactId>wildfly-galleon-pack</artifactId>
+                                    <version>${version.org.wildfly}</version>
+                                </feature-pack>
+                                <feature-pack>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>wildfly-a2a-feature-pack</artifactId>
+                                    <version>${project.version}</version>
+                                </feature-pack>
+                            </feature-packs>
+                            <galleon-options>
+                                <stability-level>${wildfly.a2a.stability}</stability-level>
+                            </galleon-options>
+                            <layers>
+                                <layer>ee-core-profile-server</layer>
+                                <layer>jaxrs</layer>
+                                <layer>microprofile-config</layer>
+                                <layer>a2a-server-jsonrpc</layer>
+                            </layers>
+                        </configuration>
+                    </execution>
+                    <!-- Second server, provisioned from the layers Glow discovered above -->
+                    <execution>
+                        <id>glow-provisioning</id>
+                        <goals>
+                            <goal>provision</goal>
+                        </goals>
+                        <phase>test-compile</phase>
+                        <configuration>
+                            <provisioning-file>${project.build.directory}/glow-scan/provisioning.xml</provisioning-file>
+                            <provisioning-dir>${jboss.home.glow}</provisioning-dir>
+                            <galleon-options>
+                                <stability-level>${wildfly.a2a.stability}</stability-level>
+                            </galleon-options>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <!-- Runs the same suite a second time against the Glow-provisioned server, so the
+                         discovered layer set is shown to produce a working server, not merely to match.
+                         Note that jboss-parent's java*-test-classpath profiles configure the default-test
+                         execution by id, so this one does not pick up their classesDirectory tweaks; that
+                         is harmless while the module has no src/main classes. -->
+                    <execution>
+                        <id>glow.surefire</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <systemPropertyVariables combine.children="override">
+                                <jboss.dist>${jboss.home.glow}</jboss.dist>
+                                <jboss.install.dir>${jboss.home.glow}</jboss.install.dir>
+                                <server.jvm.args>-Dtest.agent.card.port=8080</server.jvm.args>
+                                <jboss.args>${server.jboss.args}</jboss.args>
+                            </systemPropertyVariables>
+                            <reportNameSuffix>glow</reportNameSuffix>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
+
 </project>

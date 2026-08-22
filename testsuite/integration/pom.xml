@@ -16,9 +16,13 @@
     <name>WildFly A2A Feature-Pack - Testsuite - Integration</name>
 
     <properties>
-        <jboss.home>${project.build.directory}/wildfly</jboss.home>
+        <!-- Server provisioned from the explicit layer list in each module -->
+        <jboss.home.layers>${project.build.directory}/wildfly-layers</jboss.home.layers>
         <!-- Server arguments for A2A subsystem stability level -->
         <server.jboss.args>--stability=${wildfly.a2a.stability}</server.jboss.args>
+        <!-- Server provisioned from the WildFly Glow deployment scan; the rest and jsonrpc modules
+             run their suite against both this and ${jboss.home.layers}. -->
+        <jboss.home.glow>${project.build.directory}/wildfly-glow</jboss.home.glow>
     </properties>
 
     <dependencyManagement>
@@ -223,15 +227,15 @@
                     <artifactId>wildfly-maven-plugin</artifactId>
                     <version>${version.wildfly.maven.plugin}</version>
                     <configuration>
-                        <provisioning-file>${project.build.directory}/glow-scan/provisioning.xml</provisioning-file>
-                        <jboss-home>${jboss.home}</jboss-home>
-                        <provisioning-dir>${jboss.home}</provisioning-dir>
+                        <provisioning-dir>${jboss.home.layers}</provisioning-dir>
                     </configuration>
                     <executions>
+                        <!-- The modules redeclare this execution id to add their feature-packs and layers;
+                             Maven merges the goal lists, so this must name the same goal they do. -->
                         <execution>
                             <id>test-provisioning</id>
                             <goals>
-                                <goal>package</goal>
+                                <goal>provision</goal>
                             </goals>
                             <phase>test-compile</phase>
                         </execution>
@@ -241,8 +245,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <configuration>
+                        <!-- Labels the reports of the implicit default-test execution, which runs against
+                             the layer-list server; the glow.surefire executions override this with 'glow'. -->
+                        <reportNameSuffix>layers</reportNameSuffix>
                         <systemPropertyVariables combine.children="append">
-                            <jboss.install.dir>${jboss.home}</jboss.install.dir>
+                            <jboss.dist>${jboss.home.layers}</jboss.dist>
+                            <jboss.install.dir>${jboss.home.layers}</jboss.install.dir>
                             <server.jvm.args>-Dtest.agent.card.port=8080</server.jvm.args>
                             <jboss.args>${server.jboss.args}</jboss.args>
                         </systemPropertyVariables>

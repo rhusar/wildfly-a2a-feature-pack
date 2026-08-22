@@ -106,7 +106,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <systemPropertyVariables combine.children="append">
-                        <jboss.install.dir>${jboss.home}</jboss.install.dir>
                         <!-- test.agent.card.port is read by AgentCardProducer in a2a-java-sdk-tests-server-common -->
                         <!-- gRPC uses port 9555 for the agent card -->
                         <server.jvm.args>-Dtest.agent.card.port=9555</server.jvm.args>

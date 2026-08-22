@@ -8,6 +8,11 @@
         <prop name="org.wildfly.category" value="A2A"/>
         <prop name="org.wildfly.description" value="Support for A2A (Agent-to-Agent) Protocol"/>
         <prop name="org.wildfly.stability" value="experimental"/>
+        <!-- Every package shipped by the SDK modules this layer provisions. Glow matches a constant-pool
+             entry against the exact class name and then its exact package name, so subpackages have to be
+             listed individually. -->
+        <prop name="org.wildfly.rule.class" value="org.a2aproject.sdk,org.a2aproject.sdk.common,org.a2aproject.sdk.util,org.a2aproject.sdk.spec,org.a2aproject.sdk.spec.util,org.a2aproject.sdk.jsonrpc.common.json,org.a2aproject.sdk.jsonrpc.common.wrappers,org.a2aproject.sdk.server,org.a2aproject.sdk.server.agentexecution,org.a2aproject.sdk.server.auth,org.a2aproject.sdk.server.config,org.a2aproject.sdk.server.events,org.a2aproject.sdk.server.extensions,org.a2aproject.sdk.server.requesthandlers,org.a2aproject.sdk.server.tasks,org.a2aproject.sdk.server.util,org.a2aproject.sdk.server.util.async,org.a2aproject.sdk.server.util.sse,org.a2aproject.sdk.server.version,org.a2aproject.sdk.client,org.a2aproject.sdk.client.config,org.a2aproject.sdk.client.http"/>
+        <prop name="org.wildfly.rule.annotations" value="org.a2aproject.sdk.server"/>
     </props>
     <feature spec="subsystem.a2a"/>
     <packages>

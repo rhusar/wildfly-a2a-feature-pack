@@ -8,6 +8,13 @@
         <prop name="org.wildfly.category" value="A2A"/>
         <prop name="org.wildfly.description" value="A2A server with gRPC binary protocol transport"/>
         <prop name="org.wildfly.stability" value="experimental"/>
+        <!-- Deliberately no org.wildfly.rule.class: this layer is usable only together with the gRPC
+             feature-pack and its grpc layer, which no A2A layer can depend on. Auto-discovering it from
+             a deployment would provision a server that boots but has no gRPC endpoint, so it is offered
+             as an add-on only. -->
+        <prop name="org.wildfly.rule.add-on-depends-on" value="only:a2a"/>
+        <prop name="org.wildfly.rule.add-on" value="a2a-server,a2a-server-grpc"/>
+        <prop name="org.wildfly.rule.add-on-description" value="A2A server exposing the gRPC binary protocol transport"/>
     </props>
     <dependencies>
         <layer name="a2a"/>

@@ -8,6 +8,10 @@
         <prop name="org.wildfly.category" value="A2A"/>
         <prop name="org.wildfly.description" value="A2A server with RESTful HTTP/JSON transport"/>
         <prop name="org.wildfly.stability" value="experimental"/>
+        <prop name="org.wildfly.rule.class" value="org.wildfly.a2a.jakarta.rest"/>
+        <prop name="org.wildfly.rule.add-on-depends-on" value="only:a2a"/>
+        <prop name="org.wildfly.rule.add-on" value="a2a-server,a2a-server-http-json"/>
+        <prop name="org.wildfly.rule.add-on-description" value="A2A server exposing the RESTful HTTP/JSON transport"/>
     </props>
     <dependencies>
         <layer name="a2a"/>

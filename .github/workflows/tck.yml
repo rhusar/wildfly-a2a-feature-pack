@@ -3,8 +3,6 @@
 name: Build and Run TCK
 
 on:
-  schedule:
-    - cron: '0 6 * * *'
   push:
     branches:
       - main
@@ -101,7 +99,7 @@ jobs:
           if-no-files-found: warn
       - name: Upload tck server.log
         uses: actions/upload-artifact@v7
-        if: always()
+        if: failure()
         with:
           name: tck-server-log
           path: tck/target/wildfly/standalone/log/server.log

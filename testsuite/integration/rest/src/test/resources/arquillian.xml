@@ -12,7 +12,7 @@
 
     <container qualifier="wildfly" default="true">
         <configuration>
-            <property name="jbossHome">${basedir}/target/wildfly</property>
+            <property name="jbossHome">${jboss.dist}</property>
             <property name="javaVmArguments">${server.jvm.args}</property>
             <property name="jbossArguments">${jboss.args}</property>
             <property name="allowConnectingToRunningServer">false</property>

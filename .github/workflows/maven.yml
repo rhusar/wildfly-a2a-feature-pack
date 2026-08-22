@@ -1,8 +1,6 @@
 name: Maven
 
 on:
-  schedule:
-    - cron: '0 6 * * *'
   push:
     branches:
       - main
@@ -55,3 +53,5 @@ jobs:
           path: |
             **/surefire-reports/*
             **/failsafe-reports/*
+            **/glow-scan/provisioning.xml
+            **/standalone/log/*.log

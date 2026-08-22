@@ -13,7 +13,7 @@ Build the A2A feature-pack:
 ----
 git clone https://github.com/rhusar/wildfly-a2a-feature-pack.git
 cd wildfly-a2a-feature-pack
-./mvnw install -DskipTests
+./mvnw clean install -DskipTests
 ----
 
 == Provisioning with Maven
@@ -70,6 +70,55 @@ For gRPC support, include the https://github.com/wildfly-extras/wildfly-grpc-fea
 </plugin>
 ----
 
+== Provisioning with WildFly Glow
+
+The layers define https://github.com/wildfly/wildfly-glow[WildFly Glow] rules, so Glow can infer the
+layer set from a deployment scan instead of a manually configured `<layers>` list. The base `a2a` layer is
+discovered from A2A SDK usage in the deployment, and the client transport layers from the transport
+class the application uses.
+
+Glow takes feature-packs to scan against from a Galleon provisioning file, not from a command
+line coordinate, so start with a `feature-packs.xml` listing both WildFly and this feature-pack:
+
+[source,xml]
+----
+<installation xmlns="urn:jboss:galleon:provisioning:4.0">
+    <feature-pack location="org.wildfly:wildfly-galleon-pack:41.0.0.Final"/>
+    <feature-pack location="org.wildfly.a2a:wildfly-a2a-feature-pack:0.0.1.Alpha1-SNAPSHOT"/>
+</installation>
+----
+
+[source,bash]
+----
+wildfly-glow scan my-a2a-app.war \
+    --input-feature-packs-file=feature-packs.xml \
+    --add-ons=a2a-server-jsonrpc \
+    --package-stability-level=experimental \
+    --config-stability-level=experimental \
+    --provision=SERVER
+----
+
+Fow now, the stability options are required because all A2A layers are `experimental`.
+
+=== Choosing Server Transport with Glow
+
+A deployment that drives A2A purely through the SDK and CDI - an `AgentExecutor` plus a
+`@PublicAgentCard` producer - carries no information for which _server_ transport to provision.
+The three server layers are therefore offered as add-ons of
+the `a2a-server` family (namely `a2a-server-jsonrpc`, `a2a-server-grpc`, `a2a-server-http-json`), selected
+with `--add-ons`. The client layers form the `a2a-client` family and are additionally auto-detected
+from the transport class the application uses.
+
+A deployment that does reference the Jakarta EE implementation classes directly - for example a
+JAX-RS resource that extends or calls `org.wildfly.a2a.jakarta.jsonrpc.A2AServerResource` - is
+matched by that server layer's own class rule, and the layer is discovered without `--add-ons`.
+
+`a2a-server-grpc` is not discoverable this way. It is usable only together with the
+https://github.com/wildfly-extras/wildfly-grpc-feature-pack[gRPC feature-pack] and its `grpc` layer,
+which no A2A layer can depend on because the feature-pack is optional. Were the layer auto-selected,
+Glow would provision a server that resolves and boots but has no gRPC endpoint. Provision it
+explicitly, alongside the gRPC feature-pack and the `grpc` layer.
+
 == Layers
 
 The feature-pack provides the following Galleon layers:
@@ -86,7 +135,8 @@ The feature-pack provides the following Galleon layers:
 |`a2a-server-http-json` |A2A server with RESTful HTTP/JSON transport
 |===
 
-Server layers include both the A2A SDK transport module and the Jakarta EE implementation. Client layers include only the SDK transport module.
+Server layers include both the A2A SDK transport module and the Jakarta EE implementation.
+Client layers include only the SDK transport module.
 
 
 == Running Integration Tests
@@ -98,12 +148,25 @@ Based on https://github.com/wildfly-extras/a2a-jakarta[a2a-jakarta] testing appr
 mvn clean install                                  # All tests
 mvn clean test -pl testsuite/integration/jsonrpc   # JSON-RPC only
 mvn clean test -pl testsuite/integration/grpc      # gRPC only
-mvn clean test -pl testsuite/integration/http-json # HTTP-JSON only
+mvn clean test -pl testsuite/integration/rest      # RESTful HTTP/JSON only
 ----
+
+The `jsonrpc` and `rest` modules each provision *two* servers and run their suite against both:
+
+* `target/wildfly-layers` from the hardcoded layer list, and
+* `target/wildfly-glow` from the layer set WildFly.
+
+Glow discovers by scanning the Arquillian deployment.
+Both run automatically via `mvn clean install`.
+Results are differentiated by the `-layers` and `-glow` suffixes on the surefire reports.
+
+The `grpc` module provisions only the hardcoded server: it additionally requires the gRPC feature-pack
+and its `grpc` layer, which no A2A layer depends on and which Glow cannot infer from a deployment - see
+<<Choosing Server Transport with Glow>>.
 
 == Running the TCK
 
-The feature-pack includes a TCK (Test Compatibility Kit) module that runs the official A2A protocol TCK against WildFly.
+The feature-pack includes a TCK (Technology Compatibility Kit) module that runs the official A2A protocol TCK against WildFly.
 
 === Prerequisites
 
@@ -163,7 +226,7 @@ TCK Endpoints Reference
 
 * JSON-RPC: `http://localhost:8080`
 * REST (HTTP-JSON): `http://localhost:8080`
-* gRPC: `localhost:9555` (gRPC endpoint provisioned by the FP runs on separate Netty-back port)
+* gRPC: `localhost:9555` (gRPC endpoint provisioned by the FP runs on separate Netty-backed port)
 
 == Resources
 
