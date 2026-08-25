@@ -87,6 +87,14 @@
                         <layer>a2a-server-jsonrpc</layer>
                         <layer>a2a-server-grpc</layer>
                         <layer>a2a-server-http-json</layer>
+                        <!--
+                            The TCK SUT (a2a-java-sdk-tck-sut) builds messages with the
+                            org.a2aproject.sdk.A2A helper, which ships in the client module. Since the
+                            base a2a layer no longer bundles the client SDK, a server-only layer set
+                            omits it and message sends fail with NoClassDefFoundError: org/a2aproject/sdk/A2A.
+                            Provision a2a-core-client to restore the client SDK core.
+                        -->
+                        <layer>a2a-core-client</layer>
                         <layer>grpc</layer>
                     </layers>
                     <jboss-home>${jboss.home}</jboss-home>

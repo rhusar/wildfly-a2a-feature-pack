@@ -93,6 +93,7 @@
                     </galleon-options>
                     <layers>
                         <layer>a2a-server-grpc</layer>
+                        <layer>a2a-client-grpc</layer>
                         <layer>ee-core-profile-server</layer>
                         <layer>jaxrs</layer>
                         <layer>microprofile-config</layer>
