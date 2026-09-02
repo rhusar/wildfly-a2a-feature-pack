@@ -159,6 +159,27 @@ handled as v0.3. The agent card served from `/.well-known/agent-card.json` alway
 version.
 
 
+== Configuration
+
+The A2A SDK reads its configuration through MicroProfile Config, so a deployment overrides a value with a
+`META-INF/microprofile-config.properties` entry, a system property or an environment variable. The `a2a` layer
+provisions the `microprofile-config` layer for that reason; without it only the SDK's built-in defaults apply.
+
+[source,properties]
+----
+# Deny task operations when no TaskAuthorizationProvider is configured (default: true)
+a2a.authorization.required=false
+# Blocking-call timeouts, in seconds
+a2a.blocking.agent.timeout.seconds=30
+----
+
+IMPORTANT: Since a2a-java 1.3.0.Final, authorization is fail-closed: a deployment that provides no
+`org.a2aproject.sdk.server.auth.TaskAuthorizationProvider` bean rejects every task operation with
+`TaskNotFoundError`. Provide a `TaskAuthorizationProvider`, or set `a2a.authorization.required=false` for
+single-user deployments and testing. The full list of properties and their defaults is in
+`META-INF/a2a-defaults.properties` in `a2a-java-sdk-server-common`.
+
+
 == Running Integration Tests
 
 Based on https://github.com/wildfly-extras/a2a-jakarta[a2a-jakarta] testing approach.

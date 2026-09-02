@@ -18,11 +18,22 @@
         <module name="jakarta.inject.api"/>
         <module name="jakarta.annotation.api"/>
 
+        <module name="org.a2aproject.sdk.common"/>
         <module name="org.a2aproject.sdk.jsonrpc-common"/>
         <module name="org.a2aproject.sdk.server-common"/>
         <module name="org.a2aproject.sdk.spec"/>
         <module name="org.a2aproject.sdk.spec-grpc"/>
         <module name="org.a2aproject.sdk.transport.grpc"/>
+        <!--
+            AgentCardValidator rejects an agent card advertising a transport it cannot find a
+            TransportMetadata service for. WildFlyGrpcHandler runs that check with the TCCL set to its own
+            module's class loader (the HTTP transports leave the deployment class loader in place), so the
+            services of the other transports have to be imported here or a server provisioning gRPC next to
+            JSON-RPC or HTTP+JSON fails every gRPC call with an internal error. Optional: each transport is
+            present only when its layer is provisioned.
+        -->
+        <module name="org.wildfly.a2a.jakarta.jsonrpc" optional="true" services="import"/>
+        <module name="org.wildfly.a2a.jakarta.rest" optional="true" services="import"/>
         <module name="io.grpc-all" optional="true"/>
     </dependencies>
 </module>

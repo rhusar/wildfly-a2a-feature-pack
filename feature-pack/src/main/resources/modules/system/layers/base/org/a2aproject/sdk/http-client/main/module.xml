@@ -14,6 +14,7 @@
     </resources>
 
     <dependencies>
+        <module name="java.logging"/>
         <module name="java.net.http"/>
 
         <module name="org.a2aproject.sdk.common"/>

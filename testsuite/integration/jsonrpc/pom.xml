@@ -62,7 +62,7 @@
                 <groupId>org.wildfly.glow</groupId>
                 <artifactId>wildfly-glow-arquillian-plugin</artifactId>
                 <configuration>
-                    <expected-discovery>[a2a, a2a-client-grpc, a2a-client-http-json, a2a-client-jsonrpc, a2a-core-client, a2a-core-server, a2a-server-jsonrpc, cdi, ee-integration, jaxrs, microprofile-config]==>ee-core-profile-server,a2a-client-grpc,a2a-client-http-json,a2a-client-jsonrpc,a2a-server-jsonrpc,jaxrs,microprofile-config</expected-discovery>
+                    <expected-discovery>[a2a, a2a-client-grpc, a2a-client-http-json, a2a-client-jsonrpc, a2a-core-client, a2a-core-server, a2a-server-jsonrpc, cdi, ee-integration, jaxrs, microprofile-config]==>ee-core-profile-server,a2a-client-grpc,a2a-client-http-json,a2a-client-jsonrpc,a2a-server-jsonrpc,jaxrs</expected-discovery>
                 </configuration>
             </plugin>
             <plugin>

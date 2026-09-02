@@ -54,6 +54,7 @@ public class A2AJsonRpcTestCase extends AbstractA2AServerTest {
                 .addPackage(A2AJsonRpcTestCase.class.getPackage())
                 // Deployment descriptors
                 .addAsManifestResource("META-INF/beans.xml", "beans.xml")
+                .addAsResource("META-INF/microprofile-config.properties")
                 .addAsWebInfResource("WEB-INF/web.xml", "web.xml")
                 // Test properties for AgentCardProducer
                 .addAsResource("a2a-requesthandler-test.properties");

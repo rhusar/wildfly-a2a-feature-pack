@@ -74,6 +74,7 @@ public class A2AGrpcTestCase extends AbstractA2AServerTest {
                 .addPackage(A2AGrpcTestCase.class.getPackage())
                 // Deployment descriptors
                 .addAsWebInfResource("META-INF/beans.xml", "beans.xml")
+                .addAsResource("META-INF/microprofile-config.properties")
                 .addAsWebInfResource("WEB-INF/web.xml", "web.xml")
                 // Test properties for AgentCardProducer
                 .addAsResource("a2a-requesthandler-test.properties");
