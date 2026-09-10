@@ -14,9 +14,9 @@
         <prop name="org.wildfly.rule.add-on-description" value="A2A client using the gRPC binary protocol transport"/>
     </props>
     <dependencies>
-        <layer name="a2a"/>
+        <layer name="a2a-core-client"/>
     </dependencies>
     <packages>
-        <package name="org.a2aproject.sdk.transport.grpc"/>
+        <package name="org.a2aproject.sdk.client-transport-grpc"/>
     </packages>
 </layer-spec>

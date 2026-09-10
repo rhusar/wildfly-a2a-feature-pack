@@ -8,11 +8,14 @@
         <prop name="org.wildfly.category" value="A2A"/>
         <prop name="org.wildfly.description" value="Support for A2A (Agent-to-Agent) Protocol"/>
         <prop name="org.wildfly.stability" value="experimental"/>
-        <!-- Every package shipped by the SDK modules this layer provisions. Glow matches a constant-pool
+        <!-- Packages of the common SDK modules provisioned by this base layer. Glow matches a constant-pool
              entry against the exact class name and then its exact package name, so subpackages have to be
-             listed individually. -->
-        <prop name="org.wildfly.rule.class" value="org.a2aproject.sdk,org.a2aproject.sdk.common,org.a2aproject.sdk.util,org.a2aproject.sdk.spec,org.a2aproject.sdk.spec.util,org.a2aproject.sdk.jsonrpc.common.json,org.a2aproject.sdk.jsonrpc.common.wrappers,org.a2aproject.sdk.server,org.a2aproject.sdk.server.agentexecution,org.a2aproject.sdk.server.auth,org.a2aproject.sdk.server.config,org.a2aproject.sdk.server.events,org.a2aproject.sdk.server.extensions,org.a2aproject.sdk.server.requesthandlers,org.a2aproject.sdk.server.tasks,org.a2aproject.sdk.server.util,org.a2aproject.sdk.server.util.async,org.a2aproject.sdk.server.util.sse,org.a2aproject.sdk.server.version,org.a2aproject.sdk.client,org.a2aproject.sdk.client.config,org.a2aproject.sdk.client.http"/>
-        <prop name="org.wildfly.rule.annotations" value="org.a2aproject.sdk.server"/>
+             listed individually. Server- and client-specific packages are declared on a2a-core-server /
+             a2a-core-client respectively, so Glow can reach those tiers without dragging in the other side.
+             org.a2aproject.sdk.client.http is the exception: the http-client module is a mandatory dependency
+             of server-common (server-only provisioning needs it too), so it stays in the base layer and the
+             base layer advertises its package. -->
+        <prop name="org.wildfly.rule.class" value="org.a2aproject.sdk.common,org.a2aproject.sdk.util,org.a2aproject.sdk.spec,org.a2aproject.sdk.spec.util,org.a2aproject.sdk.jsonrpc.common.json,org.a2aproject.sdk.jsonrpc.common.wrappers,org.a2aproject.sdk.client.http"/>
     </props>
     <feature spec="subsystem.a2a"/>
     <packages>
@@ -25,15 +28,6 @@
         <package name="org.a2aproject.sdk.spec-grpc"/>
         <package name="org.a2aproject.sdk.jsonrpc-common"/>
         <package name="org.a2aproject.sdk.http-client"/>
-        <package name="org.a2aproject.sdk.server-common"/>
-        <!-- A2A Jakarta common (managed-executor producer used by all transports) -->
-        <package name="org.wildfly.a2a.jakarta.common"/>
-        <!-- A2A SDK client modules -->
-        <package name="org.a2aproject.sdk.client"/>
-        <package name="org.a2aproject.sdk.client-transport-spi"/>
-        <package name="org.a2aproject.sdk.client-transport-jsonrpc"/>
-        <package name="org.a2aproject.sdk.client-transport-grpc"/>
-        <package name="org.a2aproject.sdk.client-transport-rest"/>
         <!-- Third-party dependencies -->
         <!-- For layers that do NOT bring in the GRPC feature-pack with an updated protobuf version -->
         <!-- we need to bring an up-to-date one ourselves, since WildFly uses a very old and incompatible version -->

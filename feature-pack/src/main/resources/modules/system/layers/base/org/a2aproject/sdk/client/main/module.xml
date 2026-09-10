@@ -17,7 +17,7 @@
         <module name="java.logging"/>
 
         <module name="org.a2aproject.sdk.client-transport-grpc" optional="true"/>
-        <module name="org.a2aproject.sdk.client-transport-jsonrpc"/>
+        <module name="org.a2aproject.sdk.client-transport-jsonrpc" optional="true"/>
         <module name="org.a2aproject.sdk.client-transport-rest" optional="true"/>
         <module name="org.a2aproject.sdk.client-transport-spi"/>
         <module name="org.a2aproject.sdk.common"/>

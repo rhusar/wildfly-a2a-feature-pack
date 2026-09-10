@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<layer-spec xmlns="urn:jboss:galleon:layer-spec:2.0" name="a2a-core-server">
+    <props>
+        <prop name="org.wildfly.category" value="A2A"/>
+        <prop name="org.wildfly.description" value="A2A core server support"/>
+        <prop name="org.wildfly.stability" value="experimental"/>
+        <!-- Server-side SDK packages. Glow matches these so a deployment that uses server API types
+             resolves to this layer (and its transport add-ons) rather than the base a2a layer alone. -->
+        <prop name="org.wildfly.rule.class" value="org.a2aproject.sdk.server,org.a2aproject.sdk.server.agentexecution,org.a2aproject.sdk.server.auth,org.a2aproject.sdk.server.config,org.a2aproject.sdk.server.events,org.a2aproject.sdk.server.extensions,org.a2aproject.sdk.server.requesthandlers,org.a2aproject.sdk.server.tasks,org.a2aproject.sdk.server.util,org.a2aproject.sdk.server.util.async,org.a2aproject.sdk.server.util.sse,org.a2aproject.sdk.server.version"/>
+        <prop name="org.wildfly.rule.annotations" value="org.a2aproject.sdk.server"/>
+    </props>
+    <dependencies>
+        <layer name="a2a"/>
+    </dependencies>
+    <packages>
+        <package name="org.a2aproject.sdk.server-common"/>
+        <package name="org.wildfly.a2a.jakarta.common"/>
+    </packages>
+</layer-spec>

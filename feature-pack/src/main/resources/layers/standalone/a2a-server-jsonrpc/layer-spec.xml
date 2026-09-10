@@ -14,11 +14,10 @@
         <prop name="org.wildfly.rule.add-on-description" value="A2A server exposing the JSON-RPC 2.0 over HTTP transport"/>
     </props>
     <dependencies>
-        <layer name="a2a"/>
+        <layer name="a2a-core-server"/>
     </dependencies>
     <packages>
         <package name="org.a2aproject.sdk.transport.jsonrpc"/>
-        <package name="org.wildfly.a2a.jakarta.common"/>
         <package name="org.wildfly.a2a.jakarta.jsonrpc"/>
     </packages>
 </layer-spec>

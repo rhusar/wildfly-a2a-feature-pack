@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<layer-spec xmlns="urn:jboss:galleon:layer-spec:2.0" name="a2a-core-client">
+    <props>
+        <prop name="org.wildfly.category" value="A2A"/>
+        <prop name="org.wildfly.description" value="A2A core client support"/>
+        <prop name="org.wildfly.stability" value="experimental"/>
+        <!-- Client-side SDK packages. Glow matches these so a deployment that uses client API types
+             resolves to this layer (and its transport add-ons) rather than the base a2a layer alone.
+             org.a2aproject.sdk holds the A2A helper class, which ships only in a2a-java-sdk-client (this
+             layer), so it is declared here rather than on the base layer. Subpackages of the transport
+             SPI have to be listed individually. -->
+        <prop name="org.wildfly.rule.class" value="org.a2aproject.sdk,org.a2aproject.sdk.client,org.a2aproject.sdk.client.config,org.a2aproject.sdk.client.transport.spi,org.a2aproject.sdk.client.transport.spi.interceptors,org.a2aproject.sdk.client.transport.spi.interceptors.auth,org.a2aproject.sdk.client.transport.spi.sse"/>
+    </props>
+    <dependencies>
+        <layer name="a2a"/>
+    </dependencies>
+    <packages>
+        <package name="org.a2aproject.sdk.client"/>
+        <package name="org.a2aproject.sdk.client-transport-spi"/>
+    </packages>
+</layer-spec>

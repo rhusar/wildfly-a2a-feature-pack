@@ -126,7 +126,9 @@ The feature-pack provides the following Galleon layers:
 |===
 |Layer |Description
 
-|`a2a` |Base layer with A2A subsystem
+|`a2a` |Base layer with A2A subsystem and common SDK modules
+|`a2a-core-client` |A2A client-side SDK core (client builder and transport SPI); required for client-only deployments
+|`a2a-core-server` |A2A server-side SDK core (request handler infrastructure); required for server-only deployments
 |`a2a-client-jsonrpc` |A2A client with JSON-RPC 2.0 over HTTP transport
 |`a2a-client-grpc` |A2A client with gRPC binary protocol transport
 |`a2a-client-http-json` |A2A client with RESTful HTTP/JSON transport

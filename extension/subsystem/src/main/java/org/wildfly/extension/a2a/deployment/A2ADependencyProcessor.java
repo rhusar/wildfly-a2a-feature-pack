@@ -31,21 +31,23 @@ public class A2ADependencyProcessor implements DeploymentUnitProcessor {
             "org.a2aproject.sdk.spec-grpc",
             "org.a2aproject.sdk.jsonrpc-common",
             "org.a2aproject.sdk.http-client",
-            "org.a2aproject.sdk.client",
-            "org.a2aproject.sdk.client-transport-spi",
-            "org.a2aproject.sdk.client-transport-jsonrpc",
-            "org.a2aproject.sdk.client-transport-grpc",
-            "org.a2aproject.sdk.client-transport-rest",
-            "org.a2aproject.sdk.server-common",
             "com.google.code.gson",
             "com.google.protobuf",
             "com.google.guava"
     };
 
     /**
-     * Optional transport modules - added based on what's available.
+     * Optional modules - added based on what's available in the provisioned server.
+     * Client and server SDK modules are optional because a server may be provisioned
+     * with only client-side or only server-side layers.
      */
     private static final String[] OPTIONAL_MODULES = {
+            "org.a2aproject.sdk.client",
+            "org.a2aproject.sdk.client-transport-spi",
+            "org.a2aproject.sdk.client-transport-jsonrpc",
+            "org.a2aproject.sdk.client-transport-grpc",
+            "org.a2aproject.sdk.client-transport-rest",
+            "org.a2aproject.sdk.server-common",
             "org.a2aproject.sdk.transport.jsonrpc",
             "org.a2aproject.sdk.transport.grpc",
             "org.a2aproject.sdk.transport.rest",
