@@ -18,6 +18,7 @@
         <module name="jakarta.enterprise.api"/>
         <module name="jakarta.inject.api"/>
 
+        <module name="org.a2aproject.sdk.common"/>
         <module name="org.a2aproject.sdk.jsonrpc-common"/>
         <module name="org.a2aproject.sdk.server-common"/>
         <module name="org.a2aproject.sdk.spec"/>

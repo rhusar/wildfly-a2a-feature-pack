@@ -34,6 +34,15 @@
             module is present only when a v0.3 layer is provisioned.
         -->
         <module name="org.a2aproject.sdk.compat03-server-conversion" optional="true"/>
+        <!--
+            DefaultRequestHandler reads its configuration (blocking timeouts, a2a.authorization.required,
+            ...) from an injected A2AConfigProvider. MicroProfileConfigProvider is the @Alternative that
+            makes those values overridable from MicroProfile Config; without this dependency it is not in
+            a bean archive this module can see and only the hardcoded META-INF/a2a-defaults.properties
+            values apply. Optional: the module is absent when the microprofile-config layer is not
+            provisioned.
+        -->
+        <module name="org.a2aproject.sdk.microprofile-config" optional="true"/>
         <!-- Weld modules for proper proxy generation with package-private access -->
         <module name="org.jboss.weld.api"/>
         <module name="org.jboss.weld.core"/>

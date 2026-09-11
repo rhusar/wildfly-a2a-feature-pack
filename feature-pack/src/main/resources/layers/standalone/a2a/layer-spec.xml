@@ -19,6 +19,15 @@
              mappers) is matched here rather than by a transport layer. -->
         <prop name="org.wildfly.rule.class" value="org.a2aproject.sdk.common,org.a2aproject.sdk.util,org.a2aproject.sdk.spec,org.a2aproject.sdk.spec.util,org.a2aproject.sdk.jsonrpc.common.json,org.a2aproject.sdk.jsonrpc.common.wrappers,org.a2aproject.sdk.client.http,org.a2aproject.sdk.grpc,org.a2aproject.sdk.grpc.mapper,org.a2aproject.sdk.grpc.utils"/>
     </props>
+    <dependencies>
+        <!--
+            MicroProfileConfigProvider is the only A2AConfigProvider that lets a deployment override the
+            SDK's built-in defaults (a2a.authorization.required, the blocking timeouts, the executor pool
+            sizes, ...). Without MicroProfile Config the SDK falls back to the values baked into
+            META-INF/a2a-defaults.properties and none of them can be changed.
+        -->
+        <layer name="microprofile-config"/>
+    </dependencies>
     <feature spec="subsystem.a2a"/>
     <packages>
         <!-- Subsystem module -->
@@ -30,6 +39,7 @@
         <package name="org.a2aproject.sdk.spec-grpc"/>
         <package name="org.a2aproject.sdk.jsonrpc-common"/>
         <package name="org.a2aproject.sdk.http-client"/>
+        <package name="org.a2aproject.sdk.microprofile-config"/>
         <!-- Third-party dependencies -->
         <!-- For layers that do NOT bring in the GRPC feature-pack with an updated protobuf version -->
         <!-- we need to bring an up-to-date one ourselves, since WildFly uses a very old and incompatible version -->
