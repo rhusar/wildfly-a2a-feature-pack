@@ -17,6 +17,7 @@
         <module name="java.logging"/>
         <module name="java.net.http"/>
 
+        <module name="com.google.protobuf"/> <!-- Required by A2ACardResolver -->
         <module name="org.a2aproject.sdk.common"/>
         <module name="org.a2aproject.sdk.jsonrpc-common"/>
         <module name="org.a2aproject.sdk.spec"/>

@@ -18,6 +18,7 @@
         <module name="jakarta.enterprise.api"/>
         <module name="jakarta.enterprise.concurrent.api"/>
         <module name="jakarta.inject.api"/>
+        <module name="jakarta.servlet.api"/> <!-- Required by SSESubscriberLifecycleListener -->
         <module name="jakarta.ws.rs.api"/>
 
         <!-- The routing filters here inject Instance<A2AVersionProvider>/<A2AJsonRpcMethodProvider>, whose

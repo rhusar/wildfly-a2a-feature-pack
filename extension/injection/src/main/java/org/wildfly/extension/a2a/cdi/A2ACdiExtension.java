@@ -50,6 +50,13 @@ public class A2ACdiExtension implements Extension {
         tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.common.AgentCardRoutingFilter", classLoader);
         tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.common.A2AJsonRpcAcceptFilter", classLoader);
         tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.common.A2ARestVersionRoutingFilter", classLoader);
+        // Shared HTTP support beans. TenantHolder is the @RequestScoped carrier the routing filters write the
+        // parsed tenant into and the REST resource reads back on the SSE writer thread; SSEHeartbeatScheduler
+        // supplies the scheduler every streaming resource uses to detect a disconnected client. Both are
+        // injected by the transport resources, so they have to be registered even when only one transport is
+        // provisioned.
+        tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.common.TenantHolder", classLoader);
+        tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.common.SSEHeartbeatScheduler", classLoader);
 
         // JSON-RPC transport
         tryAddAnnotatedType(event, beanManager, "org.wildfly.a2a.jakarta.jsonrpc.A2AServerResource", classLoader);
