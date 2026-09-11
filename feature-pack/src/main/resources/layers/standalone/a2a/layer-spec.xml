@@ -14,8 +14,10 @@
              a2a-core-client respectively, so Glow can reach those tiers without dragging in the other side.
              org.a2aproject.sdk.client.http is the exception: the http-client module is a mandatory dependency
              of server-common (server-only provisioning needs it too), so it stays in the base layer and the
-             base layer advertises its package. -->
-        <prop name="org.wildfly.rule.class" value="org.a2aproject.sdk.common,org.a2aproject.sdk.util,org.a2aproject.sdk.spec,org.a2aproject.sdk.spec.util,org.a2aproject.sdk.jsonrpc.common.json,org.a2aproject.sdk.jsonrpc.common.wrappers,org.a2aproject.sdk.client.http"/>
+             base layer advertises its package. The org.a2aproject.sdk.grpc* packages come from spec-grpc,
+             which the base layer provisions for both sides; a deployment touching only those (e.g. the proto
+             mappers) is matched here rather than by a transport layer. -->
+        <prop name="org.wildfly.rule.class" value="org.a2aproject.sdk.common,org.a2aproject.sdk.util,org.a2aproject.sdk.spec,org.a2aproject.sdk.spec.util,org.a2aproject.sdk.jsonrpc.common.json,org.a2aproject.sdk.jsonrpc.common.wrappers,org.a2aproject.sdk.client.http,org.a2aproject.sdk.grpc,org.a2aproject.sdk.grpc.mapper,org.a2aproject.sdk.grpc.utils"/>
     </props>
     <feature spec="subsystem.a2a"/>
     <packages>

@@ -29,18 +29,18 @@ For gRPC support, include the https://github.com/wildfly-extras/wildfly-grpc-fea
 <plugin>
     <groupId>org.wildfly.plugins</groupId>
     <artifactId>wildfly-maven-plugin</artifactId>
-    <version>6.0.0.Final</version>
+    <version>6.0.1.Final</version>
     <configuration>
         <feature-packs>
             <feature-pack>
                 <groupId>org.wildfly</groupId>
                 <artifactId>wildfly-galleon-pack</artifactId>
-                <version>40.0.0.Final</version>
+                <version>41.0.1.Final</version>
             </feature-pack>
             <feature-pack>
                 <groupId>org.wildfly.grpc</groupId>
                 <artifactId>wildfly-grpc-feature-pack</artifactId>
-                <version>0.2.0.Final</version>
+                <version>0.2.1.Final</version>
             </feature-pack>
             <feature-pack>
                 <groupId>org.wildfly.a2a</groupId>
@@ -50,10 +50,11 @@ For gRPC support, include the https://github.com/wildfly-extras/wildfly-grpc-fea
         </feature-packs>
         <layers>
             <layer>cloud-server</layer>
-            <layer>a2a-server-jsonrpc</layer>
+            <layer>a2a-core-client</layer> <!-- needed if the agent builds messages with the org.a2aproject.sdk.A2A helper -->
+            <layer>grpc</layer>
             <layer>a2a-server-grpc</layer>
             <layer>a2a-server-http-json</layer>
-            <layer>grpc</layer>
+            <layer>a2a-server-jsonrpc</layer>
         </layers>
         <galleon-options>
             <jboss-fork-embedded>true</jboss-fork-embedded>
@@ -83,7 +84,7 @@ line coordinate, so start with a `feature-packs.xml` listing both WildFly and th
 [source,xml]
 ----
 <installation xmlns="urn:jboss:galleon:provisioning:4.0">
-    <feature-pack location="org.wildfly:wildfly-galleon-pack:41.0.0.Final"/>
+    <feature-pack location="org.wildfly:wildfly-galleon-pack:41.0.1.Final"/>
     <feature-pack location="org.wildfly.a2a:wildfly-a2a-feature-pack:0.0.1.Alpha1-SNAPSHOT"/>
 </installation>
 ----
@@ -98,12 +99,12 @@ wildfly-glow scan my-a2a-app.war \
     --provision=SERVER
 ----
 
-Fow now, the stability options are required because all A2A layers are `experimental`.
+For now, the stability options are required because all A2A layers are `experimental`.
 
 === Choosing Server Transport with Glow
 
 A deployment that drives A2A purely through the SDK and CDI - an `AgentExecutor` plus a
-`@PublicAgentCard` producer - carries no information for which _server_ transport to provision.
+`@PublicAgentCard` producer - carries no information about which _server_ transport to provision.
 The three server layers are therefore offered as add-ons of
 the `a2a-server` family (namely `a2a-server-jsonrpc`, `a2a-server-grpc`, `a2a-server-http-json`), selected
 with `--add-ons`. The client layers form the `a2a-client` family and are additionally auto-detected
@@ -127,8 +128,8 @@ The feature-pack provides the following Galleon layers:
 |Layer |Description
 
 |`a2a` |Base layer with A2A subsystem and common SDK modules
-|`a2a-core-client` |A2A client-side SDK core (client builder and transport SPI); required for client-only deployments
-|`a2a-core-server` |A2A server-side SDK core (request handler infrastructure); required for server-only deployments
+|`a2a-core-client` |A2A client-side SDK core (client builder, transport SPI and the `org.a2aproject.sdk.A2A` message helper)
+|`a2a-core-server` |A2A server-side SDK core (request handler infrastructure)
 |`a2a-client-jsonrpc` |A2A client with JSON-RPC 2.0 over HTTP transport
 |`a2a-client-grpc` |A2A client with gRPC binary protocol transport
 |`a2a-client-http-json` |A2A client with RESTful HTTP/JSON transport
@@ -142,6 +143,9 @@ The feature-pack provides the following Galleon layers:
 
 Server layers include both the A2A SDK transport module and the Jakarta EE implementation.
 Client layers include only the SDK transport module.
+Each transport layer pulls in the core layer it needs, so `a2a-core-client` and `a2a-core-server` do not need to be
+listed explicitly. The one exception is a server layer set for an agent that builds messages with the
+`org.a2aproject.sdk.A2A` helper, which ships in the client SDK core; Glow discovers that layer on its own.
 
 
 === Protocol version v0.3 backward compatibility
