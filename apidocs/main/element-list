@@ -1,0 +1,3 @@
+org.wildfly.extension.a2a
+org.wildfly.extension.a2a.cdi
+org.wildfly.extension.a2a.deployment
