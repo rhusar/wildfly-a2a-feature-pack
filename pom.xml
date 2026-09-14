@@ -7,54 +7,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.jboss</groupId>
-        <artifactId>jboss-parent</artifactId>
-        <version>53</version>
-        <!-- The empty relativePath makes Maven look it up in the repository. Missing tag default is ../pom.xml. -->
-        <relativePath/>
+        <groupId>org.wildfly.a2a</groupId>
+        <artifactId>wildfly-a2a-bom</artifactId>
+        <version>0.0.1.Alpha1-SNAPSHOT</version>
+        <relativePath>bom/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.wildfly.a2a</groupId>
     <artifactId>wildfly-a2a-feature-pack-parent</artifactId>
-    <version>0.0.1.Alpha1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>WildFly A2A Feature-Pack Parent</name>
-    <description>Parent POM for the WildFly A2A Feature-Pack</description>
-    <url>https://github.com/rhusar/wildfly-a2a-feature-pack</url>
-
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>https://www.apache.org/licenses/LICENSE-2.0.html</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <scm>
-        <connection>scm:git:git@github.com:rhusar/wildfly-a2a-feature-pack.git</connection>
-        <developerConnection>scm:git:git@github.com:rhusar/wildfly-a2a-feature-pack.git</developerConnection>
-        <url>https://github.com/rhusar/wildfly-a2a-feature-pack</url>
-    </scm>
-
-    <developers>
-        <developer>
-            <id>wildfly.org</id>
-            <name>WildFly Community</name>
-            <organization>wildfly.org</organization>
-            <organizationUrl>https://wildfly.org</organizationUrl>
-        </developer>
-        <developer>
-            <name>Radoslav Husar</name>
-            <email>rhusar@ibm.com</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <url>https://github.com/rhusar</url>
-            <organization>IBM</organization>
-            <organizationUrl>https://www.ibm.com</organizationUrl>
-        </developer>
-    </developers>
+    <description>Parent POM of the WildFly A2A Feature-Pack modules, managing build and the third-party dependencies.</description>
 
     <properties>
         <!-- jboss-parent -->
@@ -128,30 +91,6 @@
                 <artifactId>wildfly-galleon-pack</artifactId>
                 <version>${version.org.wildfly}</version>
                 <type>zip</type>
-            </dependency>
-
-            <!-- Internal modules -->
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>wildfly-a2a-subsystem</artifactId>
-                <version>${project.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>*</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>wildfly-a2a-injection</artifactId>
-                <version>${project.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>*</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <!-- A2A SDK - Core -->

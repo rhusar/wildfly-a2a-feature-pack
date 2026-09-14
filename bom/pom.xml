@@ -3,36 +3,71 @@
   ~ Copyright The WildFly Authors
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.wildfly.a2a</groupId>
-        <artifactId>wildfly-a2a-feature-pack-parent</artifactId>
-        <version>0.0.1.Alpha1-SNAPSHOT</version>
+        <groupId>org.jboss</groupId>
+        <artifactId>jboss-parent</artifactId>
+        <version>53</version>
+        <!-- The empty relativePath makes Maven look it up in the repository. Missing tag default is ../pom.xml. -->
+        <relativePath/>
     </parent>
 
+    <groupId>org.wildfly.a2a</groupId>
     <artifactId>wildfly-a2a-bom</artifactId>
+    <version>0.0.1.Alpha1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>WildFly A2A BOM</name>
-    <description>Bill of Materials for WildFly A2A Feature-Pack (only artifacts produced by this project)</description>
+    <description>Bill of Materials for WildFly A2A Feature-Pack</description>
+    <url>https://github.com/rhusar/wildfly-a2a-feature-pack</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git@github.com:rhusar/wildfly-a2a-feature-pack.git</connection>
+        <developerConnection>scm:git:git@github.com:rhusar/wildfly-a2a-feature-pack.git</developerConnection>
+        <url>https://github.com/rhusar/wildfly-a2a-feature-pack</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>wildfly.org</id>
+            <name>WildFly Community</name>
+            <organization>wildfly.org</organization>
+            <organizationUrl>https://wildfly.org</organizationUrl>
+        </developer>
+        <developer>
+            <name>Radoslav Husar</name>
+            <email>rhusar@ibm.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <url>https://github.com/rhusar</url>
+            <organization>IBM</organization>
+            <organizationUrl>https://www.ibm.com</organizationUrl>
+        </developer>
+    </developers>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.wildfly</groupId>
-                <artifactId>wildfly-standard-expansion-bom</artifactId>
-                <version>${version.org.wildfly}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>wildfly-a2a-feature-pack</artifactId>
+                <version>${project.version}</version>
+                <type>zip</type>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>wildfly-a2a-subsystem</artifactId>
                 <version>${project.version}</version>
-                <scope>provided</scope>
                 <exclusions>
                     <exclusion>
                         <groupId>*</groupId>
@@ -44,7 +79,6 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>wildfly-a2a-injection</artifactId>
                 <version>${project.version}</version>
-                <scope>provided</scope>
                 <exclusions>
                     <exclusion>
                         <groupId>*</groupId>
