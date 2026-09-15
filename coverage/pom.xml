@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.wildfly.a2a</groupId>
+        <artifactId>wildfly-a2a-feature-pack-parent</artifactId>
+        <version>0.0.1.Alpha1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>wildfly-a2a-coverage</artifactId>
+    <name>WildFly A2A Feature-Pack - Coverage Report</name>
+    <packaging>pom</packaging>
+    <description>
+        Aggregates JaCoCo coverage across the reactor into a single report.
+    </description>
+
+    <dependencies>
+        <!-- Code under test: supplies the classes and sources shown in the report. -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-a2a-subsystem</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-a2a-injection</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Integration test modules: supply the in-container jacoco-server.exec files. -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-a2a-testsuite-integration-rest</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-a2a-testsuite-integration-jsonrpc</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-a2a-testsuite-integration-grpc</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>aggregate-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                        <configuration>
+                            <includeCurrentProject>true</includeCurrentProject>
+                            <outputDirectory>${project.build.directory}/site/jacoco-aggregate</outputDirectory>
+                            <!-- Pick up both the unit-test/client data (jacoco.exec) and the in-container
+                                 server data (jacoco-server.exec) from each aggregated module's target. -->
+                            <dataFileIncludes>
+                                <dataFileInclude>target/jacoco.exec</dataFileInclude>
+                                <dataFileInclude>target/jacoco-server.exec</dataFileInclude>
+                            </dataFileIncludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

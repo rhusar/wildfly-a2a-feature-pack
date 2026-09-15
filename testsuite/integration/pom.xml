@@ -191,6 +191,28 @@
     </dependencies>
 
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <!-- Builds the -javaagent argument (into ${jacoco.server.argLine}) that instruments
+                         the managed WildFly server JVM, writing its coverage to jacoco-server.exec.
+                         append=true keeps data from the layers and glow server runs in one file. -->
+                    <execution>
+                        <id>jacoco-prepare-agent-server</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <propertyName>jacoco.server.argLine</propertyName>
+                            <destFile>${project.build.directory}/jacoco-server.exec</destFile>
+                            <append>true</append>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -251,7 +273,7 @@
                         <systemPropertyVariables combine.children="append">
                             <jboss.dist>${jboss.home.layers}</jboss.dist>
                             <jboss.install.dir>${jboss.home.layers}</jboss.install.dir>
-                            <server.jvm.args>-Dtest.agent.card.port=8080</server.jvm.args>
+                            <server.jvm.args>-Dtest.agent.card.port=8080 ${jacoco.server.argLine}</server.jvm.args>
                             <jboss.args>${server.jboss.args}</jboss.args>
                         </systemPropertyVariables>
                     </configuration>
