@@ -26,6 +26,24 @@
             <artifactId>wildfly-jaxrs</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!-- WarMetaData and the web metadata model, for registering the A2A servlet context listeners -->
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-web-common</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.metadata</groupId>
+            <artifactId>jboss-metadata-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Compile-time only: the javaee support classes ListenerMetaData extends. At runtime they come from
+             org.jboss.metadata.common, which org.jboss.metadata.web already depends on. -->
+        <dependency>
+            <groupId>org.jboss.metadata</groupId>
+            <artifactId>jboss-metadata-common</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.wildfly.grpc</groupId>
             <artifactId>wildfly-grpc-subsystem</artifactId>

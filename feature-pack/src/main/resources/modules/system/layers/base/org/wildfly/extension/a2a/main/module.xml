@@ -26,6 +26,9 @@
         <module name="org.wildfly.extension.a2a.injection"/>
         <module name="org.wildfly.service"/>
         <module name="org.wildfly.subsystem"/>
+        <!-- For servlet context listener registration -->
+        <module name="org.jboss.as.web-common"/>
+        <module name="org.jboss.metadata.web"/>
         <!-- For JAX-RS resource/provider registration -->
         <module name="org.jboss.as.jaxrs" optional="true"/>
         <!-- For gRPC service registration -->
