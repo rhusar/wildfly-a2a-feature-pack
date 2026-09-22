@@ -13,8 +13,8 @@
         <version>0.0.1.Alpha1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>wildfly-a2a-coverage</artifactId>
-    <name>WildFly A2A Feature-Pack - Coverage Report</name>
+    <artifactId>wildfly-a2a-code-coverage</artifactId>
+    <name>WildFly A2A Feature-Pack - Code Coverage Report</name>
     <packaging>pom</packaging>
     <description>
         Aggregates JaCoCo coverage across the reactor into a single report.
@@ -78,13 +78,10 @@
                         <goals>
                             <goal>report-aggregate</goal>
                         </goals>
-                        <configuration>
-                            <includeCurrentProject>true</includeCurrentProject>
-                            <outputDirectory>${project.build.directory}/site/jacoco-aggregate</outputDirectory>
-                            <!-- The plugin's default dataFileIncludes (target/*.exec) already picks up both
-                                 the unit-test/client data (jacoco.exec) and the in-container server data
-                                 (jacoco-server.exec) from each aggregated module's target. -->
-                        </configuration>
+                        <!-- No configuration needed: the default dataFileIncludes (target/*.exec) already
+                             picks up both the unit-test data (jacoco.exec) and the in-container server data
+                             (jacoco-server.exec) from each aggregated module's target, and the report lands
+                             in the default ${project.build.directory}/site/jacoco-aggregate. -->
                     </execution>
                 </executions>
             </plugin>

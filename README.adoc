@@ -205,6 +205,36 @@ The `grpc` module provisions only the hardcoded server: it additionally requires
 and its `grpc` layer, which no A2A layer depends on and which Glow cannot infer from a deployment - see
 <<Choosing Server Transport with Glow>>.
 
+=== Code Coverage
+
+Add `-Dcoverage` to any build to attach the JaCoCo agent to both the test JVMs and the managed WildFly
+servers, and to aggregate the results across the reactor:
+
+[source,bash]
+----
+mvn clean install -Dcoverage
+----
+
+The aggregated HTML report is written to `code-coverage/target/site/jacoco-aggregate/index.html`.
+The report for `main` is published on every push at
+https://rhusar.github.io/wildfly-a2a-feature-pack/coverage/main/[rhusar.github.io/wildfly-a2a-feature-pack/coverage/main].
+
+NOTE: The report covers the subsystem unit tests and the integration testsuite only - the TCK runs are
+*not* included, so the reported numbers understate what CI actually exercises. The TCK workflows are
+separate runs whose execution data never reaches the coverage job, and the TCK modules define no
+`server.jvm.args`, so their SUT - started by `wildfly:start` rather than by surefire - carries no
+JaCoCo agent to begin with. See <<Running the TCK>>.
+
+IMPORTANT: Enable coverage with `-Dcoverage`, never with `-P coverage-enabled`. The profile is activated
+by the property because `jacoco.server.argLine` - the `-javaagent` argument handed to the managed server -
+must not exist as a POM property while coverage is on, or Maven freezes it to its empty default before
+`prepare-agent` ever runs. A `-P` activation leaves the property unset, so the complementary
+`coverage-disabled` profile stays active too, and the build quietly produces an uninstrumented server
+and an empty report.
+
+Coverage builds must always include `clean`: the in-container execution data is appended to across the
+layers and Glow server runs of a single build, and nothing truncates it between builds.
+
 == Running the TCK
 
 The feature-pack includes a TCK (Technology Compatibility Kit) module that runs the official A2A protocol TCK against WildFly.
