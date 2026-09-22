@@ -556,14 +556,16 @@
 
     <profiles>
         <!-- Enable with -Dcoverage to instrument tests and generate JaCoCo coverage reports.
-             Activated by the 'coverage' property (rather than -P) on purpose: jacoco.server.argLine
+             Activated by the 'coverage' property and never by -P on purpose: jacoco.server.argLine
              must NOT be declared as a POM property during a coverage build, otherwise Maven freezes
              it to its default at model-interpolation time and the ${jacoco.server.argLine} placeholders
              in the managed-server surefire args can never pick up the value prepare-agent sets at
              runtime (the same reason surefire's own ${argLine} is never declared as a property). The
-             empty default therefore lives in the complementary no-coverage profile below. -->
+             empty default therefore lives in the complementary coverage-disabled profile below, which
+             -P cannot switch off: a -P activation leaves the property unset and therefore yields an
+             uninstrumented server and an empty report. -->
         <profile>
-            <id>coverage</id>
+            <id>coverage-enabled</id>
             <activation>
                 <property>
                     <name>coverage</name>
@@ -578,14 +580,14 @@
                 </plugins>
             </build>
             <modules>
-                <module>coverage</module>
+                <module>code-coverage</module>
             </modules>
         </profile>
         <!-- Active whenever coverage is off: supplies the empty jacoco.server.argLine default so the
              ${jacoco.server.argLine} placeholders in the managed-server surefire args resolve to
              nothing instead of being passed to the WildFly JVM as a bogus, unresolved argument. -->
         <profile>
-            <id>no-coverage</id>
+            <id>coverage-disabled</id>
             <activation>
                 <property>
                     <name>!coverage</name>

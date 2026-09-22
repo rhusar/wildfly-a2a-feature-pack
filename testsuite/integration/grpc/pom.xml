@@ -106,7 +106,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <systemPropertyVariables combine.children="append">
+                    <!-- combine.children="merge" (Maven's default, stated explicitly) replaces the
+                         same-named inherited entries and keeps the rest, so jboss.dist/jboss.install.dir
+                         still come from the parent. With "append" the inherited server.jvm.args would be
+                         kept alongside this one and the agent card port would hinge on which of the two
+                         duplicates the configuration converter happens to apply last. -->
+                    <systemPropertyVariables combine.children="merge">
                         <!-- test.agent.card.port is read by AgentCardProducer in a2a-java-sdk-tests-server-common -->
                         <!-- gRPC uses port 9555 for the agent card -->
                         <server.jvm.args>-Dtest.agent.card.port=9555 ${jacoco.server.argLine}</server.jvm.args>

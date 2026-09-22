@@ -270,7 +270,7 @@
     <profiles>
         <!-- Enable with -Dcoverage to instrument the managed WildFly server JVM. -->
         <profile>
-            <id>coverage</id>
+            <id>coverage-enabled</id>
             <activation>
                 <property>
                     <name>coverage</name>
@@ -282,9 +282,27 @@
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
                         <executions>
+                            <!-- The inherited surefire agent instruments whatever the test JVM loads. These
+                                 modules only drive the server over the wire, so scope it to the code under
+                                 test as well; otherwise every class on the test classpath (the A2A SDK,
+                                 grpc-netty-shaded, protobuf, rest-assured, Arquillian) is woven in each of
+                                 the forked JVMs to produce a jacoco.exec that contributes nothing. -->
+                            <execution>
+                                <id>jacoco-prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                                <configuration>
+                                    <includes>
+                                        <include>org.wildfly.extension.a2a.*</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
                             <!-- Builds the -javaagent argument (into ${jacoco.server.argLine}) that instruments
                                  the managed WildFly server JVM, writing its coverage to jacoco-server.exec.
-                                 append=true keeps data from the layers and glow server runs in one file. -->
+                                 append=true keeps data from the layers and glow server runs in one file; since
+                                 nothing truncates that file at the start of a build, a coverage build must
+                                 always run 'clean' or it folds the previous run's sessions into the report. -->
                             <execution>
                                 <id>jacoco-prepare-agent-server</id>
                                 <goals>
