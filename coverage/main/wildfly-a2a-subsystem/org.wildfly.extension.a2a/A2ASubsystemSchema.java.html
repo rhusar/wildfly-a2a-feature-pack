@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>A2ASubsystemSchema.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">WildFly A2A Feature-Pack - Code Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">wildfly-a2a-subsystem</a> &gt; <a href="index.source.html" class="el_package">org.wildfly.extension.a2a</a> &gt; <span class="el_source">A2ASubsystemSchema.java</span></div><h1>A2ASubsystemSchema.java</h1><pre class="source lang-java linenums">/*
+ * Copyright The WildFly Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+package org.wildfly.extension.a2a;
+
+import org.jboss.as.controller.SubsystemSchema;
+import org.jboss.as.controller.persistence.xml.ResourceXMLParticleFactory;
+import org.jboss.as.controller.persistence.xml.SubsystemResourceRegistrationXMLElement;
+import org.jboss.as.controller.persistence.xml.SubsystemResourceXMLSchema;
+import org.jboss.as.controller.xml.VersionedNamespace;
+import org.jboss.staxmapper.IntVersion;
+
+/**
+ * Enumeration of A2A subsystem schema versions.
+ */
+<span class="fc" id="L17">public enum A2ASubsystemSchema implements SubsystemResourceXMLSchema&lt;A2ASubsystemSchema&gt; {</span>
+<span class="fc" id="L18">    VERSION_1_0(1, 0),</span>
+    ;
+
+<span class="fc" id="L21">    static final A2ASubsystemSchema CURRENT = VERSION_1_0;</span>
+
+<span class="fc" id="L23">    private final ResourceXMLParticleFactory factory = ResourceXMLParticleFactory.newInstance(this);</span>
+    private final VersionedNamespace&lt;IntVersion, A2ASubsystemSchema&gt; namespace;
+
+<span class="fc" id="L26">    A2ASubsystemSchema(int major, int minor) {</span>
+<span class="fc" id="L27">        this.namespace = SubsystemSchema.createLegacySubsystemURN(A2ASubsystemRegistrar.NAME, new IntVersion(major, minor));</span>
+<span class="fc" id="L28">    }</span>
+
+    @Override
+    public VersionedNamespace&lt;IntVersion, A2ASubsystemSchema&gt; getNamespace() {
+<span class="fc" id="L32">        return this.namespace;</span>
+    }
+
+    @Override
+    public SubsystemResourceRegistrationXMLElement getSubsystemXMLElement() {
+<span class="fc" id="L37">        return this.factory.subsystemElement(A2ASubsystemRegistrar.REGISTRATION).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

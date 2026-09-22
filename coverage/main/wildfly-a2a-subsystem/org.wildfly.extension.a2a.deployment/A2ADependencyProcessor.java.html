@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>A2ADependencyProcessor.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">WildFly A2A Feature-Pack - Code Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">wildfly-a2a-subsystem</a> &gt; <a href="index.source.html" class="el_package">org.wildfly.extension.a2a.deployment</a> &gt; <span class="el_source">A2ADependencyProcessor.java</span></div><h1>A2ADependencyProcessor.java</h1><pre class="source lang-java linenums">/*
+ * Copyright The WildFly Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+package org.wildfly.extension.a2a.deployment;
+
+import org.jboss.as.server.deployment.Attachments;
+import org.jboss.as.server.deployment.DeploymentPhaseContext;
+import org.jboss.as.server.deployment.DeploymentUnit;
+import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
+import org.jboss.as.server.deployment.DeploymentUnitProcessor;
+import org.jboss.as.server.deployment.module.ModuleDependency;
+import org.jboss.as.server.deployment.module.ModuleSpecification;
+import org.jboss.modules.Module;
+import org.jboss.modules.ModuleLoader;
+import org.jboss.modules.filter.PathFilters;
+import org.wildfly.extension.a2a.A2ALogger;
+
+/**
+ * Deployment processor that adds A2A module dependencies to deployments.
+ */
+<span class="fc" id="L22">public class A2ADependencyProcessor implements DeploymentUnitProcessor {</span>
+
+    /**
+     * Modules exported to deployments.
+     */
+<span class="fc" id="L27">    private static final String[] EXPORTED_MODULES = {</span>
+            &quot;org.wildfly.extension.a2a.injection&quot;,
+            &quot;org.a2aproject.sdk.common&quot;,
+            &quot;org.a2aproject.sdk.spec&quot;,
+            &quot;org.a2aproject.sdk.spec-grpc&quot;,
+            &quot;org.a2aproject.sdk.jsonrpc-common&quot;,
+            &quot;org.a2aproject.sdk.http-client&quot;,
+            &quot;com.google.code.gson&quot;,
+            &quot;com.google.protobuf&quot;,
+            &quot;com.google.guava&quot;
+    };
+
+    /**
+     * Optional modules - added based on what's available in the provisioned server.
+     * Client and server SDK modules are optional because a server may be provisioned
+     * with only client-side or only server-side layers.
+     */
+<span class="fc" id="L44">    private static final String[] OPTIONAL_MODULES = {</span>
+            &quot;org.a2aproject.sdk.client&quot;,
+            &quot;org.a2aproject.sdk.client-transport-spi&quot;,
+            &quot;org.a2aproject.sdk.client-transport-jsonrpc&quot;,
+            &quot;org.a2aproject.sdk.client-transport-grpc&quot;,
+            &quot;org.a2aproject.sdk.client-transport-rest&quot;,
+            &quot;org.a2aproject.sdk.server-common&quot;,
+            &quot;org.a2aproject.sdk.transport.jsonrpc&quot;,
+            &quot;org.a2aproject.sdk.transport.grpc&quot;,
+            &quot;org.a2aproject.sdk.transport.rest&quot;,
+            &quot;io.smallrye.reactive.mutiny.zero&quot;,
+            &quot;org.a2aproject.sdk.microprofile-config&quot;,
+            // v0.3 backward-compatibility SDK modules (present only when a v0.3 layer is provisioned).
+            // These carry the v0.3 spec types and request handlers (@ApplicationScoped CDI beans).
+            &quot;org.a2aproject.sdk.compat03-spec&quot;,
+            &quot;org.a2aproject.sdk.compat03-spec-grpc&quot;,
+            &quot;org.a2aproject.sdk.compat03-server-conversion&quot;,
+            &quot;org.a2aproject.sdk.compat03-transport-jsonrpc&quot;,
+            &quot;org.a2aproject.sdk.compat03-transport-grpc&quot;,
+            &quot;org.a2aproject.sdk.compat03-transport-rest&quot;
+    };
+
+    /**
+     * Jakarta modules containing JAX-RS resources and providers.
+     * These are added as system dependencies with META-INF filters for CDI discovery.
+     */
+<span class="fc" id="L70">    private static final String[] JAKARTA_MODULES = {</span>
+            &quot;org.wildfly.a2a.jakarta.common&quot;,
+            &quot;org.wildfly.a2a.jakarta.jsonrpc&quot;,
+            &quot;org.wildfly.a2a.jakarta.grpc&quot;,
+            &quot;org.wildfly.a2a.jakarta.rest&quot;,
+            // v0.3 backward-compatibility transports (added only when present in the deployment)
+            &quot;org.wildfly.a2a.jakarta.compat03.jsonrpc&quot;,
+            &quot;org.wildfly.a2a.jakarta.compat03.grpc&quot;,
+            &quot;org.wildfly.a2a.jakarta.compat03.rest&quot;
+    };
+
+    @Override
+    public void deploy(DeploymentPhaseContext deploymentPhaseContext) throws DeploymentUnitProcessingException {
+<span class="fc" id="L83">        DeploymentUnit deploymentUnit = deploymentPhaseContext.getDeploymentUnit();</span>
+
+<span class="fc" id="L85">        A2ALogger.ROOT_LOGGER.debugf(&quot;Processing deployment '%s' for A2A&quot;, deploymentUnit.getName());</span>
+<span class="fc" id="L86">        ModuleSpecification moduleSpecification = deploymentUnit.getAttachment(Attachments.MODULE_SPECIFICATION);</span>
+<span class="fc" id="L87">        ModuleLoader moduleLoader = Module.getBootModuleLoader();</span>
+
+        // Add exported modules with META-INF import for CDI bean discovery
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        for (String module : EXPORTED_MODULES) {</span>
+<span class="fc" id="L91">            ModuleDependency modDep = ModuleDependency.Builder.of(moduleLoader, module)</span>
+<span class="fc" id="L92">                    .setExport(true)</span>
+<span class="fc" id="L93">                    .setImportServices(true)</span>
+<span class="fc" id="L94">                    .build();</span>
+            // Import META-INF to allow CDI to discover beans from modules
+<span class="fc" id="L96">            modDep.addImportFilter(PathFilters.getMetaInfFilter(), true);</span>
+<span class="fc" id="L97">            moduleSpecification.addSystemDependency(modDep);</span>
+        }
+
+        // Add optional transport modules with META-INF import for CDI bean discovery
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        for (String module : OPTIONAL_MODULES) {</span>
+<span class="fc" id="L102">            ModuleDependency modDep = ModuleDependency.Builder.of(moduleLoader, module)</span>
+<span class="fc" id="L103">                    .setOptional(true)</span>
+<span class="fc" id="L104">                    .setExport(true)</span>
+<span class="fc" id="L105">                    .setImportServices(true)</span>
+<span class="fc" id="L106">                    .build();</span>
+            // Import META-INF to allow CDI to discover beans from modules
+<span class="fc" id="L108">            modDep.addImportFilter(PathFilters.getMetaInfFilter(), true);</span>
+<span class="fc" id="L109">            moduleSpecification.addSystemDependency(modDep);</span>
+        }
+
+        // Add Jakarta modules as system dependencies with META-INF filters for CDI discovery
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        for (String module : JAKARTA_MODULES) {</span>
+<span class="fc" id="L114">            ModuleDependency modDep = ModuleDependency.Builder.of(moduleLoader, module)</span>
+<span class="fc" id="L115">                    .setOptional(true)</span>
+<span class="fc" id="L116">                    .setExport(true)</span>
+<span class="fc" id="L117">                    .setImportServices(true)</span>
+<span class="fc" id="L118">                    .build();</span>
+            // Import META-INF and subdirectories for CDI and services discovery
+<span class="fc" id="L120">            modDep.addImportFilter(PathFilters.getMetaInfSubdirectoriesFilter(), true);</span>
+<span class="fc" id="L121">            modDep.addImportFilter(PathFilters.getMetaInfFilter(), true);</span>
+<span class="fc" id="L122">            moduleSpecification.addSystemDependency(modDep);</span>
+        }
+<span class="fc" id="L124">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

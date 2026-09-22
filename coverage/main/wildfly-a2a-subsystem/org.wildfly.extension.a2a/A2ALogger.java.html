@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>A2ALogger.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">WildFly A2A Feature-Pack - Code Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">wildfly-a2a-subsystem</a> &gt; <a href="index.source.html" class="el_package">org.wildfly.extension.a2a</a> &gt; <span class="el_source">A2ALogger.java</span></div><h1>A2ALogger.java</h1><pre class="source lang-java linenums">/*
+ * Copyright The WildFly Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+package org.wildfly.extension.a2a;
+
+import static org.jboss.logging.Logger.Level.INFO;
+
+import java.lang.invoke.MethodHandles;
+
+import org.jboss.logging.BasicLogger;
+import org.jboss.logging.Logger;
+import org.jboss.logging.annotations.LogMessage;
+import org.jboss.logging.annotations.Message;
+import org.jboss.logging.annotations.MessageLogger;
+
+/**
+ * Logger for the A2A subsystem.
+ */
+@MessageLogger(projectCode = &quot;WFA2A&quot;, length = 5)
+public interface A2ALogger extends BasicLogger {
+
+<span class="fc" id="L23">    A2ALogger ROOT_LOGGER = Logger.getMessageLogger(MethodHandles.lookup(), A2ALogger.class, &quot;org.wildfly.extension.a2a&quot;);</span>
+
+    @LogMessage(level = INFO)
+    @Message(id = 1, value = &quot;A2A subsystem activated&quot;)
+    void subsystemActivated();
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

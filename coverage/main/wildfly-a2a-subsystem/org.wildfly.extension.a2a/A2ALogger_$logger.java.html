@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>A2ALogger_$logger.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">WildFly A2A Feature-Pack - Code Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">wildfly-a2a-subsystem</a> &gt; <a href="index.source.html" class="el_package">org.wildfly.extension.a2a</a> &gt; <span class="el_source">A2ALogger_$logger.java</span></div><h1>A2ALogger_$logger.java</h1><pre class="source lang-java linenums">package org.wildfly.extension.a2a;
+
+import java.util.Locale;
+import java.io.Serializable;
+import javax.annotation.processing.Generated;
+import org.jboss.logging.DelegatingBasicLogger;
+import org.jboss.logging.BasicLogger;
+import org.jboss.logging.Logger;
+
+
+import static org.jboss.logging.Logger.Level.INFO;
+
+/**
+ * Warning this class consists of generated code.
+ */
+@Generated(value = &quot;org.jboss.logging.processor.generator.model.MessageLoggerImplementor&quot;, date = &quot;2026-09-22T14:11:57+0000&quot;)
+public class A2ALogger_$logger extends DelegatingBasicLogger implements A2ALogger, BasicLogger, Serializable {
+    private static final long serialVersionUID = 1L;
+<span class="fc" id="L19">    private static final String FQCN = A2ALogger_$logger.class.getName();</span>
+    public A2ALogger_$logger(final Logger log) {
+<span class="fc" id="L21">        super(log);</span>
+<span class="fc" id="L22">    }</span>
+<span class="fc" id="L23">    private static final Locale LOCALE = Locale.ROOT;</span>
+    protected Locale getLoggingLocale() {
+<span class="nc" id="L25">        return LOCALE;</span>
+    }
+    @Override
+    public final void subsystemActivated() {
+<span class="fc" id="L29">        super.log.logf(FQCN, INFO, null, subsystemActivated$str());</span>
+<span class="fc" id="L30">    }</span>
+    protected String subsystemActivated$str() {
+<span class="fc" id="L32">        return &quot;WFA2A00001: A2A subsystem activated&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

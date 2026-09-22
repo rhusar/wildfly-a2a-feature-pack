@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>A2ASubsystemModel.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">WildFly A2A Feature-Pack - Code Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">wildfly-a2a-subsystem</a> &gt; <a href="index.source.html" class="el_package">org.wildfly.extension.a2a</a> &gt; <span class="el_source">A2ASubsystemModel.java</span></div><h1>A2ASubsystemModel.java</h1><pre class="source lang-java linenums">/*
+ * Copyright The WildFly Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+package org.wildfly.extension.a2a;
+
+import org.jboss.as.controller.SubsystemModel;
+import org.jboss.as.controller.ModelVersion;
+
+/**
+ * Enumeration of A2A subsystem model versions.
+ */
+<span class="fc" id="L13">enum A2ASubsystemModel implements SubsystemModel {</span>
+<span class="fc" id="L14">    VERSION_1_0_0(1, 0, 0),</span>
+    ;
+
+<span class="fc" id="L17">    static final A2ASubsystemModel CURRENT = VERSION_1_0_0;</span>
+
+    private final ModelVersion version;
+
+<span class="fc" id="L21">    A2ASubsystemModel(int major, int minor, int micro) {</span>
+<span class="fc" id="L22">        this.version = ModelVersion.create(major, minor, micro);</span>
+<span class="fc" id="L23">    }</span>
+
+    @Override
+    public ModelVersion getVersion() {
+<span class="fc" id="L27">        return this.version;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

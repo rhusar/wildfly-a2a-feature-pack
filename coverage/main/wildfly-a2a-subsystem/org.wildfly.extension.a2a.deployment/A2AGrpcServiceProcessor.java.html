@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>A2AGrpcServiceProcessor.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">WildFly A2A Feature-Pack - Code Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">wildfly-a2a-subsystem</a> &gt; <a href="index.source.html" class="el_package">org.wildfly.extension.a2a.deployment</a> &gt; <span class="el_source">A2AGrpcServiceProcessor.java</span></div><h1>A2AGrpcServiceProcessor.java</h1><pre class="source lang-java linenums">/*
+ * Copyright The WildFly Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+package org.wildfly.extension.a2a.deployment;
+
+import java.util.List;
+import java.util.function.Supplier;
+
+import io.grpc.BindableService;
+import io.grpc.ServerInterceptor;
+import org.jboss.as.controller.capability.CapabilityServiceSupport;
+import org.jboss.as.server.deployment.Attachments;
+import org.jboss.as.server.deployment.DeploymentPhaseContext;
+import org.jboss.as.server.deployment.DeploymentUnit;
+import org.jboss.as.server.deployment.DeploymentUnitProcessor;
+import org.jboss.modules.Module;
+import org.jboss.msc.Service;
+import org.jboss.msc.service.ServiceBuilder;
+import org.jboss.msc.service.ServiceName;
+import org.jboss.msc.service.StartContext;
+import org.jboss.msc.service.StopContext;
+import org.wildfly.extension.a2a.A2ALogger;
+import org.wildfly.extension.grpc.WildFlyGrpcDeploymentRegistry;
+
+/**
+ * Deployment processor that manually registers the A2A gRPC handler with the WildFly gRPC deployment registry.
+ *
+ * This bypasses the Jandex annotation scanning approach which has issues with module class visibility.
+ * Instead, we directly register the WildFlyGrpcHandler class with the gRPC subsystem's deployment registry.
+ *
+ * @author Radoslav Husar
+ */
+<span class="fc" id="L34">public class A2AGrpcServiceProcessor implements DeploymentUnitProcessor {</span>
+
+    private static final String GRPC_SERVER_CAPABILITY = &quot;org.wildfly.grpc.server&quot;;
+
+    /**
+     * The A2A gRPC handlers that may be present in an installation. Each is registered with the gRPC subsystem only when its
+     * module and classes are available, so a deployment may expose the v1.0 handler, the v0.3 handler, or both.
+     */
+<span class="fc" id="L42">    private enum GrpcHandler {</span>
+<span class="fc" id="L43">        V1_0(&quot;a2a-grpc-registration&quot;,</span>
+                &quot;org.wildfly.a2a.jakarta.grpc&quot;,
+                &quot;org.wildfly.a2a.jakarta.grpc.WildFlyGrpcHandler&quot;,
+                &quot;org.wildfly.a2a.jakarta.grpc.A2AExtensionsInterceptor&quot;),
+<span class="fc" id="L47">        V0_3(&quot;a2a-grpc-registration-0.3&quot;,</span>
+                &quot;org.wildfly.a2a.jakarta.compat03.grpc&quot;,
+                &quot;org.wildfly.a2a.jakarta.grpc.compat03.WildFlyGrpcHandler_v0_3&quot;,
+                &quot;org.wildfly.a2a.jakarta.grpc.compat03.A2AExtensionsInterceptor_v0_3&quot;);
+
+        final String serviceSuffix;
+        final String module;
+        final String handlerClass;
+        final String interceptorClass;
+
+<span class="fc" id="L57">        GrpcHandler(String serviceSuffix, String module, String handlerClass, String interceptorClass) {</span>
+<span class="fc" id="L58">            this.serviceSuffix = serviceSuffix;</span>
+<span class="fc" id="L59">            this.module = module;</span>
+<span class="fc" id="L60">            this.handlerClass = handlerClass;</span>
+<span class="fc" id="L61">            this.interceptorClass = interceptorClass;</span>
+<span class="fc" id="L62">        }</span>
+    }
+
+    @Override
+    public void deploy(DeploymentPhaseContext phaseContext) {
+<span class="fc" id="L67">        DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();</span>
+
+        // TODO needs i18n in this class
+<span class="fc" id="L70">        A2ALogger.ROOT_LOGGER.debugf(&quot;A2AGrpcServiceProcessor running for deployment '%s'&quot;, deploymentUnit.getName());</span>
+
+        // Check if gRPC capability is available
+<span class="fc" id="L73">        CapabilityServiceSupport support = deploymentUnit.getAttachment(Attachments.CAPABILITY_SERVICE_SUPPORT);</span>
+<span class="pc bpc" id="L74" title="1 of 4 branches missed.">        if (support == null || !support.hasCapability(GRPC_SERVER_CAPABILITY)) {</span>
+<span class="fc" id="L75">            A2ALogger.ROOT_LOGGER.infof(&quot;gRPC capability not available, skipping A2A gRPC service registration for '%s'&quot;, deploymentUnit.getName());</span>
+<span class="fc" id="L76">            return;</span>
+        }
+
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (GrpcHandler handler : GrpcHandler.values()) {</span>
+<span class="fc" id="L80">            registerHandler(phaseContext, deploymentUnit, support, handler);</span>
+        }
+<span class="fc" id="L82">    }</span>
+
+    private void registerHandler(DeploymentPhaseContext phaseContext, DeploymentUnit deploymentUnit,
+                                 CapabilityServiceSupport support, GrpcHandler handler) {
+        // Load the handler and interceptor from their module to avoid a compile-time dependency.
+        // A handler whose module/classes are absent from the deployment is simply skipped.
+        Class&lt;? extends BindableService&gt; handlerClass;
+        List&lt;ServerInterceptor&gt; interceptors;
+        try {
+<span class="fc" id="L91">            Module module = Module.getBootModuleLoader().loadModule(handler.module);</span>
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L93">            Class&lt;? extends BindableService&gt; clazz = (Class&lt;? extends BindableService&gt;) module.getClassLoader().loadClass(handler.handlerClass);</span>
+<span class="fc" id="L94">            handlerClass = clazz;</span>
+            @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L96">            Class&lt;? extends ServerInterceptor&gt; interceptorClass = (Class&lt;? extends ServerInterceptor&gt;) module.getClassLoader().loadClass(handler.interceptorClass);</span>
+<span class="fc" id="L97">            interceptors = List.of(interceptorClass.getConstructor().newInstance());</span>
+<span class="fc" id="L98">        } catch (Exception e) {</span>
+<span class="fc" id="L99">            A2ALogger.ROOT_LOGGER.debugf(&quot;A2A gRPC handler '%s' not available for '%s', skipping: %s&quot;, handler.handlerClass, deploymentUnit.getName(), e.getMessage());</span>
+<span class="fc" id="L100">            return;</span>
+<span class="fc" id="L101">        }</span>
+
+        // Install a service that depends on the gRPC registry and registers this handler
+<span class="fc" id="L104">        ServiceName serviceName = support.getCapabilityServiceName(GRPC_SERVER_CAPABILITY);</span>
+<span class="fc" id="L105">        ServiceName a2aGrpcServiceName = deploymentUnit.getServiceName().append(handler.serviceSuffix);</span>
+
+<span class="fc" id="L107">        ServiceBuilder&lt;?&gt; builder = phaseContext.getRequirementServiceTarget().addService();</span>
+<span class="fc" id="L108">        builder.provides(a2aGrpcServiceName);</span>
+<span class="fc" id="L109">        Supplier&lt;WildFlyGrpcDeploymentRegistry&gt; registrySupplier = builder.requires(serviceName);</span>
+
+<span class="fc" id="L111">        builder.setInstance(new A2AGrpcRegistrationService(deploymentUnit, handlerClass, interceptors, registrySupplier));</span>
+<span class="fc" id="L112">        builder.install();</span>
+
+<span class="fc" id="L114">        A2ALogger.ROOT_LOGGER.infof(&quot;Installed A2A gRPC registration service (%s) for deployment '%s'&quot;,</span>
+<span class="fc" id="L115">                handler.handlerClass, deploymentUnit.getName());</span>
+<span class="fc" id="L116">    }</span>
+
+    @Override
+    public void undeploy(DeploymentUnit deploymentUnit) {
+        // The gRPC subsystem handles cleanup via removeDeploymentServices
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * A small service that registers the A2A gRPC handler when started, allowing us to properly depend on the gRPC registry service.
+     */
+<span class="fc" id="L126">    private record A2AGrpcRegistrationService(</span>
+            DeploymentUnit deploymentUnit,
+            Class&lt;? extends BindableService&gt; handlerClass,
+            List&lt;ServerInterceptor&gt; interceptors,
+            Supplier&lt;WildFlyGrpcDeploymentRegistry&gt; registrySupplier
+    ) implements Service {
+
+        @Override
+        public void start(StartContext context) {
+<span class="fc" id="L135">            WildFlyGrpcDeploymentRegistry registry = registrySupplier.get();</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">            if (registry == null) {</span>
+<span class="nc" id="L137">                A2ALogger.ROOT_LOGGER.warnf(&quot;gRPC deployment registry is not available, skipping A2A gRPC service registration for '%s'&quot;, deploymentUnit.getName());</span>
+<span class="nc" id="L138">                return;</span>
+            }
+
+<span class="fc" id="L141">            A2ALogger.ROOT_LOGGER.debugf(&quot;Got gRPC registry: %s&quot;, registry.getClass().getName());</span>
+
+            try {
+<span class="fc" id="L144">                registry.addService(deploymentUnit, handlerClass, interceptors);</span>
+<span class="fc" id="L145">                A2ALogger.ROOT_LOGGER.infof(&quot;Registered A2A gRPC handler '%s' for deployment '%s'&quot;, handlerClass.getName(), deploymentUnit.getName());</span>
+<span class="nc" id="L146">            } catch (Exception e) {</span>
+<span class="nc" id="L147">                A2ALogger.ROOT_LOGGER.warnf(e, &quot;Failed to register A2A gRPC handler for deployment '%s'&quot;, deploymentUnit.getName());</span>
+<span class="fc" id="L148">            }</span>
+<span class="fc" id="L149">        }</span>
+
+        @Override
+        public void stop(StopContext context) {
+            // The gRPC subsystem handles cleanup via removeDeploymentServices
+<span class="fc" id="L154">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

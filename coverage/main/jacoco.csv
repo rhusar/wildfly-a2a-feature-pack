@@ -1,0 +1,13 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a.deployment,A2AJaxrsProcessor,3,141,2,10,0,24,2,8,0,4
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a.deployment,A2AGrpcServiceProcessor.A2AGrpcRegistrationService,15,48,1,1,4,9,1,3,0,3
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a.deployment,A2AGrpcServiceProcessor.GrpcHandler,0,40,0,0,0,9,0,2,0,2
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a.deployment,A2ADependencyProcessor,0,265,0,6,0,33,0,6,0,3
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a.deployment,A2AGrpcServiceProcessor,0,146,1,5,0,30,1,6,0,4
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a,A2ALogger,0,7,0,0,0,1,0,1,0,1
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a,A2ASubsystemRegistrar,0,62,0,0,0,15,0,4,0,4
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a,A2ASubsystemSchema,0,49,0,0,0,9,0,4,0,4
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a,A2ASubsystemModel,0,28,0,0,0,7,0,3,0,3
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a,A2ASubsystemExtension,0,11,0,0,0,3,0,2,0,2
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a,A2ALogger_.logger,2,23,0,0,1,7,1,4,1,4
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-injection,org.wildfly.extension.a2a.cdi,A2ACdiExtension,12,133,1,1,3,29,2,4,1,4
