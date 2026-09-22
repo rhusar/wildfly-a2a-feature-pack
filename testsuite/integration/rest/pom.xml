@@ -129,7 +129,7 @@
                             <systemPropertyVariables combine.children="override">
                                 <jboss.dist>${jboss.home.glow}</jboss.dist>
                                 <jboss.install.dir>${jboss.home.glow}</jboss.install.dir>
-                                <server.jvm.args>-Dtest.agent.card.port=8080</server.jvm.args>
+                                <server.jvm.args>-Dtest.agent.card.port=8080 ${jacoco.server.argLine}</server.jvm.args>
                                 <jboss.args>${server.jboss.args}</jboss.args>
                             </systemPropertyVariables>
                             <reportNameSuffix>glow</reportNameSuffix>

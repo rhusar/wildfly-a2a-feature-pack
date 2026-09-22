@@ -251,7 +251,7 @@
                         <systemPropertyVariables combine.children="append">
                             <jboss.dist>${jboss.home.layers}</jboss.dist>
                             <jboss.install.dir>${jboss.home.layers}</jboss.install.dir>
-                            <server.jvm.args>-Dtest.agent.card.port=8080</server.jvm.args>
+                            <server.jvm.args>-Dtest.agent.card.port=8080 ${jacoco.server.argLine}</server.jvm.args>
                             <jboss.args>${server.jboss.args}</jboss.args>
                         </systemPropertyVariables>
                     </configuration>
@@ -266,4 +266,47 @@
         <module>rest</module>
         <module>grpc</module>
     </modules>
+
+    <profiles>
+        <!-- Enable with -Dcoverage to instrument the managed WildFly server JVM. -->
+        <profile>
+            <id>coverage</id>
+            <activation>
+                <property>
+                    <name>coverage</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <executions>
+                            <!-- Builds the -javaagent argument (into ${jacoco.server.argLine}) that instruments
+                                 the managed WildFly server JVM, writing its coverage to jacoco-server.exec.
+                                 append=true keeps data from the layers and glow server runs in one file. -->
+                            <execution>
+                                <id>jacoco-prepare-agent-server</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                                <configuration>
+                                    <propertyName>jacoco.server.argLine</propertyName>
+                                    <destFile>${project.build.directory}/jacoco-server.exec</destFile>
+                                    <append>true</append>
+                                    <!-- Only instrument the code under test; without this the agent
+                                         weaves every class WildFly loads (Undertow, Weld, JBoss Modules,
+                                         the full EE stack) on each server boot for a report that only
+                                         renders org.wildfly.extension.a2a.*. -->
+                                    <includes>
+                                        <include>org.wildfly.extension.a2a.*</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

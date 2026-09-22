@@ -84,6 +84,9 @@
         <!-- Annotation processing -->
         <version.org.jboss.logging.tools>3.0.4.Final</version.org.jboss.logging.tools>
 
+        <!-- Build plugins -->
+        <version.jacoco.plugin>0.8.15</version.jacoco.plugin>
+
         <!-- Test dependencies -->
         <version.arquillian>1.10.2.Final</version.arquillian>
         <version.wildfly.arquillian>5.1.0.Final</version.wildfly.arquillian>
@@ -499,6 +502,28 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${version.jacoco.plugin}</version>
+                    <executions>
+                        <!-- Attaches the JaCoCo agent to the test JVM via the surefire argLine property. -->
+                        <execution>
+                            <id>jacoco-prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <!-- Generates the per-module coverage report after tests run. -->
+                        <execution>
+                            <id>jacoco-report</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -528,4 +553,47 @@
         <module>tck</module>
         <module>tck-0.3</module>
     </modules>
+
+    <profiles>
+        <!-- Enable with -Dcoverage to instrument tests and generate JaCoCo coverage reports.
+             Activated by the 'coverage' property (rather than -P) on purpose: jacoco.server.argLine
+             must NOT be declared as a POM property during a coverage build, otherwise Maven freezes
+             it to its default at model-interpolation time and the ${jacoco.server.argLine} placeholders
+             in the managed-server surefire args can never pick up the value prepare-agent sets at
+             runtime (the same reason surefire's own ${argLine} is never declared as a property). The
+             empty default therefore lives in the complementary no-coverage profile below. -->
+        <profile>
+            <id>coverage</id>
+            <activation>
+                <property>
+                    <name>coverage</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+            <modules>
+                <module>coverage</module>
+            </modules>
+        </profile>
+        <!-- Active whenever coverage is off: supplies the empty jacoco.server.argLine default so the
+             ${jacoco.server.argLine} placeholders in the managed-server surefire args resolve to
+             nothing instead of being passed to the WildFly JVM as a bogus, unresolved argument. -->
+        <profile>
+            <id>no-coverage</id>
+            <activation>
+                <property>
+                    <name>!coverage</name>
+                </property>
+            </activation>
+            <properties>
+                <jacoco.server.argLine></jacoco.server.argLine>
+            </properties>
+        </profile>
+    </profiles>
 </project>
