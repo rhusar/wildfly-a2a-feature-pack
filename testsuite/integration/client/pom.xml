@@ -13,7 +13,7 @@
     <artifactId>wildfly-a2a-testsuite-integration-client</artifactId>
     <packaging>jar</packaging>
 
-    <name>WildFly A2A Feature-Pack - Testsuite - Integration - Client-only provisioning</name>
+    <name>WildFly A2A Feature-Pack - Testsuite - Integration - Client</name>
 
     <!-- The assertions load classes by name from the modules the subsystem adds to the deployment;
          these are here only to compile A2AClientUsage, which feeds the Glow scan. Arquillian,

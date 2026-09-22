@@ -14,7 +14,7 @@
     </parent>
 
     <artifactId>wildfly-a2a-extension</artifactId>
-    <name>WildFly A2A Extension</name>
+    <name>WildFly A2A Feature-Pack - Extension</name>
     <packaging>pom</packaging>
 
     <modules>
