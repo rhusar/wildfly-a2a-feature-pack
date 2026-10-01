@@ -14,6 +14,7 @@ import org.jboss.as.server.deployment.Phase;
 import org.wildfly.extension.a2a.deployment.A2ADependencyProcessor;
 import org.wildfly.extension.a2a.deployment.A2AGrpcServiceProcessor;
 import org.wildfly.extension.a2a.deployment.A2AJaxrsProcessor;
+import org.wildfly.extension.a2a.deployment.A2AWebListenerProcessor;
 import org.wildfly.subsystem.resource.ManagementResourceRegistrar;
 import org.wildfly.subsystem.resource.ManagementResourceRegistrationContext;
 import org.wildfly.subsystem.resource.ResourceDescriptor;
@@ -38,6 +39,7 @@ class A2ASubsystemRegistrar implements SubsystemResourceDefinitionRegistrar {
 
         ResourceDescriptor descriptor = ResourceDescriptor.builder(RESOLVER)
                 .withDeploymentChainContributor(target -> {
+                    target.addDeploymentProcessor(NAME, Phase.PARSE, A2APhases.PHASE_PARSE_A2A_WEB_LISTENER, new A2AWebListenerProcessor());
                     target.addDeploymentProcessor(NAME, Phase.DEPENDENCIES, A2APhases.PHASE_DEPENDENCIES_A2A, new A2ADependencyProcessor());
                     target.addDeploymentProcessor(NAME, Phase.INSTALL, A2APhases.PHASE_INSTALL_A2A_GRPC, new A2AGrpcServiceProcessor());
                     target.addDeploymentProcessor(NAME, Phase.POST_MODULE, A2APhases.PHASE_POST_MODULE_A2A_JAXRS, new A2AJaxrsProcessor());
