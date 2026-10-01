@@ -14,7 +14,7 @@
     </parent>
 
     <artifactId>wildfly-a2a-subsystem</artifactId>
-    <name>WildFly A2A Subsystem</name>
+    <name>WildFly A2A Feature-Pack - Extension - Subsystem</name>
 
     <dependencies>
         <dependency>

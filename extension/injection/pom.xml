@@ -14,7 +14,7 @@
     </parent>
 
     <artifactId>wildfly-a2a-injection</artifactId>
-    <name>WildFly A2A Injection</name>
+    <name>WildFly A2A Feature-Pack - Extension - Injection</name>
     <description>CDI extension for A2A bean registration</description>
 
     <dependencies>

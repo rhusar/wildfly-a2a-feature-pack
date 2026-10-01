@@ -17,7 +17,7 @@
     <artifactId>wildfly-a2a-tck</artifactId>
     <packaging>war</packaging>
 
-    <name>WildFly A2A Feature-Pack - TCK</name>
+    <name>WildFly A2A Feature-Pack - TCK v1.0</name>
     <description>TCK server for running the A2A protocol TCK against WildFly with the A2A feature-pack</description>
 
     <properties>

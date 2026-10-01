@@ -16,7 +16,7 @@
     <artifactId>wildfly-a2a-bom</artifactId>
     <packaging>pom</packaging>
 
-    <name>WildFly A2A BOM</name>
+    <name>WildFly A2A Feature-Pack - BOM</name>
     <description>Bill of Materials for WildFly A2A Feature-Pack (only artifacts produced by this project)</description>
 
     <dependencyManagement>

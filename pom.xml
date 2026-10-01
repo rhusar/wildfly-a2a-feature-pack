@@ -19,7 +19,7 @@
     <version>0.0.1.Alpha1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>WildFly A2A Feature-Pack Parent</name>
+    <name>WildFly A2A Feature-Pack - Parent</name>
     <description>Parent POM for the WildFly A2A Feature-Pack</description>
     <url>https://github.com/rhusar/wildfly-a2a-feature-pack</url>
 
