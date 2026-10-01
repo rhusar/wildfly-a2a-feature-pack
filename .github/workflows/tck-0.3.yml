@@ -1,5 +1,5 @@
 # Runs the legacy A2A protocol v0.3 TCK against the feature-pack.
-# The v1.0 TCK lives in tck.yml.
+# The v1.0 TCK lives in tck-1.0.yml.
 # Based on https://github.com/wildfly-extras/a2a-jakarta/blob/main/.github/workflows/run-tck.yml
 
 name: Build and Run TCK 0.3
@@ -34,7 +34,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  tck-test-0-3:
+  build-and-test:
     name: Run TCK 0.3${{ matrix.profile && format(' ({0})', matrix.profile) || '' }}
     runs-on: ubuntu-latest
     strategy:
@@ -56,7 +56,7 @@ jobs:
           path: a2a-tck
           ref: ${{ env.TCK_VERSION }}
       # The feature-pack is consumed as a Galleon feature-pack rather than a Maven dependency, so
-      # `-pl tck-0.3 -am` would not build it. Build the whole reactor, as the v1.0 TCK job does.
+      # `-pl tck/tck-0.3 -am` would not build it. Build the whole reactor, as the v1.0 TCK job does.
       - name: Build the feature-pack and provision the v0.3 TCK server
         run: ./mvnw --batch-mode --no-transfer-progress install ${{ matrix.profile && format('-P{0}', matrix.profile) || '' }}
       - name: Set up Python
@@ -70,7 +70,7 @@ jobs:
         working-directory: a2a-tck
       - name: Start the WildFly SUT
         run: |
-          ./mvnw --batch-mode --no-transfer-progress --projects tck-0.3 -Dstartup-timeout=120 -Dwildfly.serverArgs="--stability=experimental" ${{ matrix.profile && format('-P{0}', matrix.profile) || '' }} wildfly:start
+          ./mvnw --batch-mode --no-transfer-progress --projects tck/tck-0.3 -Dstartup-timeout=120 -Dwildfly.serverArgs="--stability=experimental" ${{ matrix.profile && format('-P{0}', matrix.profile) || '' }} wildfly:start
       - name: Verify agent card
         run: |
           echo "Agent card from http://${{ env.SUT_HOST }}/.well-known/agent-card.json:"
@@ -97,11 +97,11 @@ jobs:
       - name: Shutdown the WildFly SUT
         if: always()
         run: |
-          ./mvnw --batch-mode --no-transfer-progress --projects tck-0.3 wildfly:shutdown
-      - name: Upload tck server.log
+          ./mvnw --batch-mode --no-transfer-progress --projects tck/tck-0.3 wildfly:shutdown
+      - name: Upload tck-0.3 server.log
         uses: actions/upload-artifact@v7
         if: always()
         with:
           name: tck-0.3-server-log-${{ matrix.profile || 'standalone' }}
-          path: tck-0.3/target/wildfly/standalone/log/server.log
+          path: tck/tck-0.3/target/wildfly/standalone/log/server.log
           retention-days: 5

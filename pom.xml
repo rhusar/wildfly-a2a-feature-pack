@@ -551,7 +551,6 @@
         <module>feature-pack</module>
         <module>testsuite</module>
         <module>tck</module>
-        <module>tck-0.3</module>
     </modules>
 
     <profiles>

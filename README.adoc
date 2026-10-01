@@ -258,14 +258,14 @@ mvn clean install
 
 [source,bash]
 ----
-mvn package -pl tck -am
+mvn package -pl tck/tck-1.0 -am
 ----
 
 . Start the WildFly server:
 
 [source,bash]
 ----
-SUT_HOST=localhost:8080 SUT_GRPC_HOST=localhost:9555 tck/target/wildfly/bin/standalone.sh --stability=experimental
+SUT_HOST=localhost:8080 SUT_GRPC_HOST=localhost:9555 tck/tck-1.0/target/wildfly/bin/standalone.sh --stability=experimental
 ----
 
 . Clone and set up the A2A TCK:
@@ -290,7 +290,7 @@ uv run ./run_tck.py --sut-host http://localhost:8080 -v
 
 [source,bash]
 ----
-mvn wildfly:shutdown -pl tck
+mvn wildfly:shutdown -pl tck/tck-1.0
 ----
 
 TCK Endpoints Reference
