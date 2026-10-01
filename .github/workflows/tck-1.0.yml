@@ -1,6 +1,8 @@
+# Runs the A2A protocol v1.0 TCK against the feature-pack.
+# The v0.3 TCK lives in tck-0.3.yml.
 # Based on https://github.com/wildfly-extras/a2a-jakarta/blob/main/.github/workflows/run-tck.yml
 
-name: Build and Run TCK
+name: Build and Run TCK 1.0
 
 on:
   push:
@@ -48,7 +50,7 @@ jobs:
           repository: a2aproject/a2a-tck
           path: a2a-tck
           ref: ${{ env.TCK_VERSION }}
-      - name: Build the feature-pack and provision the TCK server
+      - name: Build the feature-pack and provision the v1.0 TCK server
         run: ./mvnw --batch-mode --no-transfer-progress install
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -61,7 +63,7 @@ jobs:
         working-directory: a2a-tck
       - name: Start the WildFly SUT
         run: |
-          ./mvnw --batch-mode --no-transfer-progress --projects tck -Dstartup-timeout=120 -Dwildfly.serverArgs="--stability=experimental" wildfly:start
+          ./mvnw --batch-mode --no-transfer-progress --projects tck/tck-1.0 -Dstartup-timeout=120 -Dwildfly.serverArgs="--stability=experimental" wildfly:start
       - name: Verify agent card
         run: |
           echo "Agent card from http://${{ env.SUT_HOST }}/.well-known/agent-card.json:"
@@ -88,19 +90,19 @@ jobs:
       - name: Shutdown the WildFly SUT
         if: always()
         run: |
-          ./mvnw --batch-mode --no-transfer-progress --projects tck wildfly:shutdown
+          ./mvnw --batch-mode --no-transfer-progress --projects tck/tck-1.0 wildfly:shutdown
       - name: Upload TCK Reports
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: tck-reports
+          name: tck-1.0-reports
           path: a2a-tck/reports/
           retention-days: 14
           if-no-files-found: warn
-      - name: Upload tck server.log
+      - name: Upload tck-1.0 server.log
         uses: actions/upload-artifact@v7
         if: failure()
         with:
-          name: tck-server-log
-          path: tck/target/wildfly/standalone/log/server.log
+          name: tck-1.0-server-log
+          path: tck/tck-1.0/target/wildfly/standalone/log/server.log
           retention-days: 5

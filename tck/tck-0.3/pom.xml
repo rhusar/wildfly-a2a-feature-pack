@@ -10,7 +10,7 @@
 
     <parent>
         <groupId>org.wildfly.a2a</groupId>
-        <artifactId>wildfly-a2a-feature-pack-parent</artifactId>
+        <artifactId>wildfly-a2a-tck-parent</artifactId>
         <version>0.0.1.Alpha1-SNAPSHOT</version>
     </parent>
 
