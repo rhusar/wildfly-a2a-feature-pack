@@ -554,6 +554,16 @@
     </modules>
 
     <profiles>
+        <!--
+            ITK agent (see itk/run_itk.sh). The a2a-itk launcher builds it with 'mvn -Pitk -pl itk -am install'.
+            Off by default, since the module needs an a2a-itk checkout to compile instruction.proto.
+        -->
+        <profile>
+            <id>itk</id>
+            <modules>
+                <module>itk</module>
+            </modules>
+        </profile>
         <!-- Enable with -Dcoverage to instrument tests and generate JaCoCo coverage reports.
              Activated by the 'coverage' property and never by -P on purpose: jacoco.server.argLine
              must NOT be declared as a POM property during a coverage build, otherwise Maven freezes

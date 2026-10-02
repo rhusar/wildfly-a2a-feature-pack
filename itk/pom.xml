@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.wildfly.a2a</groupId>
+        <artifactId>wildfly-a2a-feature-pack-parent</artifactId>
+        <version>0.0.1.Alpha1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>wildfly-a2a-itk</artifactId>
+    <packaging>war</packaging>
+
+    <name>WildFly A2A Feature-Pack - ITK Agent</name>
+    <description>Integration Test Kit agent for cross-SDK interoperability testing of WildFly with the A2A feature-pack</description>
+
+    <properties>
+        <!-- An ITK harness, not published API: keep it out of the aggregated Javadoc and of any javadoc jar. -->
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <jboss.home>${project.build.directory}/wildfly</jboss.home>
+        <!--
+            Location of the canonical instruction.proto. run_itk.sh clones a2a-itk at the ref pinned by
+            A2A_ITK_REVISION into ${project.basedir}/a2a-itk; override with -Da2a.itk.proto.dir=... when building
+            outside run_itk.sh.
+        -->
+        <a2a.itk.proto.dir>${project.basedir}/a2a-itk/protos</a2a.itk.proto.dir>
+    </properties>
+
+    <dependencies>
+        <!--
+            The feature-pack is referenced only by the wildfly-maven-plugin below. This dependency puts it in the
+            reactor for 'mvn -Pitk -pl itk -am install', the command the ITK launcher builds the agent with.
+        -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>wildfly-a2a-feature-pack</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!--
+            The v0.3 compat client is not shipped by the feature-pack, so it is bundled in the deployment. Its
+            transitive dependencies (compat03-spec, compat03-spec-grpc, http-client, gRPC, ...) are provided by the
+            feature-pack modules the A2A subsystem adds to deployments.
+        -->
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-compat-0.3-client</artifactId>
+            <version>${version.sdk}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-compat-0.3-client-transport-spi</artifactId>
+            <version>${version.sdk}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-compat-0.3-client-transport-jsonrpc</artifactId>
+            <version>${version.sdk}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-compat-0.3-client-transport-rest</artifactId>
+            <version>${version.sdk}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-compat-0.3-client-transport-grpc</artifactId>
+            <version>${version.sdk}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Provided by the A2A feature-pack -->
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-server-common</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-client</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-client-transport-jsonrpc</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-client-transport-rest</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-client-transport-grpc</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.a2aproject.sdk</groupId>
+            <artifactId>a2a-java-sdk-compat-0.3-spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Provided by WildFly and the gRPC feature-pack -->
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Compile instruction.proto from the a2a-itk checkout -->
+            <plugin>
+                <groupId>io.github.ascopes</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>5.1.8</version>
+                <configuration>
+                    <protoc kind="binary-maven">
+                        <version>${version.protobuf}</version>
+                    </protoc>
+                    <sourceDirectories>
+                        <sourceDirectory>${a2a.itk.proto.dir}</sourceDirectory>
+                    </sourceDirectories>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--
+                Pre-resolve exec-maven-plugin so the launcher's mvn exec:java does not download it at runtime, which
+                would hold Maven repository locks and conflict with other agent builds in the ITK container.
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+            </plugin>
+
+            <!-- Provision WildFly with the A2A feature-pack and deploy the ITK agent -->
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${version.wildfly.maven.plugin}</version>
+                <configuration>
+                    <feature-packs>
+                        <feature-pack>
+                            <groupId>org.wildfly</groupId>
+                            <artifactId>wildfly-galleon-pack</artifactId>
+                            <version>${version.org.wildfly}</version>
+                        </feature-pack>
+                        <!-- gRPC feature-pack (required for the a2a-server-grpc layers) -->
+                        <feature-pack>
+                            <groupId>org.wildfly.grpc</groupId>
+                            <artifactId>wildfly-grpc-feature-pack</artifactId>
+                            <version>${version.wildfly.grpc}</version>
+                        </feature-pack>
+                        <!-- A2A feature-pack -->
+                        <feature-pack>
+                            <groupId>org.wildfly.a2a</groupId>
+                            <artifactId>wildfly-a2a-feature-pack</artifactId>
+                            <version>${project.version}</version>
+                        </feature-pack>
+                    </feature-packs>
+                    <!--
+                        The ITK agent is both a server (v1.0 and v0.3, all transports) and a client calling the next
+                        agent in the traversal over any transport.
+                    -->
+                    <layers>
+                        <layer>cloud-server</layer>
+                        <layer>a2a-server-jsonrpc</layer>
+                        <layer>a2a-server-grpc</layer>
+                        <layer>a2a-server-http-json</layer>
+                        <layer>a2a-server-jsonrpc-0.3</layer>
+                        <layer>a2a-server-grpc-0.3</layer>
+                        <layer>a2a-server-http-json-0.3</layer>
+                        <layer>a2a-client-jsonrpc</layer>
+                        <layer>a2a-client-grpc</layer>
+                        <layer>a2a-client-http-json</layer>
+                        <layer>grpc</layer>
+                    </layers>
+                    <jboss-home>${jboss.home}</jboss-home>
+                    <name>ROOT.war</name>
+                    <provisioning-dir>${jboss.home}</provisioning-dir>
+                    <galleon-options>
+                        <jboss-fork-embedded>true</jboss-fork-embedded>
+                        <stability-level>${wildfly.a2a.stability}</stability-level>
+                    </galleon-options>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>provision</id>
+                        <goals>
+                            <goal>package</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
