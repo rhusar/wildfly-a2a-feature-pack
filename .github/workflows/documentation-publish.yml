@@ -1,0 +1,74 @@
+# Publishes the project website (README.adoc rendered to index.html) to the root of the gh-pages branch.
+
+name: Publish documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - README.adoc
+      - .github/actions/build-documentation/action.yml
+      - .github/workflows/documentation-build.yml
+      - .github/workflows/documentation-publish.yml
+
+concurrency:
+  group: documentation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Build documentation
+        uses: ./.github/actions/build-documentation
+
+      - name: Upload documentation
+        uses: actions/upload-artifact@v7
+        with:
+          name: documentation
+          path: target/docs/index.html
+          if-no-files-found: error
+
+  publish:
+    name: Publish documentation
+    # Don't publish from forks; only the canonical repository owns the docs site.
+    if: github.repository == 'rhusar/wildfly-a2a-feature-pack'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    # Shares the Javadoc and Code Coverage workflows' concurrency group on purpose: all deploy to
+    # gh-pages and would otherwise race on it. cancel-in-progress must stay false so runs queue
+    # instead of cancelling each other mid-deploy.
+    concurrency:
+      group: gh-pages-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Download documentation
+        uses: actions/download-artifact@v8
+        with:
+          name: documentation
+          path: target/docs
+
+      - name: Publish to gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: target/docs
+          # The website is deployed to the branch root, so keep the folders other workflows publish
+          # there from being wiped by the action's clean step.
+          clean-exclude: |
+            apidocs/
+            coverage/

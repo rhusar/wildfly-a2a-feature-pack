@@ -1,0 +1,28 @@
+name: Build documentation
+description: Builds the project website using Asciidoctor
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.4'
+
+    - name: Install Asciidoctor
+      run: |
+        gem install asciidoctor --version 2.0.26 --no-document
+        gem install rouge --version 5.1.0 --no-document
+      shell: bash
+
+    - name: Build documentation
+      run: |
+        mkdir -p target/docs
+        asciidoctor README.adoc \
+          --attribute generated-doc=true \
+          --failure-level WARN \
+          --out-file target/docs/index.html
+        test -s target/docs/index.html
+        grep -q '<pre class="rouge highlight"><code data-lang="xml"><span' target/docs/index.html
+        grep -q '<title>WildFly A2A Feature-Pack</title>' target/docs/index.html
+      shell: bash

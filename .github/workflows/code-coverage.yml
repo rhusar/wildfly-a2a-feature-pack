@@ -11,8 +11,8 @@ on:
 permissions:
   contents: write
 
-# Shares the Javadoc workflow's concurrency group on purpose: both deploy to gh-pages and would
-# otherwise race on it. cancel-in-progress must stay false so runs queue instead of cancelling
+# Shares the Javadoc and documentation workflows' concurrency group on purpose: all deploy to gh-pages
+# and would otherwise race on it. cancel-in-progress must stay false so runs queue instead of cancelling
 # each other mid-deploy.
 concurrency:
   group: gh-pages-${{ github.ref }}

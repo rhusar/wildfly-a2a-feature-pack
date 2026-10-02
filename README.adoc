@@ -1,20 +1,25 @@
 :toc:
+:source-highlighter: rouge
+:rouge-style: github
 = WildFly A2A Feature-Pack
 
 WARNING: This is an unsupported experimental POC implementation. Use with caution.
 
 A WildFly feature-pack implementing the open-standard Agent2Agent (A2A) Protocol to enable universal interoperability and seamless collaboration between AI agents across diverse frameworks and vendors.
 
-== Building
+== About the A2A Protocol
 
-Build the A2A feature-pack:
+The Agent2Agent (A2A) protocol addresses a critical challenge in the AI landscape: enabling gen AI agents, built on diverse frameworks by different companies running on separate servers, to communicate and collaborate effectively - as agents, not just as tools. A2A aims to provide a common language for agents, fostering a more interconnected, powerful, and innovative AI ecosystem.
 
-[source,bash]
-----
-git clone https://github.com/rhusar/wildfly-a2a-feature-pack.git
-cd wildfly-a2a-feature-pack
-./mvnw clean install -DskipTests
-----
+With A2A, agents can:
+
+* Discover each other's capabilities.
+* Negotiate interaction modalities (text, forms, media).
+* Securely collaborate on long-running tasks.
+* Operate without exposing their internal state, memory, or tools.
+
+Learn more about the protocol in the https://github.com/a2aproject/A2A#agent2agent-a2a-protocol[A2A project], from which
+this introduction is taken.
 
 == Provisioning with Maven
 
@@ -180,6 +185,17 @@ single-user deployments and testing. The full list of properties and their defau
 `META-INF/a2a-defaults.properties` in `a2a-java-sdk-server-common`.
 
 
+== Building
+
+Build the A2A feature-pack:
+
+[source,bash]
+----
+git clone https://github.com/rhusar/wildfly-a2a-feature-pack.git
+cd wildfly-a2a-feature-pack
+./mvnw clean install -DskipTests
+----
+
 == Running Integration Tests
 
 Based on https://github.com/wildfly-extras/a2a-jakarta[a2a-jakarta] testing approach.
@@ -319,6 +335,10 @@ checkout that `run_itk.sh` clones into `itk/a2a-itk`.
 
 == Resources
 
+ifdef::generated-doc[]
+* link:apidocs/main/[API Documentation] - Javadoc for the `main` branch
+* link:coverage/main/[Code Coverage Report] - JaCoCo report for the `main` branch
+endif::generated-doc[]
 * https://a2aprotocol.ai/[A2A Protocol] - Official A2A protocol specification
 * https://github.com/a2aproject/A2A[A2A] - Reference implementation of the A2A protocol
 * https://github.com/a2aproject/a2a-java[a2a-java] - Java SDK for A2A protocol
