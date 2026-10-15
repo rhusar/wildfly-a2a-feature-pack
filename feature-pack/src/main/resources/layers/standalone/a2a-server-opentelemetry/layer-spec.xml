@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<layer-spec xmlns="urn:jboss:galleon:layer-spec:2.0" name="a2a-server-opentelemetry">
+    <props>
+        <prop name="org.wildfly.category" value="A2A"/>
+        <prop name="org.wildfly.description" value="OpenTelemetry tracing of A2A server requests"/>
+        <prop name="org.wildfly.stability" value="experimental"/>
+        <!-- Deliberately no org.wildfly.rule.class: the decorator this layer provisions is enabled by
+             @Priority alone, so a deployment that wants server-side tracing references none of its
+             classes and nothing in a deployment scan can point at this layer. It is an add-on only. -->
+        <prop name="org.wildfly.rule.add-on-depends-on" value="only:a2a"/>
+        <prop name="org.wildfly.rule.add-on" value="a2a-opentelemetry,a2a-server-opentelemetry"/>
+        <prop name="org.wildfly.rule.add-on-description" value="A2A server emitting an OpenTelemetry span per protocol method"/>
+    </props>
+    <dependencies>
+        <layer name="a2a-core-server"/>
+        <!--
+            OpenTelemetryRequestHandlerDecorator injects an io.opentelemetry.api.trace.Tracer. The
+            microprofile-telemetry subsystem produces that bean (and pulls in the opentelemetry
+            subsystem, which owns the SDK and the exporter configuration); without it the decorator
+            has an unsatisfied injection point and every deployment using A2A fails to start.
+        -->
+        <layer name="microprofile-telemetry"/>
+    </dependencies>
+    <packages>
+        <package name="org.a2aproject.sdk.opentelemetry-common"/>
+        <package name="org.a2aproject.sdk.opentelemetry-server"/>
+    </packages>
+</layer-spec>

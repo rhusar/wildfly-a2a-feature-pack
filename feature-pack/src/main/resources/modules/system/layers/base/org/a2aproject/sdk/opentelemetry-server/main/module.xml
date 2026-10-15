@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright The WildFly Authors
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<module xmlns="urn:jboss:module:1.9" name="org.a2aproject.sdk.opentelemetry-server">
+
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
+
+    <resources>
+        <artifact name="${org.a2aproject.sdk:a2a-java-sdk-opentelemetry-server}"/>
+    </resources>
+
+    <dependencies>
+        <module name="java.logging"/>
+        <!-- jakarta.annotation.api carries @Priority; jakarta.enterprise.api carries @Decorator. -->
+        <module name="jakarta.annotation.api"/>
+        <module name="jakarta.enterprise.api"/>
+        <module name="jakarta.inject.api"/>
+
+        <!--
+            OpenTelemetryRequestHandlerDecorator injects an io.opentelemetry.api.trace.Tracer. The bean
+            that satisfies it is a producer method on io.smallrye.opentelemetry's OpenTelemetryProducer,
+            and Weld only resolves beans from bean archives this module can see - hence the dependency
+            on the implementation module rather than on io.opentelemetry.api alone. The
+            a2a-server-opentelemetry layer provisions MicroProfile Telemetry, which owns both modules.
+        -->
+        <module name="io.opentelemetry.api"/>
+        <module name="io.opentelemetry.context"/>
+        <module name="io.smallrye.opentelemetry"/>
+        <module name="org.a2aproject.sdk.jsonrpc-common"/>
+        <module name="org.a2aproject.sdk.opentelemetry-common"/>
+        <module name="org.a2aproject.sdk.server-common"/>
+        <module name="org.a2aproject.sdk.spec"/>
+        <module name="org.slf4j"/>
+    </dependencies>
+</module>

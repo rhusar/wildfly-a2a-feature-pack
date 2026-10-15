@@ -125,6 +125,11 @@ which no A2A layer can depend on because the feature-pack is optional. Were the 
 Glow would provision a server that resolves and boots but has no gRPC endpoint. Provision it
 explicitly, alongside the gRPC feature-pack and the `grpc` layer.
 
+The two OpenTelemetry layers form a third add-on family, `a2a-opentelemetry`. `a2a-client-opentelemetry`
+is also auto-detected from the wrapper classes an application configures; `a2a-server-opentelemetry` is
+an add-on only, since the decorator it provisions is enabled by `@Priority` and a deployment that wants
+server-side tracing references none of its classes - see <<OpenTelemetry>>.
+
 == Layers
 
 The feature-pack provides the following Galleon layers:
@@ -144,6 +149,8 @@ The feature-pack provides the following Galleon layers:
 |`a2a-server-jsonrpc-0.3` |A2A server with the v0.3 JSON-RPC 2.0 over HTTP transport (backward compatibility)
 |`a2a-server-grpc-0.3` |A2A server with the v0.3 gRPC binary protocol transport (backward compatibility)
 |`a2a-server-http-json-0.3` |A2A server with the v0.3 RESTful HTTP/JSON transport (backward compatibility)
+|`a2a-server-opentelemetry` |OpenTelemetry tracing of A2A server requests
+|`a2a-client-opentelemetry` |OpenTelemetry tracing and trace-context propagation for the A2A client
 |===
 
 Server layers include both the A2A SDK transport module and the Jakarta EE implementation.
@@ -162,6 +169,51 @@ serve both protocol versions from a single deployment, with requests dispatched 
 Note that a v0.3 transport declares itself the default version, so a request that carries no `A2A-Version` header is
 handled as v0.3. The agent card served from `/.well-known/agent-card.json` always comes from the highest provisioned
 version.
+
+
+=== OpenTelemetry
+
+The two `-opentelemetry` layers provision the
+https://github.com/a2aproject/a2a-java/tree/main/extras/opentelemetry[OpenTelemetry extras] of the A2A SDK. Both depend
+on the `microprofile-telemetry` layer, which owns the OpenTelemetry SDK, its exporter configuration and the
+CDI-injectable `Tracer` and `OpenTelemetry` instances, so there is no need to list it as well.
+
+`a2a-server-opentelemetry` needs nothing from the application: it provisions a CDI decorator around the SDK's
+`RequestHandler` that opens a `SERVER` span per protocol method - `SendMessage`, `GetTask`, ... - with the
+`gen_ai.agent.a2a.*` attributes of the request. The decorator is enabled by `@Priority`, so it applies to every
+deployment on a server that provisions the layer. It is an add-on only; nothing in a deployment references it, so
+WildFly Glow cannot discover it from a scan.
+
+[source,properties]
+----
+# MicroProfile Telemetry is off per deployment until this is set, and with it off the injected Tracer
+# records nothing.
+otel.sdk.disabled=false
+otel.service.name=my-agent
+----
+
+`a2a-client-opentelemetry` provisions two `ClientTransportWrapper` services - one that spans each client operation, one
+that injects W3C trace-context headers into outbound calls. Both stay dormant until the application puts the
+instance they need into the transport config, so an application opts in per client:
+
+[source,java]
+----
+@Inject Tracer tracer;
+@Inject OpenTelemetry openTelemetry;
+
+JSONRPCTransportConfig config = new JSONRPCTransportConfig();
+config.setParameters(Map.of(
+        OpenTelemetryClientTransportWrapper.OTEL_TRACER_KEY, tracer,
+        OpenTelemetryClientPropagatorTransportWrapper.OTEL_OPEN_TELEMETRY_KEY, openTelemetry));
+
+Client.builder(agentCard)
+        .withTransport(JSONRPCTransport.class, config)
+        .build();
+----
+
+NOTE: A deployment on a server with `a2a-server-opentelemetry` logs `WELD-001479` for the decorator at boot. The SDK
+artifact both annotates it `@Priority` and lists it in its own `beans.xml`, and Weld reports the overlap; it enables the
+decorator once, through `@Priority`.
 
 
 == Configuration
@@ -202,10 +254,11 @@ Based on https://github.com/wildfly-extras/a2a-jakarta[a2a-jakarta] testing appr
 
 [source,bash]
 ----
-mvn clean install                                  # All tests
-mvn clean test -pl testsuite/integration/jsonrpc   # JSON-RPC only
-mvn clean test -pl testsuite/integration/grpc      # gRPC only
-mvn clean test -pl testsuite/integration/rest      # RESTful HTTP/JSON only
+mvn clean install                                        # All tests
+mvn clean test -pl testsuite/integration/jsonrpc         # JSON-RPC only
+mvn clean test -pl testsuite/integration/grpc            # gRPC only
+mvn clean test -pl testsuite/integration/rest            # RESTful HTTP/JSON only
+mvn clean test -pl testsuite/integration/opentelemetry   # OpenTelemetry only
 ----
 
 The `jsonrpc` and `rest` modules each provision *two* servers and run their suite against both:
@@ -220,6 +273,11 @@ Results are differentiated by the `-layers` and `-glow` suffixes on the surefire
 The `grpc` module provisions only the hardcoded server: it additionally requires the gRPC feature-pack
 and its `grpc` layer, which no A2A layer depends on and which Glow cannot infer from a deployment - see
 <<Choosing Server Transport with Glow>>.
+
+The `opentelemetry` module provisions only the hardcoded server too. It turns MicroProfile Telemetry on
+in the deployment with the logging span exporter and asserts the span `a2a-server-opentelemetry` wraps
+around a `SendMessage` reaches the server log; `a2a-server-opentelemetry` carries no Glow class rule, so
+there is no discovery to pin.
 
 === Code Coverage
 
