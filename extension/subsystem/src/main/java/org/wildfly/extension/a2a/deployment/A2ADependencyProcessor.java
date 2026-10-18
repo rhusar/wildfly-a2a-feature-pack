@@ -58,7 +58,6 @@ public class A2ADependencyProcessor implements DeploymentUnitProcessor {
      * Modules added to A2A server deployments only.
      */
     private static final String[] SERVER_MODULES = {
-            "org.wildfly.extension.a2a.injection",
             "com.google.code.gson",
             "com.google.protobuf",
             "com.google.guava"
