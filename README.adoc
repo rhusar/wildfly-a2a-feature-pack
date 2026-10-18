@@ -164,6 +164,30 @@ handled as v0.3. The agent card served from `/.well-known/agent-card.json` alway
 version.
 
 
+== A2A Client/Server Availability in Deployments
+
+The A2A subsystem treats a deployment as an A2A _server_ deployment only when it is a CDI deployment that contains
+a `@PublicAgentCard` (`org.a2aproject.sdk.server.PublicAgentCard`) annotation, typically on the producer of its
+public `AgentCard`. Only such deployments are enriched with A2A support.
+
+A deployment is an A2A _client_ deployment when one of its classes uses the A2A client API, i.e. references
+
+* `org.a2aproject.sdk.client.Client`,
+* `org.a2aproject.sdk.client.ClientBuilder` or
+* `org.a2aproject.sdk.A2A`.
+
+Such deployments are enriched with A2A SDK and client modules.
+Should a client only be reached through reflection is not recognised.
+
+This detection is narrower than https://docs.wildfly.org/wildfly-glow/[WildFly Glow] provisioning detection, whose
+rules match any class of the A2A SDK packages. A deployment that neither provides an A2A server nor uses the A2A client
+API, e.g. one that only uses the `org.a2aproject.sdk.spec` types, gets no A2A modules even though Glow provisions the
+`a2a` layer for it.
+
+The class references are read from the deployment's Jandex index, so a deployment jar shipping a pre-built
+`META-INF/jandex.idx` created by a Jandex version that does not record class references is not recognised through them.
+
+
 == Configuration
 
 The A2A SDK reads its configuration through MicroProfile Config, so a deployment overrides a value with a

@@ -27,6 +27,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-weld-common</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.wildfly.grpc</groupId>
             <artifactId>wildfly-grpc-subsystem</artifactId>
             <scope>provided</scope>
