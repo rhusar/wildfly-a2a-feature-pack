@@ -9,6 +9,9 @@ on:
       - .github/actions/build-documentation/action.yml
       - .github/workflows/documentation-build.yml
       - .github/workflows/documentation-publish.yml
+  merge_group:
+    types:
+      - checks_requested
 
 concurrency:
   group: documentation-${{ github.ref }}
