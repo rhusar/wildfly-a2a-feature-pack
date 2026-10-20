@@ -21,7 +21,7 @@ permissions:
 env:
   # Ref (branch/tag/SHA) of the TCK
   # https://github.com/a2aproject/a2a-tck
-  TCK_VERSION: 0.3.0.beta5
+  TCK_VERSION: 0.3.0.beta6
   UV_SYSTEM_PYTHON: 1
   # Env vars to configure SUT hosts
   SUT_HOST: localhost:8080
