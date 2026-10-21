@@ -4,20 +4,16 @@
  */
 package org.wildfly.a2a.test.integration.rest;
 
-import java.io.File;
-
 import org.a2aproject.sdk.client.ClientBuilder;
 import org.a2aproject.sdk.client.transport.rest.RestTransport;
 import org.a2aproject.sdk.client.transport.rest.RestTransportConfigBuilder;
 import org.a2aproject.sdk.server.apps.common.AbstractA2AServerTest;
 import org.a2aproject.sdk.server.apps.common.TestTaskAuthorizationProvider;
 import org.a2aproject.sdk.spec.TransportProtocol;
-import io.restassured.RestAssured;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit5.container.annotation.ArquillianTest;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -52,10 +48,8 @@ public class A2ARestTestCase extends AbstractA2AServerTest {
     }
 
     @Deployment
-    public static WebArchive createTestArchive() throws Exception {
+    public static WebArchive createTestArchive() {
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "ROOT.war")
-                // RestAssured library needed by AbstractA2AServerTest
-                .addAsLibrary(getJarForClass(RestAssured.class))
                 // Test utilities from a2a-java-sdk-tests-server-common
                 .addPackage(AbstractA2AServerTest.class.getPackage())
                 // Test classes for this module
@@ -73,11 +67,6 @@ public class A2ARestTestCase extends AbstractA2AServerTest {
                 + TestTaskAuthorizationProvider.class.getName().replace('.', '/') + ".class");
 
         return archive;
-    }
-
-    static JavaArchive getJarForClass(Class<?> clazz) throws Exception {
-        File f = new File(clazz.getProtectionDomain().getCodeSource().getLocation().toURI());
-        return ShrinkWrap.createFromZipFile(JavaArchive.class, f);
     }
 
     /**

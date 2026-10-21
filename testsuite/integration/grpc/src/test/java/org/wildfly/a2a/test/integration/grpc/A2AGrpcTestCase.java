@@ -4,7 +4,6 @@
  */
 package org.wildfly.a2a.test.integration.grpc;
 
-import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import org.a2aproject.sdk.server.apps.common.AbstractA2AServerTest;
@@ -15,14 +14,10 @@ import org.a2aproject.sdk.client.transport.grpc.GrpcTransportConfigBuilder;
 import org.a2aproject.sdk.spec.TransportProtocol;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.restassured.RestAssured;
-import io.restassured.common.mapper.ObjectDeserializationContext;
-import io.restassured.mapper.ObjectMapper;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit5.container.annotation.ArquillianTest;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -63,11 +58,8 @@ public class A2AGrpcTestCase extends AbstractA2AServerTest {
     }
 
     @Deployment
-    public static WebArchive createTestArchive() throws Exception{
+    public static WebArchive createTestArchive() {
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "ROOT.war")
-                // RestAssured libraries needed by AbstractA2AServerTest
-                .addAsLibrary(getJarForClass(RestAssured.class))
-                .addAsLibrary(getJarForClass(ObjectDeserializationContext.class))
                 // Test utilities from a2a-java-sdk-tests-server-common
                 .addPackage(AbstractA2AServerTest.class.getPackage())
                 // Test resources for this module
@@ -85,11 +77,6 @@ public class A2AGrpcTestCase extends AbstractA2AServerTest {
                 + TestTaskAuthorizationProvider.class.getName().replace('.', '/') + ".class");
 
         return archive;
-    }
-
-    static JavaArchive getJarForClass(Class<?> clazz) throws Exception {
-        File f = new File(clazz.getProtectionDomain().getCodeSource().getLocation().toURI());
-        return ShrinkWrap.createFromZipFile(JavaArchive.class, f);
     }
 
     @Override
