@@ -60,7 +60,14 @@ public class A2ADependencyProcessor implements DeploymentUnitProcessor {
             "org.a2aproject.sdk.compat03-server-conversion",
             "org.a2aproject.sdk.compat03-transport-jsonrpc",
             "org.a2aproject.sdk.compat03-transport-grpc",
-            "org.a2aproject.sdk.compat03-transport-rest"
+            "org.a2aproject.sdk.compat03-transport-rest",
+            // OpenTelemetry support (present only when an a2a-*-opentelemetry layer is provisioned).
+            // The server module holds OpenTelemetryRequestHandlerDecorator, a @Priority-enabled CDI
+            // decorator, and the client ones hold ClientTransportWrapper services.
+            "org.a2aproject.sdk.opentelemetry-common",
+            "org.a2aproject.sdk.opentelemetry-client",
+            "org.a2aproject.sdk.opentelemetry-client-propagation",
+            "org.a2aproject.sdk.opentelemetry-server"
     };
 
     /**

@@ -265,6 +265,7 @@
         <module>jsonrpc</module>
         <module>rest</module>
         <module>grpc</module>
+        <module>opentelemetry</module>
     </modules>
 
     <profiles>
