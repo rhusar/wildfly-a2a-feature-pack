@@ -93,7 +93,7 @@
         <version.wildfly.glow>2.2.0.Final</version.wildfly.glow>
         <version.wildfly.maven.plugin>6.1.0.Final</version.wildfly.maven.plugin>
         <version.rest-assured>6.2.0</version.rest-assured>
-        <version.shrinkwrap>1.2.6</version.shrinkwrap>
+        <version.shrinkwrap>2.0.0.Final</version.shrinkwrap>
         <version.shrinkwrap.resolver>3.3.7</version.shrinkwrap.resolver>
     </properties>
 
