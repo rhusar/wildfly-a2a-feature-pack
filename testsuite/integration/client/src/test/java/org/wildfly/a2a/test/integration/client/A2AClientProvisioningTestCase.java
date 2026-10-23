@@ -4,8 +4,12 @@
  */
 package org.wildfly.a2a.test.integration.client;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.ServiceLoader;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit5.container.annotation.ArquillianTest;
@@ -67,6 +71,16 @@ public class A2AClientProvisioningTestCase {
         }
     }
 
+    /**
+     * The client looks up its transports and HTTP client with {@link ServiceLoader} through the deployment's class loader,
+     * so the deployment has to import the services of the modules that provide them.
+     */
+    @Test
+    public void clientProvidersAreDiscoverable() throws Exception {
+        assertEquals(CLIENT_TRANSPORT_CLASSES.length, countProviders("org.a2aproject.sdk.client.transport.spi.ClientTransportProvider"));
+        assertNotEquals(0, countProviders("org.a2aproject.sdk.client.http.A2AHttpClientProvider"));
+    }
+
     @Test
     public void serverTransportsAreNotProvisioned() {
         for (String className : SERVER_TRANSPORT_CLASSES) {
@@ -76,5 +90,9 @@ public class A2AClientProvisioningTestCase {
 
     private static Class<?> load(String className) throws ClassNotFoundException {
         return Class.forName(className, false, A2AClientProvisioningTestCase.class.getClassLoader());
+    }
+
+    private static long countProviders(String serviceName) throws ClassNotFoundException {
+        return ServiceLoader.load(load(serviceName), A2AClientProvisioningTestCase.class.getClassLoader()).stream().count();
     }
 }

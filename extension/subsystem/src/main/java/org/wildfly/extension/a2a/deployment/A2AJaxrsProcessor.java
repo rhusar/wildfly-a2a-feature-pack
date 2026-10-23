@@ -50,6 +50,10 @@ public class A2AJaxrsProcessor implements DeploymentUnitProcessor {
     public void deploy(DeploymentPhaseContext deploymentPhaseContext) throws DeploymentUnitProcessingException {
         DeploymentUnit deploymentUnit = deploymentPhaseContext.getDeploymentUnit();
 
+        if (!A2ADeploymentMarker.isMarkedServer(deploymentUnit)) {
+            return;
+        }
+
         // Only process WAR deployments that have JAX-RS deployment data
         ResteasyDeploymentData resteasyData = deploymentUnit.getAttachment(JaxrsAttachments.RESTEASY_DEPLOYMENT_DATA);
         if (resteasyData == null) {
