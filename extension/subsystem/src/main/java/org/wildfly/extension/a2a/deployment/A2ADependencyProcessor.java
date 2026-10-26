@@ -25,8 +25,8 @@ import org.wildfly.extension.a2a.A2ALogger;
 /**
  * Deployment processor that adds A2A module dependencies to deployments.
  *
- * A2A server deployments, i.e. CDI deployments that provide a {@code @PublicAgentCard}, get the SDK, client and server
- * modules, with their {@code META-INF} imported for CDI bean discovery. A2A client deployments, i.e. deployments that use
+ * A2A server deployments, i.e. CDI deployments that provide an agent card or an agent executor, get the SDK, client and
+ * server modules, with their {@code META-INF} imported for CDI bean discovery. A2A client deployments, i.e. deployments that use
  * the A2A client API, get the SDK and client modules only. Other deployments get no A2A modules.
  * See {@link A2ADeploymentMarker}.
  */
@@ -122,7 +122,7 @@ public class A2ADependencyProcessor implements DeploymentUnitProcessor {
     }
 
     private static boolean isA2AServerDeployment(DeploymentUnit deploymentUnit) {
-        if (!A2ADeploymentMarker.hasA2AServerAnnotations(deploymentUnit)) {
+        if (!A2ADeploymentMarker.usesA2AServer(deploymentUnit)) {
             return false;
         }
         CapabilityServiceSupport support = deploymentUnit.getAttachment(Attachments.CAPABILITY_SERVICE_SUPPORT);

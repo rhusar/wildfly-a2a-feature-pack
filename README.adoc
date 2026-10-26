@@ -166,9 +166,14 @@ version.
 
 == A2A Client/Server Availability in Deployments
 
-The A2A subsystem treats a deployment as an A2A _server_ deployment only when it is a CDI deployment that contains
-a `@PublicAgentCard` (`org.a2aproject.sdk.server.PublicAgentCard`) annotation, typically on the producer of its
-public `AgentCard`. Only such deployments are enriched with A2A support.
+The A2A subsystem treats a deployment as an A2A _server_ deployment only when it is a CDI deployment that
+
+* contains a `@PublicAgentCard` (`org.a2aproject.sdk.server.PublicAgentCard`) or `@ExtendedAgentCard`
+  (`org.a2aproject.sdk.server.ExtendedAgentCard`) annotation, typically on the producer of its `AgentCard`, or
+* has a class that references `org.a2aproject.sdk.server.agentexecution.AgentExecutor`, e.g. its implementation or
+  the method producing it.
+
+Only such deployments are enriched with A2A support.
 
 A deployment is an A2A _client_ deployment when one of its classes uses the A2A client API, i.e. references
 
@@ -177,7 +182,7 @@ A deployment is an A2A _client_ deployment when one of its classes uses the A2A 
 * `org.a2aproject.sdk.A2A`.
 
 Such deployments are enriched with A2A SDK and client modules.
-Should a client only be reached through reflection is not recognised.
+A deployment that reaches the client API only through reflection is not recognised as a client deployment.
 
 This detection is narrower than https://docs.wildfly.org/wildfly-glow/[WildFly Glow] provisioning detection, whose
 rules match any class of the A2A SDK packages. A deployment that neither provides an A2A server nor uses the A2A client

@@ -31,10 +31,19 @@ public final class A2ADeploymentMarker {
     private static final AttachmentKey<Boolean> SERVER_ATTACHMENT_KEY = AttachmentKey.create(Boolean.class);
 
     /**
-     * An A2A server deployment has to provide the public agent card, i.e. an {@code AgentCard} bean qualified with this
-     * annotation.
+     * Qualifiers of the agent card an A2A server deployment provides - the SDK serves the {@code @PublicAgentCard} and falls
+     * back to the {@code @ExtendedAgentCard} when there is no public one.
      */
-    private static final DotName PUBLIC_AGENT_CARD = DotName.createSimple("org.a2aproject.sdk.server.PublicAgentCard");
+    private static final List<DotName> AGENT_CARD_QUALIFIERS = List.of(
+            DotName.createSimple("org.a2aproject.sdk.server.PublicAgentCard"),
+            DotName.createSimple("org.a2aproject.sdk.server.ExtendedAgentCard")
+    );
+
+    /**
+     * Every A2A server deployment provides an agent executor. It is matched by the classes referencing it rather than by
+     * the classes implementing it, so that an executor produced as a lambda or qualified per tenant is found as well.
+     */
+    private static final DotName AGENT_EXECUTOR = DotName.createSimple("org.a2aproject.sdk.server.agentexecution.AgentExecutor");
 
     /**
      * Entry points of the A2A client API - a client is created through {@code Client.builder(...)}, and {@code A2A}
@@ -63,14 +72,25 @@ public final class A2ADeploymentMarker {
         deploymentUnit.removeAttachment(SERVER_ATTACHMENT_KEY);
     }
 
-    static boolean hasA2AServerAnnotations(DeploymentUnit deploymentUnit) {
-        CompositeIndex index = deploymentUnit.getAttachment(Attachments.COMPOSITE_ANNOTATION_INDEX);
-        if (index != null && !index.getAnnotations(PUBLIC_AGENT_CARD).isEmpty()) {
-            A2ALogger.ROOT_LOGGER.debugf("Deployment '%s' is an A2A server deployment - @%s annotation found.", deploymentUnit.getName(), PUBLIC_AGENT_CARD);
-            return true;
+    static boolean usesA2AServer(DeploymentUnit deploymentUnit) {
+        CompositeIndex compositeIndex = deploymentUnit.getAttachment(Attachments.COMPOSITE_ANNOTATION_INDEX);
+        if (compositeIndex != null) {
+            for (DotName qualifier : AGENT_CARD_QUALIFIERS) {
+                if (!compositeIndex.getAnnotations(qualifier).isEmpty()) {
+                    A2ALogger.ROOT_LOGGER.debugf("Deployment '%s' is an A2A server deployment - @%s annotation found.", deploymentUnit.getName(), qualifier);
+                    return true;
+                }
+            }
+            // CompositeIndex does not expose the class users, so query each underlying index
+            for (Index index : compositeIndex.getIndexes()) {
+                if (!index.getKnownUsers(AGENT_EXECUTOR).isEmpty()) {
+                    A2ALogger.ROOT_LOGGER.debugf("Deployment '%s' is an A2A server deployment - %s is used.", deploymentUnit.getName(), AGENT_EXECUTOR);
+                    return true;
+                }
+            }
         }
 
-        A2ALogger.ROOT_LOGGER.debugf("No @%s annotation found in deployment '%s'.", PUBLIC_AGENT_CARD, deploymentUnit.getName());
+        A2ALogger.ROOT_LOGGER.debugf("No A2A agent card or agent executor found in deployment '%s'.", deploymentUnit.getName());
 
         return false;
     }
