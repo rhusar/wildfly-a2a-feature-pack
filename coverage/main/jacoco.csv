@@ -8,6 +8,6 @@ WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfl
 WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a,A2ASubsystemRegistrar,0,62,0,0,0,15,0,4,0,4
 WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a,A2ASubsystemSchema,0,49,0,0,0,9,0,4,0,4
 WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a,A2ASubsystemModel,0,28,0,0,0,7,0,3,0,3
-WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a,A2ASubsystemExtension,0,11,0,0,0,3,0,2,0,2
 WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a,A2ALogger_.logger,2,23,0,0,1,7,1,4,1,4
+WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-subsystem,org.wildfly.extension.a2a,A2ASubsystemExtension,0,11,0,0,0,3,0,2,0,2
 WildFly A2A Feature-Pack - Code Coverage Report/wildfly-a2a-injection,org.wildfly.extension.a2a.cdi,A2ACdiExtension,12,133,1,1,3,29,2,4,1,4
