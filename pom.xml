@@ -85,7 +85,7 @@
         <version.org.jboss.logging.tools>3.0.4.Final</version.org.jboss.logging.tools>
 
         <!-- Build plugins -->
-        <version.jacoco.plugin>0.8.15</version.jacoco.plugin>
+        <version.jacoco.plugin>0.8.16</version.jacoco.plugin>
 
         <!-- Test dependencies -->
         <version.arquillian>1.10.2.Final</version.arquillian>
