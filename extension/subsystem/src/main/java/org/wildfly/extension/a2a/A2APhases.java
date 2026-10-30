@@ -15,6 +15,13 @@ final class A2APhases {
     static final int PHASE_DEPENDENCIES_A2A = 0x1941;
 
     /**
+     * Deployment processor priority for registering the A2A servlet context listeners.
+     * Runs after Phase.PARSE_WEB_MERGE_METADATA (0x2000), which produces the merged web metadata, and before
+     * Phase.PARSE_WEB_COMPONENTS (0x2008), which turns the listener classes in it into EE component descriptions.
+     */
+    static final int PHASE_PARSE_A2A_WEB_LISTENER = 0x2005;
+
+    /**
      * Deployment processor priority for registering A2A gRPC service with the gRPC subsystem.
      * Runs during INSTALL phase to install a service that registers the WildFlyGrpcHandler with the gRPC deployment registry, bypassing Jandex annotation scanning.
      */
