@@ -73,7 +73,7 @@
 
         <!-- A2A dependencies -->
         <version.sdk>1.4.0.Final</version.sdk>
-        <version.org.wildfly.a2a>1.0.0.Final</version.org.wildfly.a2a>
+        <version.org.wildfly.a2a>1.1.0.Final</version.org.wildfly.a2a>
 
         <!-- Third-party dependencies (from A2A SDK) -->
         <version.protobuf>4.35.0</version.protobuf>
