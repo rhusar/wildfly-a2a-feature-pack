@@ -26,6 +26,12 @@ final class A2APhases {
      */
     static final int PHASE_POST_MODULE_A2A_JAXRS = 0x1A50;
 
+    /**
+     * Deployment processor priority for registering the A2A CDI extension.
+     * The registered extensions are only read when Weld bootstraps in the INSTALL phase, so any POST_MODULE priority works.
+     */
+    static final int PHASE_POST_MODULE_A2A_CDI_EXTENSION = 0x1A60;
+
     private A2APhases() {
     }
 }

@@ -34,7 +34,7 @@ For gRPC support, include the https://github.com/wildfly-extras/wildfly-grpc-fea
 <plugin>
     <groupId>org.wildfly.plugins</groupId>
     <artifactId>wildfly-maven-plugin</artifactId>
-    <version>6.0.1.Final</version>
+    <version>6.1.0.Final</version>
     <configuration>
         <feature-packs>
             <feature-pack>
@@ -162,6 +162,24 @@ serve both protocol versions from a single deployment, with requests dispatched 
 Note that a v0.3 transport declares itself the default version, so a request that carries no `A2A-Version` header is
 handled as v0.3. The agent card served from `/.well-known/agent-card.json` always comes from the highest provisioned
 version.
+
+
+== A2A Client/Server Availability in Deployments
+
+The A2A subsystem treats a deployment as an A2A _server_ deployment only when it is a CDI deployment that contains
+a `@PublicAgentCard` (`org.a2aproject.sdk.server.PublicAgentCard`) annotation, typically on the producer of its
+public `AgentCard`. Only such deployments are enriched with A2A support.
+
+A deployment is an A2A _client_ deployment when one of its classes uses the A2A client API, i.e. references
+
+* `org.a2aproject.sdk.client.Client`,
+* `org.a2aproject.sdk.client.ClientBuilder` or
+* `org.a2aproject.sdk.A2A`.
+
+Such deployments are enriched with A2A SDK and client modules.
+Should a client only be reached through reflection is not recognised.
+
+This mechanism matches https://docs.wildfly.org/wildfly-glow/[WildFly Glow] provisioning detection.
 
 
 == Configuration

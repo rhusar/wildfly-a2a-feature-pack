@@ -66,13 +66,17 @@ public class A2AGrpcServiceProcessor implements DeploymentUnitProcessor {
     public void deploy(DeploymentPhaseContext phaseContext) {
         DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
 
+        if (!A2ADeploymentMarker.isMarkedServer(deploymentUnit)) {
+            return;
+        }
+
         // TODO needs i18n in this class
         A2ALogger.ROOT_LOGGER.debugf("A2AGrpcServiceProcessor running for deployment '%s'", deploymentUnit.getName());
 
         // Check if gRPC capability is available
         CapabilityServiceSupport support = deploymentUnit.getAttachment(Attachments.CAPABILITY_SERVICE_SUPPORT);
         if (support == null || !support.hasCapability(GRPC_SERVER_CAPABILITY)) {
-            A2ALogger.ROOT_LOGGER.infof("gRPC capability not available, skipping A2A gRPC service registration for '%s'", deploymentUnit.getName());
+            A2ALogger.ROOT_LOGGER.debugf("gRPC capability not available, skipping A2A gRPC service registration for '%s'", deploymentUnit.getName());
             return;
         }
 
