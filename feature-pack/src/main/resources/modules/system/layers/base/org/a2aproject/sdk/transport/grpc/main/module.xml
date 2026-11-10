@@ -15,6 +15,7 @@
 
     <dependencies>
         <module name="java.logging"/>
+        <module name="com.google.code.gson"/>
         <module name="jakarta.enterprise.api"/>
         <module name="jakarta.inject.api"/>
 
