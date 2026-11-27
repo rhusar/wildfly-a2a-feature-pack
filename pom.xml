@@ -93,12 +93,22 @@
         <version.wildfly.glow>2.2.0.Final</version.wildfly.glow>
         <version.wildfly.maven.plugin>6.1.0.Final</version.wildfly.maven.plugin>
         <version.rest-assured>6.3.0</version.rest-assured>
-        <version.shrinkwrap>1.2.6</version.shrinkwrap>
+        <version.shrinkwrap>2.0.0.Final</version.shrinkwrap>
         <version.shrinkwrap.resolver>3.3.7</version.shrinkwrap.resolver>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- ShrinkWrap BOM (must be first) -->
+            <!-- The WildFly and A2A SDK BOMs below also manage ShrinkWrap, via wildfly-core-parent and quarkus-bom, and the first imported BOM wins -->
+            <dependency>
+                <groupId>org.jboss.shrinkwrap</groupId>
+                <artifactId>shrinkwrap-bom</artifactId>
+                <version>${version.shrinkwrap}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- gRPC BOM - must match a2a-java SDK version -->
             <dependency>
                 <groupId>io.grpc</groupId>
@@ -458,12 +468,6 @@
                 <groupId>io.rest-assured</groupId>
                 <artifactId>rest-assured</artifactId>
                 <version>${version.rest-assured}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.shrinkwrap</groupId>
-                <artifactId>shrinkwrap-api</artifactId>
-                <version>${version.shrinkwrap}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
