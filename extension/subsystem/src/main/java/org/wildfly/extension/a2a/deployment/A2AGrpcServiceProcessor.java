@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 
 import io.grpc.BindableService;
 import io.grpc.ServerInterceptor;
+import io.grpc.ServerServiceDefinition;
 import org.jboss.as.controller.capability.CapabilityServiceSupport;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -115,20 +116,42 @@ public class A2AGrpcServiceProcessor implements DeploymentUnitProcessor {
                 handler.handlerClass, deploymentUnit.getName());
     }
 
+    /**
+     * Returns the name under which the gRPC subsystem records the owner of a registered service. A subdeployment's own
+     * name (e.g. {@code web.war}) is only unique within its EAR, so it is qualified with the name of its parent deployment.
+     */
+    private static String deploymentName(DeploymentUnit deploymentUnit) {
+        DeploymentUnit parent = deploymentUnit.getParent();
+        return (parent == null) ? deploymentUnit.getName() : parent.getName() + "/" + deploymentUnit.getName();
+    }
+
     @Override
     public void undeploy(DeploymentUnit deploymentUnit) {
-        // The gRPC subsystem handles cleanup via removeDeploymentServices
+        // The registration service unregisters its handler from the gRPC subsystem when it stops
     }
 
     /**
-     * A small service that registers the A2A gRPC handler when started, allowing us to properly depend on the gRPC registry service.
+     * A small service that registers the A2A gRPC handler when started, and unregisters it when stopped, allowing us to
+     * properly depend on the gRPC registry service.
      */
-    private record A2AGrpcRegistrationService(
-            DeploymentUnit deploymentUnit,
-            Class<? extends BindableService> handlerClass,
-            List<ServerInterceptor> interceptors,
-            Supplier<WildFlyGrpcDeploymentRegistry> registrySupplier
-    ) implements Service {
+    private static final class A2AGrpcRegistrationService implements Service {
+
+        private final DeploymentUnit deploymentUnit;
+        private final Class<? extends BindableService> handlerClass;
+        private final List<ServerInterceptor> interceptors;
+        private final Supplier<WildFlyGrpcDeploymentRegistry> registrySupplier;
+
+        private volatile ServerServiceDefinition registeredService;
+
+        A2AGrpcRegistrationService(DeploymentUnit deploymentUnit,
+                                   Class<? extends BindableService> handlerClass,
+                                   List<ServerInterceptor> interceptors,
+                                   Supplier<WildFlyGrpcDeploymentRegistry> registrySupplier) {
+            this.deploymentUnit = deploymentUnit;
+            this.handlerClass = handlerClass;
+            this.interceptors = interceptors;
+            this.registrySupplier = registrySupplier;
+        }
 
         @Override
         public void start(StartContext context) {
@@ -141,7 +164,8 @@ public class A2AGrpcServiceProcessor implements DeploymentUnitProcessor {
             A2ALogger.ROOT_LOGGER.debugf("Got gRPC registry: %s", registry.getClass().getName());
 
             try {
-                registry.addService(deploymentUnit, handlerClass, interceptors);
+                BindableService handler = handlerClass.getConstructor().newInstance();
+                registeredService = registry.addService(deploymentName(deploymentUnit), handler, interceptors);
                 A2ALogger.ROOT_LOGGER.infof("Registered A2A gRPC handler '%s' for deployment '%s'", handlerClass.getName(), deploymentUnit.getName());
             } catch (Exception e) {
                 A2ALogger.ROOT_LOGGER.warnf(e, "Failed to register A2A gRPC handler for deployment '%s'", deploymentUnit.getName());
@@ -150,7 +174,20 @@ public class A2AGrpcServiceProcessor implements DeploymentUnitProcessor {
 
         @Override
         public void stop(StopContext context) {
-            // The gRPC subsystem handles cleanup via removeDeploymentServices
+            ServerServiceDefinition service = registeredService;
+            if (service == null) {
+                return;
+            }
+            registeredService = null;
+            WildFlyGrpcDeploymentRegistry registry = registrySupplier.get();
+            if (registry == null) {
+                return;
+            }
+            try {
+                registry.removeService(service);
+            } catch (RuntimeException e) {
+                A2ALogger.ROOT_LOGGER.warnf(e, "Failed to unregister A2A gRPC handler '%s' for deployment '%s'", handlerClass.getName(), deploymentUnit.getName());
+            }
         }
     }
 }
