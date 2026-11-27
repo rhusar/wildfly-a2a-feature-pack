@@ -11,6 +11,7 @@ import org.jboss.as.controller.descriptions.ParentResourceDescriptionResolver;
 import org.jboss.as.controller.descriptions.SubsystemResourceDescriptionResolver;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
 import org.jboss.as.server.deployment.Phase;
+import org.wildfly.extension.a2a.deployment.A2ACdiExtensionProcessor;
 import org.wildfly.extension.a2a.deployment.A2ADependencyProcessor;
 import org.wildfly.extension.a2a.deployment.A2AGrpcServiceProcessor;
 import org.wildfly.extension.a2a.deployment.A2AJaxrsProcessor;
@@ -41,6 +42,7 @@ class A2ASubsystemRegistrar implements SubsystemResourceDefinitionRegistrar {
                     target.addDeploymentProcessor(NAME, Phase.DEPENDENCIES, A2APhases.PHASE_DEPENDENCIES_A2A, new A2ADependencyProcessor());
                     target.addDeploymentProcessor(NAME, Phase.INSTALL, A2APhases.PHASE_INSTALL_A2A_GRPC, new A2AGrpcServiceProcessor());
                     target.addDeploymentProcessor(NAME, Phase.POST_MODULE, A2APhases.PHASE_POST_MODULE_A2A_JAXRS, new A2AJaxrsProcessor());
+                    target.addDeploymentProcessor(NAME, Phase.POST_MODULE, A2APhases.PHASE_POST_MODULE_A2A_CDI_EXTENSION, new A2ACdiExtensionProcessor());
                 })
                 .build();
         ManagementResourceRegistrar.of(descriptor).register(registration);

@@ -16,6 +16,7 @@ import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.modules.Module;
+import org.jboss.modules.ModuleLoadException;
 import org.jboss.msc.Service;
 import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceName;
@@ -67,19 +68,41 @@ public class A2AGrpcServiceProcessor implements DeploymentUnitProcessor {
     public void deploy(DeploymentPhaseContext phaseContext) {
         DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
 
+        if (!A2ADeploymentMarker.isMarkedServer(deploymentUnit)) {
+            return;
+        }
+
         // TODO needs i18n in this class
         A2ALogger.ROOT_LOGGER.debugf("A2AGrpcServiceProcessor running for deployment '%s'", deploymentUnit.getName());
 
         // Check if gRPC capability is available
         CapabilityServiceSupport support = deploymentUnit.getAttachment(Attachments.CAPABILITY_SERVICE_SUPPORT);
         if (support == null || !support.hasCapability(GRPC_SERVER_CAPABILITY)) {
-            A2ALogger.ROOT_LOGGER.infof("gRPC capability not available, skipping A2A gRPC service registration for '%s'", deploymentUnit.getName());
+            // An installed A2A gRPC transport without the gRPC subsystem is a misconfiguration, while a server provisioned
+            // without the A2A gRPC transport is expected to have no gRPC subsystem.
+            if (isAnyHandlerInstalled()) {
+                A2ALogger.ROOT_LOGGER.warnf("A2A gRPC transport is installed but the gRPC subsystem is not available, the gRPC endpoint is not exposed for '%s'", deploymentUnit.getName());
+            } else {
+                A2ALogger.ROOT_LOGGER.debugf("gRPC capability not available, skipping A2A gRPC service registration for '%s'", deploymentUnit.getName());
+            }
             return;
         }
 
         for (GrpcHandler handler : GrpcHandler.values()) {
             registerHandler(phaseContext, deploymentUnit, support, handler);
         }
+    }
+
+    private static boolean isAnyHandlerInstalled() {
+        for (GrpcHandler handler : GrpcHandler.values()) {
+            try {
+                Module.getBootModuleLoader().loadModule(handler.module);
+                return true;
+            } catch (ModuleLoadException e) {
+                // Not installed
+            }
+        }
+        return false;
     }
 
     private void registerHandler(DeploymentPhaseContext phaseContext, DeploymentUnit deploymentUnit,

@@ -13,9 +13,10 @@ import org.a2aproject.sdk.client.transport.rest.RestTransport;
 
 /**
  * Carries the client API types into the deployment's constant pool, which is what WildFly Glow
- * matches its {@code org.wildfly.rule.class} rules against. Without it the deployment references no
- * A2A type at all - {@link A2AClientProvisioningTestCase} names its classes as strings - and Glow
- * would discover no A2A layer to scan.
+ * matches its {@code org.wildfly.rule.class} rules against, and what the A2A subsystem checks to
+ * recognise an A2A client deployment. Without it the deployment references no A2A type at all -
+ * {@link A2AClientProvisioningTestCase} names its classes as strings - so Glow would discover no
+ * A2A layer to scan and the subsystem would add no A2A modules to the deployment.
  *
  * <p>Only this class is added to the archive, not the SDK jars, so the types still resolve against
  * the modules the subsystem adds rather than against anything the deployment ships.
