@@ -34,18 +34,18 @@ For gRPC support, include the https://github.com/wildfly-extras/wildfly-grpc-fea
 <plugin>
     <groupId>org.wildfly.plugins</groupId>
     <artifactId>wildfly-maven-plugin</artifactId>
-    <version>6.0.1.Final</version>
+    <version>6.2.0.Final</version>
     <configuration>
         <feature-packs>
             <feature-pack>
                 <groupId>org.wildfly</groupId>
                 <artifactId>wildfly-galleon-pack</artifactId>
-                <version>41.0.1.Final</version>
+                <version>42.0.0.Final</version>
             </feature-pack>
             <feature-pack>
                 <groupId>org.wildfly.grpc</groupId>
                 <artifactId>wildfly-grpc-feature-pack</artifactId>
-                <version>0.2.1.Final</version>
+                <version>0.3.0.Final</version>
             </feature-pack>
             <feature-pack>
                 <groupId>org.wildfly.a2a</groupId>
@@ -89,7 +89,7 @@ line coordinate, so start with a `feature-packs.xml` listing both WildFly and th
 [source,xml]
 ----
 <installation xmlns="urn:jboss:galleon:provisioning:4.0">
-    <feature-pack location="org.wildfly:wildfly-galleon-pack:41.0.1.Final"/>
+    <feature-pack location="org.wildfly:wildfly-galleon-pack:42.0.0.Final"/>
     <feature-pack location="org.wildfly.a2a:wildfly-a2a-feature-pack:0.0.1.Alpha1-SNAPSHOT"/>
 </installation>
 ----
